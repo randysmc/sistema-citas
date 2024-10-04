@@ -36,4 +36,13 @@ public class UsuarioServiceImplementacion implements UsuarioService {
         }
         return usuarioLocal;
     }
+
+    @Override
+    public Usuario obtenerUsuario(String username){
+        return usuarioRepository.findByUsername(username);
+    }
+
+    public void eliminarUsuario(Long usuarioId){
+        usuarioRepository.deleteById(usuarioId);
+    }
 }
