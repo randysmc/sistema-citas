@@ -34,3 +34,5 @@ build/
 
 # Ignorar la carpeta frontend
 ../Frontend/
+/Frontend/
+.Frontend/
