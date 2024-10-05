@@ -43,3 +43,4 @@ Thumbs.db
 
 # Ignorar la carpeta backend
 ../Backend/
+/Backend/
