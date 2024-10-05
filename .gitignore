@@ -1,0 +1,33 @@
+# Node modules (para Angular)
+node_modules/
+
+# Compiled output (para Angular)
+dist/
+out-tsc/
+.bazel-out/
+
+# Miscellaneous (para Angular)
+.angular/
+coverage/
+libpeerconnection.log
+npm-debug.log
+yarn-error.log
+
+# Ignorar las carpetas de backend y frontend
+Backend/
+Frontend/
+
+# Ignorar archivos de IDE
+.idea/
+*.iml
+.vscode/
+*.sublime-workspace
+
+# Ignorar archivos de configuración
+*.log
+.DS_Store
+Thumbs.db
+
+# Ignorar archivos temporales
+tmp/
+temp/
