@@ -1,1 +1,19 @@
-Navbar Works!
+<mat-toolbar color="primary">
+    <a [routerLink]="'/'" mat-icon-button class="example-icon" aria-label="Home">
+      <mat-icon>home</mat-icon>
+    </a>
+    
+    <span>Algo</span>
+    
+    <span class="example-spacer"></span>
+  
+    <a [routerLink]="'/login'" mat-icon-button class="example-icon mr20" aria-label="Login">
+      <mat-icon>login</mat-icon> 
+    </a>
+  
+    <a [routerLink]="'/signup'" mat-icon-button class="example-icon" aria-label="Signup">
+      <mat-icon>person_add</mat-icon> 
+    </a>
+
+  </mat-toolbar>
+  

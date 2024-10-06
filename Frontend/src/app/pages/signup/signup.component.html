@@ -9,48 +9,48 @@
                 <form (ngSubmit)="formSubmit()">
                     <mat-form-field class="full-width" appearance="outline">
                         <mat-label>Nombre de usuario: </mat-label>
-                        <input [(ngModel)]="user.username" name="username" matInput placeholder="Escriba su nombre de usuario">
+                        <input required [(ngModel)]="user.username" name="username" matInput placeholder="Escriba su nombre de usuario">
                         <mat-hint>username unico</mat-hint>
                     </mat-form-field>
                 
                     <mat-form-field class="full-width" appearance="outline">
                         <mat-label>Contraseña: </mat-label>
-                        <input [(ngModel)]="user.password" name="password" matInput type="password" placeholder="Escriba su password">
+                        <input required [(ngModel)]="user.password" name="password" matInput type="password" placeholder="Escriba su password">
                     </mat-form-field>
                 
                     <mat-form-field class="full-width" appearance="outline">
                         <mat-label>Nombre: </mat-label>
-                        <input [(ngModel)]="user.nombre" name="nombre" matInput type="text" placeholder="Escriba su nombre">
+                        <input required [(ngModel)]="user.nombre" name="nombre" matInput type="text" placeholder="Escriba su nombre">
                     </mat-form-field>
                 
                     <mat-form-field class="full-width" appearance="outline">
                         <mat-label>Apellido: </mat-label>
-                        <input [(ngModel)]="user.apellido" name="apellido" matInput placeholder="Escriba su apellido">
+                        <input required [(ngModel)]="user.apellido" name="apellido" matInput placeholder="Escriba su apellido">
                     </mat-form-field>
                 
                     <mat-form-field class="full-width" appearance="outline">
                         <mat-label>Email: </mat-label>
-                        <input [(ngModel)]="user.email" name="email" matInput type="email" placeholder="Escriba su Email">
+                        <input required [(ngModel)]="user.email" name="email" matInput type="email" placeholder="Escriba su Email">
                     </mat-form-field>
                 
                     <mat-form-field class="full-width" appearance="outline">
                         <mat-label>Telefono: </mat-label>
-                        <input [(ngModel)]="user.telefono" name="telefono" matInput type="number" placeholder="Escriba su Telefono">
+                        <input required [(ngModel)]="user.telefono" name="telefono" matInput type="number" placeholder="Escriba su Telefono">
                     </mat-form-field>
                 
                     <mat-form-field class="full-width" appearance="outline">
                         <mat-label>CUI: </mat-label>
-                        <input [(ngModel)]="user.cui" name="cui" matInput type="number" placeholder="Escriba su DPI">
+                        <input required [(ngModel)]="user.cui" name="cui" matInput type="number" placeholder="Escriba su DPI">
                     </mat-form-field>
                 
                     <mat-form-field class="full-width" appearance="outline">
                         <mat-label>NIT: </mat-label>
-                        <input [(ngModel)]="user.nit" name="nit" matInput type="number" placeholder="Escriba su NIT">
+                        <input required [(ngModel)]="user.nit" name="nit" matInput type="number" placeholder="Escriba su NIT">
                     </mat-form-field>
                 
                     <div class="container text-center">
                         <button mat-raised-button color="primary">Registrar</button>
-                        <button style="margin-left: 20px;" mat-raised-button color="secondary">Limpiar</button>
+                        <button type="reset" style="margin-left: 20px;" mat-raised-button color="accent">Limpiar</button>
                     </div>
                 </form>
                 
