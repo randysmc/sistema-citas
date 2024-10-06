@@ -18,13 +18,17 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+
+
     @PostMapping("/")
     public Usuario guardarUsuario(@RequestBody Usuario usuario) throws Exception{
         usuario.setPerfil("default.png");
+
+        //usuario.setPassword(this.bCryptPasswordEncoder.encode(usuario.getPassword()));
         Set<UsuarioRol> usuarioRoles = new HashSet<>();
         Rol rol = new Rol();
         rol.setRolId(2L);
-        rol.setNombre("NORMAL");
+        rol.setRolNombre("NORMAL");
 
         UsuarioRol usuarioRol = new UsuarioRol();
         usuarioRol.setUsuario(usuario);
@@ -38,8 +42,13 @@ public class UsuarioController {
     //se envia un pathvariable
     @GetMapping("/{username}")
     public Usuario obtenerUsuario(@PathVariable("username") String username){
-        return usuarioService.obtenerUsuario(username);
+        System.out.println("Estamos obteniendo al usuario: " + username);
+        Usuario usuario = usuarioService.obtenerUsuario(username);
+        System.out.println("Usuario obtenido: " + usuario.getNombre());  // Verifica si el objeto Usuario está nulo o tiene datos
+        return usuario;
     }
+
+
 
     @DeleteMapping("/{usuarioId}")
     public void eliminarUsuario(@PathVariable("usuarioId") Long usuarioId){

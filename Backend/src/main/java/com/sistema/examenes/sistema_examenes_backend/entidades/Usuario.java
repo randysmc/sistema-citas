@@ -1,22 +1,20 @@
 package com.sistema.examenes.sistema_examenes_backend.entidades;
 
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
-@Table(name= "usuarios")
-
+@Table(name = "usuarios")
 public class Usuario implements UserDetails {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) //Esto es para que sea autoincrementable
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String username;
@@ -25,15 +23,28 @@ public class Usuario implements UserDetails {
     private String apellido;
     private String email;
     private String telefono;
-    private boolean disponible = true;
+    private boolean enabled = true;
     private String perfil;
-    private String NIT;
-    private String CUI;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usuario")
+    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "usuario")
     @JsonIgnore
     private Set<UsuarioRol> usuarioRoles = new HashSet<>();
 
+    public Usuario(){
+
+    }
+
+    public Usuario(Long id, String username, String password, String nombre, String apellido, String email, String telefono, boolean enabled, String perfil) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.email = email;
+        this.telefono = telefono;
+        this.enabled = enabled;
+        this.perfil = perfil;
+    }
 
     public Long getId() {
         return id;
@@ -49,22 +60,17 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return UserDetails.super.isAccountNonExpired();
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return UserDetails.super.isAccountNonLocked();
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return UserDetails.super.isCredentialsNonExpired();
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return UserDetails.super.isEnabled();
+        return true;
     }
 
     public void setUsername(String username) {
@@ -75,9 +81,9 @@ public class Usuario implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Set<Authority> autoridades = new HashSet<>();
         this.usuarioRoles.forEach(usuarioRol -> {
-            autoridades.add(new Authority(usuarioRol.getRol().getNombre()));
+            autoridades.add(new Authority(usuarioRol.getRol().getRolNombre()));
         });
-        return  autoridades;
+        return autoridades;
     }
 
     public String getPassword() {
@@ -120,12 +126,12 @@ public class Usuario implements UserDetails {
         this.telefono = telefono;
     }
 
-    public boolean isDisponible() {
-        return disponible;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setDisponible(boolean disponible) {
-        this.disponible = disponible;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public String getPerfil() {
@@ -136,31 +142,11 @@ public class Usuario implements UserDetails {
         this.perfil = perfil;
     }
 
-    public String getNIT() {
-        return NIT;
-    }
-
-    public void setNIT(String NIT) {
-        this.NIT = NIT;
-    }
-
-    public String getCUI() {
-        return CUI;
-    }
-
-    public void setCUI(String CUI) {
-        this.CUI = CUI;
-    }
-
     public Set<UsuarioRol> getUsuarioRoles() {
         return usuarioRoles;
     }
 
     public void setUsuarioRoles(Set<UsuarioRol> usuarioRoles) {
         this.usuarioRoles = usuarioRoles;
-    }
-
-    public Usuario(){
-
     }
 }

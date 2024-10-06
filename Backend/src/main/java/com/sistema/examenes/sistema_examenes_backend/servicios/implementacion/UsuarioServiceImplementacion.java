@@ -42,6 +42,7 @@ public class UsuarioServiceImplementacion implements UsuarioService {
         return usuarioRepository.findByUsername(username);
     }
 
+    @Override
     public void eliminarUsuario(Long usuarioId){
         usuarioRepository.deleteById(usuarioId);
     }

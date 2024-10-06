@@ -1,9 +1,9 @@
 package com.sistema.examenes.sistema_examenes_backend.entidades;
-
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 public class UsuarioRol {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long usuarioRolId;
@@ -36,9 +36,5 @@ public class UsuarioRol {
 
     public void setRol(Rol rol) {
         this.rol = rol;
-    }
-
-    public UsuarioRol(){
-
     }
 }
