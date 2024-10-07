@@ -22,6 +22,9 @@ import { SignupComponent } from './pages/signup/signup.component';
 import { LoginComponent } from './pages/login/login.component'; 
 import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './pages/home/home.component';
+import { authInterceptorProviders } from './services/auth.interceptors';
+import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
+import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +32,9 @@ import { HomeComponent } from './pages/home/home.component';
     NavbarComponent,
     SignupComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    DashboardComponent,
+    UserDashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +50,7 @@ import { HomeComponent } from './pages/home/home.component';
     MatToolbarModule,
     MatIconModule
   ],
-  providers: [],
+  providers: [authInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
