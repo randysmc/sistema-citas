@@ -7,13 +7,32 @@
     
     <span class="example-spacer"></span>
   
-    <a [routerLink]="'/login'" mat-icon-button class="example-icon mr20" aria-label="Login">
-      <mat-icon>login</mat-icon> 
+    <a
+      *ngIf="!isLoggedIn" 
+      [routerLink]="'/login'" mat-icon-button class="example-icon mr20 ml70" aria-label="Login">
+      <mat-icon>login</mat-icon>
     </a>
   
-    <a [routerLink]="'/signup'" mat-icon-button class="example-icon" aria-label="Signup">
-      <mat-icon>person_add</mat-icon> 
+    <a
+      *ngIf="!isLoggedIn" 
+      [routerLink]="'/signup'" mat-icon-button class="example-icon mr20 ml70" aria-label="Signup">
+      <mat-icon>person_add</mat-icon>
     </a>
+
+    <a
+    *ngIf="isLoggedIn" 
+    (click) = "logout()"
+    mat-icon-button class="example-icon favorite-icon mr20 ml70" aria-label="Logout">
+      <mat-icon>logout</mat-icon>
+    </a>
+
+    <button
+    *ngIf="isLoggedIn && user" 
+    mat-button
+    style="margin-right: 10px;"
+    class="example-icon favorite-icon" aria-label="example-icon with hear icon">
+    {{ login.getUser().username }}
+    </button>
 
   </mat-toolbar>
   

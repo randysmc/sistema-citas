@@ -1,11 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import baserUrl from './helper';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
+
+  //Esto es para 
+  public loginStatusSubjec = new Subject<boolean>();
 
   constructor(
     private http:HttpClient
@@ -19,6 +23,7 @@ export class LoginService {
   //iniciar sesión y establecemos el token en el localstorage
   public loginUser(token:any){
     localStorage.setItem('token', token);
+    
   }
 
   //metodo para comprobar si esta conectado 
