@@ -31,8 +31,9 @@
     mat-button
     style="margin-right: 10px;"
     class="example-icon favorite-icon" aria-label="example-icon with hear icon">
-    {{ login.getUser().username }}
-    </button>
+    {{ user?.username }} <!-- Usar user en lugar de login.getUser() -->
+  </button>
+  
 
   </mat-toolbar>
   

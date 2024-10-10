@@ -20,6 +20,10 @@ export class LoginService {
     return this.http.post(`${baserUrl}/generate-token`,loginData);
   }
 
+  public validateTwoFactorCode(twoFactorData: any){
+    return this.http.post(`${baserUrl}/validate-token`, twoFactorData)
+  }
+
   //iniciar sesión y establecemos el token en el localstorage
   public loginUser(token:any){
     localStorage.setItem('token', token);

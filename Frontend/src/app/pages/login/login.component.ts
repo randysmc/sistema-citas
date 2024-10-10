@@ -25,50 +25,44 @@ export class LoginComponent {
     
   }
 
-  formSubmit(){
-    if(this.loginData.username.trim() == '' || this.loginData.username.trim == null){
-      this.snack.open('El nombre de usuario es requerido!', 'Aceptar', {
-        duration:4000
-      })
-      return
+  formSubmit() {
+    console.log("estoy aqui");
+    if (this.loginData.username.trim() === '' || this.loginData.username.trim() == null) {
+        this.snack.open('El nombre de usuario es requerido!', 'Aceptar', {
+            duration: 4000
+        });
+        return;
     }
 
-    if(this.loginData.password.trim() == '' || this.loginData.password.trim == null){
-      this.snack.open('password requerida!', 'Aceptar', {
-        duration:4000
-      })
-      return
+    if (this.loginData.password.trim() === '' || this.loginData.password.trim() == null) {
+        this.snack.open('La contraseña es requerida!', 'Aceptar', {
+            duration: 4000
+        });
+        return;
     }
+
+    // Imprimir loginData en la consola para ver lo que se envía
+    console.log('Datos a enviar:', this.loginData);
 
     this.loginService.generateToken(this.loginData).subscribe(
-      (data:any) => {
-        console.log(data);
-        this.loginService.loginUser(data.token);
-        this.loginService.getCurrentUser().subscribe((user:any) => {
-          this.loginService.setUser(user)
-          console.log(user);
+        (response: any) => {
+            console.log(response); // Esto debería mostrar "Código de autenticación enviado"
+            
+            // Guardamos el nombre de usuario
+            localStorage.setItem('username', this.loginData.username);
+            
+            // Redirigimos al componente de two-fa
+            this.router.navigate(['two-fa']); 
+        },
+        (error) => {
+            console.log('Error en la autenticación:', error);
+            this.snack.open('Credenciales invalidas!', 'Aceptar', {
+                duration: 3000
+            });
+        }
+    );
+}
 
-          if(this.loginService.getUserRole() == "ADMIN"){
-            //window.location.href = "/admin"
-            this.router.navigate(['admin'])
-            this.loginService.loginStatusSubjec.next(true);
-          }
-          else if(this.loginService.getUserRole() == "NORMAL"){
-            //window.location.href = "/user-dashboard"
-            this.router.navigate(['user-dashboard'])
-            this.loginService.loginStatusSubjec.next(true);
-          }
-          else{
-            this.loginService.logout();
-          }
-        })
-      }, (error) => {
-        console.log(error);
-        this.snack.open('Credenciales invalidas, vuelva a intentar! ', 'Aceptar ', {
-          duration:3000
-        })
-      }
-    )
-  }
+  
 
 }

@@ -7,6 +7,7 @@ import { DashboardComponent } from './pages/admin/dashboard/dashboard.component'
 import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboard.component';
 import { AdminGuard } from './services/admin.guard';
 import { normalGuard } from './services/normal.guard';
+import { TwoFaComponent } from './pages/two-fa/two-fa.component';
 
 const routes: Routes = [
   {
@@ -35,6 +36,11 @@ const routes: Routes = [
     component: UserDashboardComponent,
     pathMatch: 'full',
     canActivate: [normalGuard]
+  },
+  {
+    path: 'two-fa',
+    component: TwoFaComponent,
+    pathMatch: 'full'
   }
 ];
 
