@@ -1,6 +1,8 @@
 package com.sistema.examenes.sistema_examenes_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,16 +27,23 @@ public class Usuario implements UserDetails {
     private String telefono;
     private boolean enabled = true;
     private String perfil;
+    private String nit;
+    private String cui;
+    private boolean tfa = true;
+
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "usuario")
     @JsonIgnore
     private Set<UsuarioRol> usuarioRoles = new HashSet<>();
 
+
     public Usuario(){
 
     }
 
-    public Usuario(Long id, String username, String password, String nombre, String apellido, String email, String telefono, boolean enabled, String perfil) {
+
+
+    public Usuario(Long id, String username, String password, String nombre, String apellido, String email, String telefono, boolean enabled, String perfil, String nit, String cui, boolean tfa) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -44,6 +53,9 @@ public class Usuario implements UserDetails {
         this.telefono = telefono;
         this.enabled = enabled;
         this.perfil = perfil;
+        this.cui = cui;
+        this.nit = nit;
+        this.tfa = tfa;
     }
 
     public Long getId() {
@@ -149,4 +161,38 @@ public class Usuario implements UserDetails {
     public void setUsuarioRoles(Set<UsuarioRol> usuarioRoles) {
         this.usuarioRoles = usuarioRoles;
     }
+
+   /* public Set<UsuarioNegocio> getUsuarioNegocios() {
+        return usuarioNegocios;
+    }
+
+    public void setUsuarioNegocios(Set<UsuarioNegocio> usuarioNegocios) {
+        this.usuarioNegocios = usuarioNegocios;
+    }*/
+
+    public String getNit() {
+        return nit;
+    }
+
+    public void setNit(String nit) {
+        this.nit = nit;
+    }
+
+    public String getCui() {
+        return cui;
+    }
+
+    public void setCui(String cui) {
+        this.cui = cui;
+    }
+
+    public boolean isTfa() {
+        return tfa;
+    }
+
+    public void setTfa(boolean tfa) {
+        this.tfa = tfa;
+    }
+
+
 }
