@@ -55,7 +55,7 @@ export class TwoFaComponent {
           if (this.loginService.getUserRole() === "ADMIN") {
             this.router.navigate(['admin']);
             this.loginService.loginStatusSubjec.next(true);
-          } else if (this.loginService.getUserRole() === "NORMAL") {
+          } else if (this.loginService.getUserRole() === "CLIENTE") {
             this.router.navigate(['user-dashboard']);
             this.loginService.loginStatusSubjec.next(true);
           } else {
