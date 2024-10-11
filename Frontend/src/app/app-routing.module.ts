@@ -35,7 +35,7 @@ const routes: Routes = [
     path: 'user-dashboard',
     component: UserDashboardComponent,
     pathMatch: 'full',
-    canActivate: [normalGuard]
+    //canActivate: [normalGuard]
   },
   {
     path: 'two-fa',
