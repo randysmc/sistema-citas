@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 
 @Component({
@@ -13,10 +13,16 @@ export class TwoFaComponent {
   twoFactorCode: string = '';
   username: string = '';
 
-  constructor(private loginService: LoginService, private router: Router, private snack: MatSnackBar){
+  constructor(private route: ActivatedRoute, private loginService: LoginService, private router: Router, private snack: MatSnackBar){
     //Recuperamos el usario
     this.username = localStorage.getItem('username') || '';
 
+  }
+
+  ngOnInit():void{
+    this.route.paramMap.subscribe(params => {
+      this.username = params.get('username') || '';
+    });
   }
 
   validateTwoFactorCode() {

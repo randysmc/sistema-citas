@@ -49,10 +49,10 @@ export class LoginComponent {
             console.log(response); // Esto debería mostrar "Código de autenticación enviado"
             
             // Guardamos el nombre de usuario
-            localStorage.setItem('username', this.loginData.username);
+            //localStorage.setItem('username', this.loginData.username);
             
             // Redirigimos al componente de two-fa
-            this.router.navigate(['two-fa']); 
+            this.router.navigate(['two-fa', {username: this.loginData.username}]); 
         },
         (error) => {
             console.log('Error en la autenticación:', error);
