@@ -1,8 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend;
 
-import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
-import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
-import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioRol;
+import com.sistema.examenes.sistema_examenes_backend.entidades.*;
 import com.sistema.examenes.sistema_examenes_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -31,19 +29,19 @@ public class SistemaExamenesBackendApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		/*Usuario usuario = new Usuario();
 
-		usuario.setNombre("randy");
+		usuario.setNombre("Ringo");
 		usuario.setApellido("sum");
-		usuario.setUsername("randysmc");
+		usuario.setUsername("nachito");
 		usuario.setPassword(bCryptPasswordEncoder.encode("password"));
-		usuario.setEmail("randy@gmail.com");
+		usuario.setEmail("nacho@gmail.com");
 		usuario.setTelefono("7754");
-		//usuario.setCUI("465654");
-		//usuario.setNIT("654");
+		usuario.setNit("465654");
+		usuario.setCui("654");
 		usuario.setPerfil("foto.png");
 
 		Rol rol = new Rol();
-		rol.setRolId(1L);
-		rol.setRolNombre("ADMIN");
+		rol.setRolId(2L);
+		rol.setRolNombre("CLIENTE");
 
 		Set<UsuarioRol> usuarioRoles = new HashSet<>();
 		UsuarioRol usuarioRol = new UsuarioRol();
@@ -52,6 +50,42 @@ public class SistemaExamenesBackendApplication implements CommandLineRunner {
 		usuarioRoles.add(usuarioRol);
 
 		Usuario usuarioGuardado = usuarioService.guardarUsuario(usuario, usuarioRoles);
+		System.out.println(usuarioGuardado.getUsername());*/
+
+		/*Usuario usuario = new Usuario();
+
+		usuario.setNombre("Cristal");
+		usuario.setApellido("Coyoy");
+		usuario.setUsername("crisjyr");
+		usuario.setPassword(bCryptPasswordEncoder.encode("password"));
+		usuario.setEmail("crisjyr@gmail.com");
+		usuario.setTelefono("7795");
+		usuario.setCui("123456");
+		usuario.setNit("159");
+		usuario.setPerfil("foto.png");
+
+		Rol rol = new Rol();
+		rol.setRolId(1L);
+		rol.setRolNombre("ADMIN");
+
+		Negocio negocio = new Negocio();
+		negocio.setNegocioId(1L);
+		negocio.setNombre("Clinica Dental JCDentist");
+
+
+		Set<UsuarioRol> usuarioRoles = new HashSet<>();
+		UsuarioRol usuarioRol = new UsuarioRol();
+		usuarioRol.setRol(rol);
+		usuarioRol.setUsuario(usuario);
+		usuarioRoles.add(usuarioRol);
+
+		Set<UsuarioNegocio> usuarioNegocios = new HashSet<>();
+		UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
+		usuarioNegocio.setNegocio(negocio);
+		usuarioNegocio.setUsuario(usuario);
+		usuarioNegocios.add(usuarioNegocio);
+
+		Usuario usuarioGuardado = usuarioService.guardarEmpleado(usuario, usuarioRoles, usuarioNegocios);
 		System.out.println(usuarioGuardado.getUsername());*/
 	}
 }

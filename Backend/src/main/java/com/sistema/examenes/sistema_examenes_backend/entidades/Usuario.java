@@ -36,6 +36,9 @@ public class Usuario implements UserDetails {
     @JsonIgnore
     private Set<UsuarioRol> usuarioRoles = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usuario")
+    @JsonIgnore
+    private Set<UsuarioNegocio> usuarioNegocios = new HashSet<>();
 
     public Usuario(){
 
@@ -162,14 +165,6 @@ public class Usuario implements UserDetails {
         this.usuarioRoles = usuarioRoles;
     }
 
-   /* public Set<UsuarioNegocio> getUsuarioNegocios() {
-        return usuarioNegocios;
-    }
-
-    public void setUsuarioNegocios(Set<UsuarioNegocio> usuarioNegocios) {
-        this.usuarioNegocios = usuarioNegocios;
-    }*/
-
     public String getNit() {
         return nit;
     }
@@ -194,5 +189,12 @@ public class Usuario implements UserDetails {
         this.tfa = tfa;
     }
 
+    public Set<UsuarioNegocio> getUsuarioNegocios() {
+        return usuarioNegocios;
+    }
+
+    public void setUsuarioNegocios(Set<UsuarioNegocio> usuarioNegocios) {
+        this.usuarioNegocios = usuarioNegocios;
+    }
 
 }
