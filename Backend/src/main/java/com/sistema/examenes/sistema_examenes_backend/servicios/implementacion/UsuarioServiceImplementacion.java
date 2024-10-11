@@ -10,6 +10,7 @@ import com.sistema.examenes.sistema_examenes_backend.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -23,6 +24,11 @@ public class UsuarioServiceImplementacion implements UsuarioService {
 
     @Autowired
     private NegocioRepository negocioRepository;
+
+    @Override
+    public List<Usuario> findAll(){
+        return usuarioRepository.findAll();
+    }
 
     @Override
     public Usuario guardarUsuario(Usuario usuario, Set<UsuarioRol> usuarioRoles) throws Exception {

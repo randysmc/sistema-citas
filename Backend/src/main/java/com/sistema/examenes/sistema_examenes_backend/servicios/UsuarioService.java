@@ -4,6 +4,7 @@ import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
 import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioNegocio;
 import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioRol;
 
+import java.util.List;
 import java.util.Set;
 
 public interface UsuarioService {
@@ -15,4 +16,6 @@ public interface UsuarioService {
     public Usuario obtenerUsuario(String username);
 
     public void eliminarUsuario(Long usuarioId);
+
+    public List<Usuario> findAll();
 }

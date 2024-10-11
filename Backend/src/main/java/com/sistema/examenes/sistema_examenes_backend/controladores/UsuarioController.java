@@ -11,10 +11,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/usuarios")
+@RequestMapping("/usuarios/")
 @CrossOrigin ("*")
 public class UsuarioController {
 
@@ -27,7 +28,10 @@ public class UsuarioController {
     @Autowired
     private RolService rolService;
 
-
+    @GetMapping
+    public List<Usuario> obtenerTodosEmpleados(){
+        return usuarioService.findAll();
+    }
 
     /*@PostMapping("/")
     public Usuario guardarUsuario(@RequestBody Usuario usuario) throws Exception{
