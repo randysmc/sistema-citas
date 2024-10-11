@@ -2,33 +2,16 @@ package com.sistema.examenes.sistema_examenes_backend.DTO;
 
 import java.util.Set;
 
-public class EmpleadoDTO {
-    private Long id;
+public class UsuarioResponseDTO {
     private String username;
-    private String password;
     private String nombre;
     private String apellido;
     private String email;
     private String telefono;
-    private boolean enabled = true;
+    private boolean enabled;
     private String perfil;
-    private String nit;
-    private String cui;
-    private boolean tfa = true;
-
-    // Para manejar los roles asociados
-    private Set<Long> roles; // IDs de roles
-    // Para manejar los negocios asociados (obligatorio para empleados)
-
-    private Set<Long> negocios; // IDs de negocios
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Set<String> roles;      // O puedes usar Set<Long> si prefieres los IDs
+    private Set<String> negocios;
 
     public String getUsername() {
         return username;
@@ -36,14 +19,6 @@ public class EmpleadoDTO {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getNombre() {
@@ -94,43 +69,19 @@ public class EmpleadoDTO {
         this.perfil = perfil;
     }
 
-    public String getNit() {
-        return nit;
-    }
-
-    public void setNit(String nit) {
-        this.nit = nit;
-    }
-
-    public String getCui() {
-        return cui;
-    }
-
-    public void setCui(String cui) {
-        this.cui = cui;
-    }
-
-    public boolean isTfa() {
-        return tfa;
-    }
-
-    public void setTfa(boolean tfa) {
-        this.tfa = tfa;
-    }
-
-    public Set<Long> getRoles() {
+    public Set<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Long> roles) {
+    public void setRoles(Set<String> roles) {
         this.roles = roles;
     }
 
-    public Set<Long> getNegocios() {
+    public Set<String> getNegocios() {
         return negocios;
     }
 
-    public void setNegocios(Set<Long> negocios) {
+    public void setNegocios(Set<String> negocios) {
         this.negocios = negocios;
     }
 }

@@ -1,5 +1,7 @@
 package com.sistema.examenes.sistema_examenes_backend.controladores;
 
+import com.sistema.examenes.sistema_examenes_backend.DTO.EmpleadoDTO;
+import com.sistema.examenes.sistema_examenes_backend.DTO.UsuarioResponseDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
 import com.sistema.examenes.sistema_examenes_backend.entidades.JwtRequest; // Asegúrate de importar JwtRequest
 import com.sistema.examenes.sistema_examenes_backend.entidades.JwtResponse; // Asegúrate de importar JwtResponse
@@ -19,6 +21,8 @@ import java.security.Principal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("*")
@@ -93,10 +97,43 @@ public class AuthenticationController {
         }
     }
 
+
     @GetMapping("/actual-usuario")
     public Usuario obtenerUsuarioActual(Principal principal) {
         return (Usuario) this.userDetailsService.loadUserByUsername(principal.getName());
     }
+
+    /*@GetMapping("/actual-usuario")
+    public ResponseEntity<?> obtenerUsuarioActual(Principal principal) {
+        Usuario usuario = (Usuario) this.userDetailsService.loadUserByUsername(principal.getName());
+
+        // Crear el nuevo DTO para la respuesta
+        UsuarioResponseDTO responseDTO = new UsuarioResponseDTO();
+        responseDTO.setUsername(usuario.getUsername());
+        responseDTO.setNombre(usuario.getNombre());
+        responseDTO.setApellido(usuario.getApellido());
+        responseDTO.setEmail(usuario.getEmail());
+        responseDTO.setTelefono(usuario.getTelefono());
+        responseDTO.setEnabled(usuario.isEnabled());
+        responseDTO.setPerfil(usuario.getPerfil());
+
+        // Convertir los roles a una lista de nombres
+        Set<String> roles = usuario.getUsuarioRoles().stream()
+                .map(usuarioRol -> usuarioRol.getRol().getRolNombre())  // Nombres de los roles
+                .collect(Collectors.toSet());
+        responseDTO.setRoles(roles);  // Asignar nombres de roles
+
+        // Convertir los negocios a una lista de nombres
+        Set<String> negocios = usuario.getUsuarioNegocios().stream()
+                .map(usuarioNegocio -> usuarioNegocio.getNegocio().getNombre())  // Nombres de los negocios
+                .collect(Collectors.toSet());
+        responseDTO.setNegocios(negocios);  // Asignar nombres de negocios
+
+        return ResponseEntity.ok(responseDTO);
+    }*/
+
+
+
 }
 
 
