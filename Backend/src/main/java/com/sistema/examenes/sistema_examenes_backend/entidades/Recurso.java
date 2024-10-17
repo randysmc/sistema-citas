@@ -10,6 +10,7 @@ public class Recurso {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long recursoId;
 
+    @Column(unique = true)
     private String nombre;
     private String descripcion;
     private boolean disponible;

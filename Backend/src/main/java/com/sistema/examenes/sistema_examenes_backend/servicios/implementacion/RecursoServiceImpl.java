@@ -4,6 +4,7 @@ package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 import com.sistema.examenes.sistema_examenes_backend.DTO.RecursoDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
+import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.RecursoRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.RecursoService;
 
@@ -11,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class RecursoServiceImpl implements RecursoService {
@@ -19,7 +23,100 @@ public class RecursoServiceImpl implements RecursoService {
     @Autowired
     private RecursoRepository recursoRepository;
 
-    private RecursoDTO convertirARecursoDTO(Recurso recurso) {
+    @Autowired
+    private NegocioRepository negocioRepository;
+
+    @Override
+    public Optional<RecursoDTO> findById(Long id) {
+        return recursoRepository.findById(id).map(this::convertRecursoToDTO);
+    }
+
+    @Override
+    public List<RecursoDTO> findAll() {
+        return recursoRepository.findAll().stream()
+                .map(this::convertRecursoToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public RecursoDTO save(RecursoDTO recursoDTO) {
+        // Verificar si el nombre ya existe
+        if (recursoRepository.existsByNombre(recursoDTO.getNombre())) {
+            throw new IllegalArgumentException("El nombre del recurso ya existe.");
+        }
+
+        Recurso recurso = convertRecursoToEntity(recursoDTO);
+        Recurso savedRecurso = recursoRepository.save(recurso);
+        return convertRecursoToDTO(savedRecurso);
+    }
+
+
+    @Override
+    public RecursoDTO update(RecursoDTO recursoDTO) {
+        // Verificar si el recurso a actualizar existe
+        Recurso existingRecurso = recursoRepository.findById(recursoDTO.getRecursoId())
+                .orElseThrow(() -> new RuntimeException("Recurso no encontrado con ID: " + recursoDTO.getRecursoId()));
+
+        // Verificar si el nombre es único (excepto para el mismo recurso que estamos actualizando)
+        if (!existingRecurso.getNombre().equals(recursoDTO.getNombre())
+                && recursoRepository.existsByNombre(recursoDTO.getNombre())) {
+            throw new IllegalArgumentException("El nombre del recurso ya existe.");
+        }
+
+        // Actualizar los campos del recurso existente
+        existingRecurso.setNombre(recursoDTO.getNombre());
+        existingRecurso.setDescripcion(recursoDTO.getDescripcion());
+        existingRecurso.setDisponible(recursoDTO.isDisponible());
+        // Si necesitas actualizar otros campos, hazlo aquí
+
+        // Guardar el recurso actualizado
+        Recurso updatedRecurso = recursoRepository.save(existingRecurso);
+        return convertRecursoToDTO(updatedRecurso);
+    }
+
+
+
+    @Override
+    public void delete(Long id) {
+        recursoRepository.deleteById(id);
+    }
+
+    @Override
+    public RecursoDTO convertRecursoToDTO(Recurso recurso) {
+        RecursoDTO dto = new RecursoDTO();
+        dto.setRecursoId(recurso.getRecursoId());
+        dto.setDescripcion(recurso.getDescripcion());
+        dto.setNombre(recurso.getNombre());
+        dto.setDisponible(recurso.isDisponible());
+        dto.setNegocioId(recurso.getNegocio().getNegocioId());
+        return  dto;
+    }
+
+    @Override
+    public Recurso convertRecursoToEntity(RecursoDTO dto) {
+        Recurso recurso = new Recurso();
+        recurso.setRecursoId(dto.getRecursoId());
+        recurso.setDescripcion(dto.getDescripcion());
+        recurso.setDisponible(dto.isDisponible());
+        recurso.setNombre(dto.getNombre());
+
+        // Buscar el negocio por su ID y lanzar excepción si no se encuentra
+        Negocio negocio = negocioRepository.findById(dto.getNegocioId())
+                .orElseThrow(() -> new RuntimeException("Negocio no encontrado con ID: " + dto.getNegocioId()));
+
+        recurso.setNegocio(negocio);
+
+        return recurso;
+    }
+
+
+
+
+
+
+
+
+    /*private RecursoDTO convertirARecursoDTO(Recurso recurso) {
         return new RecursoDTO(
                 recurso.getRecursoId(),
                 recurso.getNombre(),
@@ -72,5 +169,5 @@ public class RecursoServiceImpl implements RecursoService {
     @Override
     public Set<Recurso> obtenerRecursosActivos() {
         return Set.of();
-    }
+    }*/
 }

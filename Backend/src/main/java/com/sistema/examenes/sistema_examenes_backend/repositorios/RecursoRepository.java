@@ -8,4 +8,6 @@ import java.util.Set;
 
 public interface RecursoRepository extends JpaRepository<Recurso,Long> {
     Set<Negocio> findByNegocio(Negocio negocio);
+
+    boolean existsByNombre(String nombre);
 }
