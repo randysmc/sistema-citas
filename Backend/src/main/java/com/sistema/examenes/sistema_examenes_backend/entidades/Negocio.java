@@ -1,7 +1,10 @@
 package com.sistema.examenes.sistema_examenes_backend.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -9,7 +12,9 @@ import java.util.Set;
 public class Negocio {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long negocioId;
+
     private String nombre;
     private String direccion;
     private String descripcion;
@@ -18,16 +23,26 @@ public class Negocio {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "negocio")
     private Set<UsuarioNegocio> usuarioNegocios = new HashSet<>();
 
+    //Un negocio puede tener muchos recursos
+    @OneToMany(mappedBy = "negocio", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Recurso> recursos =  new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "negocio", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Servicio> servicios = new LinkedHashSet<>();
+
+
     public Negocio() {
     }
 
-    public Negocio(Long negocioId, String direccion, String nombre, String descripcion, String telefono, Set<UsuarioNegocio> usuarioNegocios) {
+    public Negocio(Long negocioId, String direccion, String nombre, String descripcion, String telefono) {
         this.negocioId = negocioId;
         this.direccion = direccion;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.telefono = telefono;
-        this.usuarioNegocios = usuarioNegocios;
+
     }
 
     public Long getNegocioId() {
@@ -76,5 +91,21 @@ public class Negocio {
 
     public void setUsuarioNegocios(Set<UsuarioNegocio> usuarioNegocios) {
         this.usuarioNegocios = usuarioNegocios;
+    }
+
+    public Set<Recurso> getRecursos() {
+        return recursos;
+    }
+
+    public void setRecursos(Set<Recurso> recursos) {
+        this.recursos = recursos;
+    }
+
+    public Set<Servicio> getServicios() {
+        return servicios;
+    }
+
+    public void setServicios(Set<Servicio> servicios) {
+        this.servicios = servicios;
     }
 }

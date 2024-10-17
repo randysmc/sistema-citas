@@ -1,5 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.controladores;
 
+import com.sistema.examenes.sistema_examenes_backend.DTO.RolDTO;
 import com.sistema.examenes.sistema_examenes_backend.DTO.UsuarioDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -22,16 +24,46 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private RolService rolService;
 
     @GetMapping
-    public List<Usuario> obtenerTodosEmpleados(){
+    public List<UsuarioDTO> obtenerUsuarios() {
         return usuarioService.findAll();
     }
+
+    @PostMapping("/")
+    public UsuarioDTO guardarUsuario(@RequestBody UsuarioDTO usuarioDTO) throws Exception {
+        // Crear roles basados en el ID recibido desde el frontend
+        Set<UsuarioRol> usuarioRoles = new HashSet<>();
+
+        // Buscar el rol por ID (en este caso siempre recibes el rol ID 2)
+        Long rolId = 2L; // o recibirlo dinámicamente desde el usuarioDTO si quieres más flexibilidad
+        Optional<RolDTO> rolDTOOptional = rolService.findById(rolId);
+
+        if (!rolDTOOptional.isPresent()) {
+            throw new Exception("El rol con ID " + rolId + " no existe.");
+        }
+
+        // Convertir RolDTO a la entidad Rol usando RolService
+        Rol rol = rolService.convertRolToEntity(rolDTOOptional.get());
+
+        UsuarioRol usuarioRol = new UsuarioRol();
+        usuarioRol.setRol(rol);  // Asignar el rol existente al usuario
+        usuarioRoles.add(usuarioRol);
+
+        // Llamar al servicio para guardar el usuario
+        return usuarioService.guardarUsuario(usuarioDTO, usuarioRoles);
+    }
+
+
+    @GetMapping("/{username}")
+    public UsuarioDTO obtenerUsuario(@PathVariable("username") String username) {
+        return usuarioService.obtenerUsuario(username);
+    }
+
+
 
     /*@PostMapping("/")
     public Usuario guardarUsuario(@RequestBody Usuario usuario) throws Exception{
@@ -53,7 +85,7 @@ public class UsuarioController {
         return usuarioService.guardarUsuario(usuario, usuarioRoles);
     }*/
 
-    @PostMapping("/")
+    /*@PostMapping("/")
     public Usuario guardarUsuario(@RequestBody UsuarioDTO usuarioDTO) throws Exception {
         // Convertir UsuarioDTO a entidad Usuario
         Usuario usuario = new Usuario();
@@ -88,22 +120,22 @@ public class UsuarioController {
 
         // Llamar al servicio para guardar el usuario
         return usuarioService.guardarUsuario(usuario, usuarioRoles);
-    }
+    }*/
 
 
     //se envia un pathvariable
-    @GetMapping("/{username}")
+    /*@GetMapping("/{username}")
     public Usuario obtenerUsuario(@PathVariable("username") String username){
         System.out.println("Estamos obteniendo al usuario: " + username);
         Usuario usuario = usuarioService.obtenerUsuario(username);
         System.out.println("Usuario obtenido: " + usuario.getNombre());  // Verifica si el objeto Usuario está nulo o tiene datos
         return usuario;
-    }
+    }*/
 
 
 
-    @DeleteMapping("/{usuarioId}")
+    /*@DeleteMapping("/{usuarioId}")
     public void eliminarUsuario(@PathVariable("usuarioId") Long usuarioId){
         usuarioService.eliminarUsuario(usuarioId);
-    }
+    }*/
 }
