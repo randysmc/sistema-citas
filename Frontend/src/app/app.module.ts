@@ -14,6 +14,7 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatCardModule} from '@angular/material/card'; 
 import {MatToolbarModule} from '@angular/material/toolbar'; 
 import {MatIconModule} from '@angular/material/icon'; 
+import {MatListModule} from '@angular/material/list';
 
 
 
@@ -26,6 +27,9 @@ import { authInterceptorProviders } from './services/auth.interceptors';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
 import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboard.component';
 import { TwoFaComponent } from './pages/two-fa/two-fa.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { SidebarComponent } from './pages/admin/sidebar/sidebar.component';
+import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
 
 
 
@@ -40,6 +44,9 @@ import { TwoFaComponent } from './pages/two-fa/two-fa.component';
     DashboardComponent,
     UserDashboardComponent,
     TwoFaComponent,
+    ProfileComponent,
+    SidebarComponent,
+    WelcomeComponent,
 
   ],
   imports: [
@@ -54,7 +61,8 @@ import { TwoFaComponent } from './pages/two-fa/two-fa.component';
     MatSnackBarModule,
     MatCardModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MatListModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

@@ -30,7 +30,9 @@
     *ngIf="isLoggedIn && user" 
     mat-button
     style="margin-right: 10px;"
-    class="example-icon favorite-icon" aria-label="example-icon with hear icon">
+    class="example-icon favorite-icon" 
+    routerLink="/admin/profile"
+    aria-label="example-icon with hear icon">
     {{ user?.username }} <!-- Usar user en lugar de login.getUser() -->
   </button>
   
