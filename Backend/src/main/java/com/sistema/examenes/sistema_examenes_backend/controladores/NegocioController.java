@@ -40,10 +40,11 @@ public class NegocioController {
     // Actualizar un negocio existente
     @PutMapping("/{id}")
     public ResponseEntity<NegocioDTO> actualizarNegocio(@PathVariable Long id, @RequestBody NegocioDTO negocioDTO) {
-        // Establecer el ID en el DTO para asegurarse de que se actualiza el correcto
+        //Establece el Id del Negocio en el DTO
         negocioDTO.setNegocioId(id);
         NegocioDTO negocioActualizado = negocioService.update(negocioDTO);
         return ResponseEntity.ok(negocioActualizado);
+
     }
 
     // Eliminar un negocio por ID

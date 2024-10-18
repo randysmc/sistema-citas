@@ -53,25 +53,20 @@ public class RecursoServiceImpl implements RecursoService {
 
     @Override
     public RecursoDTO update(RecursoDTO recursoDTO) {
-        // Verificar si el recurso a actualizar existe
         Recurso existingRecurso = recursoRepository.findById(recursoDTO.getRecursoId())
                 .orElseThrow(() -> new RuntimeException("Recurso no encontrado con ID: " + recursoDTO.getRecursoId()));
-
-        // Verificar si el nombre es único (excepto para el mismo recurso que estamos actualizando)
-        if (!existingRecurso.getNombre().equals(recursoDTO.getNombre())
-                && recursoRepository.existsByNombre(recursoDTO.getNombre())) {
-            throw new IllegalArgumentException("El nombre del recurso ya existe.");
+        if(recursoDTO.getNombre() != null){
+            if(!existingRecurso.getNombre().equals(recursoDTO.getNombre()) && recursoRepository.existsByNombre(recursoDTO.getNombre())){
+                throw new IllegalArgumentException("El nombre del recurso ya existe");
+            }
+            existingRecurso.setNombre(recursoDTO.getNombre());
+        }
+        if(recursoDTO.getDescripcion() != null){
+            existingRecurso.setDescripcion(recursoDTO.getDescripcion());
         }
 
-        // Actualizar los campos del recurso existente
-        existingRecurso.setNombre(recursoDTO.getNombre());
-        existingRecurso.setDescripcion(recursoDTO.getDescripcion());
-        existingRecurso.setDisponible(recursoDTO.isDisponible());
-        // Si necesitas actualizar otros campos, hazlo aquí
-
-        // Guardar el recurso actualizado
-        Recurso updatedRecurso = recursoRepository.save(existingRecurso);
-        return convertRecursoToDTO(updatedRecurso);
+        Recurso updateRecurso = recursoRepository.save(existingRecurso);
+        return convertRecursoToDTO(updateRecurso);
     }
 
 

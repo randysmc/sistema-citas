@@ -1,20 +1,25 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios;
 
+import com.sistema.examenes.sistema_examenes_backend.DTO.ServicioDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Servicio;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface ServicioService {
 
-    Servicio agregarServicio(Servicio servicio);
+    Optional<ServicioDTO> findById(Long id);
 
-    Servicio actualizarServicio(Servicio servicio);
+    List<ServicioDTO> findAll();
 
-    Set<Servicio> obtenerServicios();
+    ServicioDTO save(ServicioDTO servicioDTO);
 
-    Servicio obtenerServicio(Long servicioId);
+    ServicioDTO update(ServicioDTO servicioDTO);
 
-    void eliminarServicio(Long servicioId);
+    void delete(Long id);
 
-    Set<Servicio> obtenerServiciosActivos();
+    Servicio convertServicioToEntity(ServicioDTO servicioDTO);
+
+    ServicioDTO convertServicioToDTO(Servicio servicio);
 }

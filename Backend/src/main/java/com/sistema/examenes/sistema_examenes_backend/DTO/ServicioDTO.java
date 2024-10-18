@@ -1,34 +1,25 @@
-package com.sistema.examenes.sistema_examenes_backend.entidades;
+package com.sistema.examenes.sistema_examenes_backend.DTO;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Entity
-@Table (name = "servicios")
-public class Servicio {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ServicioDTO {
     private Long servicioId;
-
     private String nombre;
     private String descripcion;
     private Integer duracionServicio;
     private BigDecimal precio;
+    private Long negocioId;
 
-    @ManyToOne (fetch = FetchType.EAGER)
-    private Negocio negocio;
-
-    public Servicio(Long servicioId, String nombre, String descripcion, Integer duracionServicio, BigDecimal precio, Negocio negocio) {
+    public ServicioDTO(Long servicioId, String nombre, String descripcion, Integer duracionServicio, BigDecimal precio, Long negocioId) {
         this.servicioId = servicioId;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracionServicio = duracionServicio;
         this.precio = precio;
-        this.negocio = negocio;
+        this.negocioId = negocioId;
     }
 
-    public Servicio() {
+    public ServicioDTO() {
     }
 
     public Long getServicioId() {
@@ -71,11 +62,23 @@ public class Servicio {
         this.precio = precio;
     }
 
-    public Negocio getNegocio() {
-        return negocio;
+    public Long getNegocioId() {
+        return negocioId;
     }
 
-    public void setNegocio(Negocio negocio) {
-        this.negocio = negocio;
+    public void setNegocioId(Long negocioId) {
+        this.negocioId = negocioId;
     }
 }
+
+/*
+*     private Long servicioId;
+
+    private String nombre;
+    private String descripcion;
+    private int duracionServicio;
+    private BigDecimal precio;
+
+    @ManyToOne (fetch = FetchType.EAGER)
+    private Negocio negocio;
+* */

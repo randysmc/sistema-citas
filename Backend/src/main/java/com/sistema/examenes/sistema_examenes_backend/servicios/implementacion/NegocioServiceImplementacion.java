@@ -2,6 +2,7 @@ package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
 import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
+import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.NegocioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,11 @@ public class NegocioServiceImplementacion implements NegocioService {
 
     @Override
     public NegocioDTO save(NegocioDTO negocioDTO) {
+        // Verificar si el nombre ya existe
+        if (negocioRepository.existsByNombre(negocioDTO.getNombre())) {
+            throw new IllegalArgumentException("El nombre del recurso ya existe.");
+        }
+
         Negocio negocio = convertNegocioToEntity(negocioDTO);
         Negocio savedNegocio = negocioRepository.save(negocio);
         return convertNegocioToDTO(savedNegocio);
@@ -39,10 +45,33 @@ public class NegocioServiceImplementacion implements NegocioService {
 
     @Override
     public NegocioDTO update(NegocioDTO negocioDTO) {
-        Negocio negocio = convertNegocioToEntity(negocioDTO);
-        Negocio updatedNegocio = negocioRepository.save(negocio);
+        Negocio existingNegocio = negocioRepository.findById(negocioDTO.getNegocioId())
+                .orElseThrow(() -> new RuntimeException("Negocio no encontrado con ID: " + negocioDTO.getNegocioId()));
+
+        // Solo actualizamos los campos que vienen en la solicitud
+        if (negocioDTO.getNombre() != null) {
+            if (!existingNegocio.getNombre().equals(negocioDTO.getNombre()) && negocioRepository.existsByNombre(negocioDTO.getNombre())) {
+                throw new IllegalArgumentException("El nombre del negocio ya existe.");
+            }
+            existingNegocio.setNombre(negocioDTO.getNombre());
+        }
+
+        if (negocioDTO.getDescripcion() != null) {
+            existingNegocio.setDescripcion(negocioDTO.getDescripcion());
+        }
+
+        if (negocioDTO.getDireccion() != null) {
+            existingNegocio.setDireccion(negocioDTO.getDireccion());
+        }
+
+        if (negocioDTO.getTelefono() != null) {
+            existingNegocio.setTelefono(negocioDTO.getTelefono());
+        }
+
+        Negocio updatedNegocio = negocioRepository.save(existingNegocio);
         return convertNegocioToDTO(updatedNegocio);
     }
+
 
     @Override
     public void delete(Long id) {

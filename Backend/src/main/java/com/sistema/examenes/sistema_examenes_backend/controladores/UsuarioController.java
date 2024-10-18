@@ -39,7 +39,7 @@ public class UsuarioController {
         Set<UsuarioRol> usuarioRoles = new HashSet<>();
 
         // Buscar el rol por ID (en este caso siempre recibes el rol ID 2)
-        Long rolId = 2L; // o recibirlo dinámicamente desde el usuarioDTO si quieres más flexibilidad
+        Long rolId = 2L;
         Optional<RolDTO> rolDTOOptional = rolService.findById(rolId);
 
         if (!rolDTOOptional.isPresent()) {
