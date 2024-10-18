@@ -55,9 +55,19 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/generate-token","/usuarios/", "/validate-token", "/empleados/**", "/recursos/**","/servicios/**", "/negocios/**").permitAll()
+                .antMatchers(
+                        "/v3/api-docs/**",          // Ruta para la documentación de OpenAPI
+                        "/swagger-ui/**",           // Ruta para Swagger UI
+                        "/swagger-resources/**",    // Ruta para los recursos de Swagger
+                        "/generate-token",
+                        "/usuarios/",
+                        "/validate-token",
+                        "/empleados/**",
+                        "/recursos/**",
+                        "/servicios/**",
+                        "/negocios/**").permitAll() // Permitir acceso sin autenticación
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .anyRequest().authenticated()
+                .anyRequest().authenticated() // Otras rutas requieren autenticación
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
                 .and()
@@ -65,4 +75,5 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
+
 }
