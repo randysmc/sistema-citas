@@ -7,20 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RolService {
-    //Optional<Rol> findById(Long id);
-    Optional<RolDTO> findById(Long id);
-
-    List<RolDTO> findAll();
-
-    RolDTO save(RolDTO rolDTO);
-
-    RolDTO update(RolDTO rolDTO);
-
+    Optional<Rol> findById(Long id);
+    List<Rol> findAll();
+    Rol save(Rol rol);
+    Rol update(Rol rol);
     void delete(Long id);
-
-    // Método para convertir de DTO a entidad si necesitas usarlo externamente
-    Rol convertRolToEntity(RolDTO rolDTO);
-
-    // Método para convertir de entidad a DTO
-    RolDTO convertRolToDTO(Rol rol);
 }

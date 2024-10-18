@@ -1,5 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios;
 
+import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
 import com.sistema.examenes.sistema_examenes_backend.DTO.RecursoDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
 
@@ -10,17 +11,13 @@ import java.util.Set;
 
 public interface RecursoService {
 
-    Optional<RecursoDTO> findById(Long id);
+    Optional<Recurso> findById(Long id);
 
-    List<RecursoDTO> findAll();
+    List<Recurso> findAll();
 
-    RecursoDTO save(RecursoDTO recursoDTO);
+    Recurso save(Recurso recurso);
 
-    RecursoDTO update(RecursoDTO recursoDTO);
+    Recurso update(Recurso recurso);
 
     void delete(Long id);
-
-    Recurso convertRecursoToEntity(RecursoDTO recursoDTO);
-
-    RecursoDTO convertRecursoToDTO(Recurso recurso);
 }

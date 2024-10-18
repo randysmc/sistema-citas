@@ -8,19 +8,21 @@ import java.util.Optional;
 
 public interface NegocioService {
 
-    Optional<NegocioDTO> findById(Long id);
+    Optional<Negocio> findById(Long id);
 
     //NegocioDTO findById(Long id);
 
-    List<NegocioDTO> findAll();
+    List<Negocio> findAll();
 
-    NegocioDTO save(NegocioDTO negocioDTO);
+    Negocio save(Negocio negocio);
 
-    NegocioDTO update(NegocioDTO negocioDTO);
+    Negocio update(Negocio negocio);
 
     void delete(Long id);
 
-    Negocio convertNegocioToEntity(NegocioDTO negocioDTO);
+    //List<NegocioDTO> obtenerServiciosPorNegocio(Long negocioId);
 
-    NegocioDTO convertNegocioToDTO(Negocio negocio);
+    //Negocio convertNegocioToEntity(NegocioDTO negocioDTO);
+
+    //NegocioDTO convertNegocioToDTO(Negocio negocio);
 }

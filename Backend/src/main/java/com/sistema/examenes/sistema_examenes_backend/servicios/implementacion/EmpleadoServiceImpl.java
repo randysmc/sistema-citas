@@ -33,95 +33,50 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
-
     @Override
-    public Optional<EmpleadoDTO> findById(Long id) {
-        return empleadoRepository.findById(id).map(this::convertToDTO);
+    public Optional<Usuario> findById(Long id) {
+        return empleadoRepository.findById(id);
     }
 
     @Override
-    public EmpleadoDTO guardarEmpleado(EmpleadoDTO empleadoDTO, Set<UsuarioRol> usuarioRoles, Set<UsuarioNegocio> usuarioNegocios) throws Exception {
-        Usuario usuarioLocal = empleadoRepository.findByUsername(empleadoDTO.getUsername());
-        if (usuarioLocal != null) {
-            throw new Exception("El usuario ya existe");
-        } else {
-            Usuario usuario = convertToEntity(empleadoDTO);
-            // Codificar la contraseña
-            usuario.setPassword(bCryptPasswordEncoder.encode(usuario.getPassword()));
-
-            // Asignar roles
-            for (UsuarioRol usuarioRol : usuarioRoles) {
-                usuarioRol.setUsuario(usuario); // Establecer la relación
-                rolRepository.save(usuarioRol.getRol()); // Guarda el rol si es necesario
-                usuario.getUsuarioRoles().add(usuarioRol); // Añade el rol al usuario
-            }
-
-            // Asignar negocios
-            for (UsuarioNegocio usuarioNegocio : usuarioNegocios) {
-                usuarioNegocio.setUsuario(usuario); // Establecer la relación
-                negocioRepository.save(usuarioNegocio.getNegocio()); // Guarda el negocio si es necesario
-                usuario.getUsuarioNegocios().add(usuarioNegocio); // Añade el negocio al usuario
-            }
-
-            // Guardar usuario en el repositorio
-            usuarioLocal = empleadoRepository.save(usuario);
+    public Usuario guardarEmpleado(Usuario empleado, Set<UsuarioRol> usuarioRoles, Set<UsuarioNegocio> usuarioNegocios) throws Exception {
+        Usuario empleadoLocal = empleadoRepository.findByUsername(empleado.getUsername());
+        if (empleadoLocal != null) {
+            throw new Exception("El empleado ya existe");
         }
-        return convertToDTO(usuarioLocal);
+
+        empleado.setPassword(bCryptPasswordEncoder.encode(empleado.getPassword()));
+
+        // Asignar roles
+        for (UsuarioRol usuarioRol : usuarioRoles) {
+            usuarioRol.setUsuario(empleado);
+            rolRepository.save(usuarioRol.getRol());
+            empleado.getUsuarioRoles().add(usuarioRol);
+        }
+
+        // Asignar negocios
+        for (UsuarioNegocio usuarioNegocio : usuarioNegocios) {
+            usuarioNegocio.setUsuario(empleado);
+            negocioRepository.save(usuarioNegocio.getNegocio());
+            empleado.getUsuarioNegocios().add(usuarioNegocio);
+        }
+
+        return empleadoRepository.save(empleado);
     }
 
     @Override
-    public EmpleadoDTO obtenerEmpleado(String username) {
-        return null;
+    public Usuario obtenerEmpleado(String username) {
+        return empleadoRepository.findByUsername(username);
     }
 
     @Override
     public void eliminarEmpleado(Long empleadoId) {
-
+        empleadoRepository.deleteById(empleadoId);
     }
 
     @Override
-    public List<EmpleadoDTO> findAll() {
-        return List.of();
+    public List<Usuario> findAll() {
+        return empleadoRepository.findAll();
     }
 
-
-    private EmpleadoDTO convertToDTO(Usuario usuario) {
-        EmpleadoDTO dto = new EmpleadoDTO();
-        dto.setId(usuario.getId());
-        dto.setUsername(usuario.getUsername());
-        dto.setPassword(usuario.getPassword());
-        dto.setNombre(usuario.getNombre());
-        dto.setApellido(usuario.getApellido());
-        dto.setEmail(usuario.getEmail());
-        dto.setTelefono(usuario.getTelefono());
-        dto.setEnabled(usuario.isEnabled());
-        dto.setPerfil(usuario.getPerfil());
-        dto.setNit(usuario.getNit());
-        dto.setCui(usuario.getCui());
-        dto.setTfa(usuario.isTfa());
-        dto.setRoles(usuario.getUsuarioRoles().stream()
-                .map(usuarioRol -> usuarioRol.getRol().getRolId())
-                .collect(Collectors.toSet()));
-        dto.setNegocios(usuario.getUsuarioNegocios().stream()
-                .map(usuarioNegocio -> usuarioNegocio.getNegocio().getNegocioId()) // Agrega el id del negocio
-                .collect(Collectors.toSet()));
-        return dto;
-    }
-
-    private Usuario convertToEntity(EmpleadoDTO dto) {
-        Usuario usuario = new Usuario();
-        usuario.setId(dto.getId());
-        usuario.setUsername(dto.getUsername());
-        usuario.setPassword(dto.getPassword());
-        usuario.setNombre(dto.getNombre());
-        usuario.setApellido(dto.getApellido());
-        usuario.setEmail(dto.getEmail());
-        usuario.setTelefono(dto.getTelefono());
-        usuario.setEnabled(dto.isEnabled());
-        usuario.setPerfil(dto.getPerfil());
-        usuario.setNit(dto.getNit());
-        usuario.setCui(dto.getCui());
-        usuario.setTfa(dto.isTfa());
-        return usuario;
-    }
 }

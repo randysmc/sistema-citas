@@ -2,6 +2,7 @@ package com.sistema.examenes.sistema_examenes_backend.controladores;
 
 import com.sistema.examenes.sistema_examenes_backend.DTO.RecursoDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
+import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
 import com.sistema.examenes.sistema_examenes_backend.servicios.NegocioService;
 import com.sistema.examenes.sistema_examenes_backend.servicios.RecursoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,30 +25,27 @@ public class RecursoController {
     private NegocioService negocioService;
 
     @GetMapping
-    public List<RecursoDTO> obtenerRecursos(){
+    public List<Recurso> obtenerRecursos() {
         return recursoService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RecursoDTO> obtenerRecursoPorId(@PathVariable Long id){
-        Optional<RecursoDTO> recursoDTO = recursoService.findById(id);
-        return recursoDTO.map(ResponseEntity::ok)
+    public ResponseEntity<Recurso> obtenerRecursoPorId(@PathVariable Long id) {
+        Optional<Recurso> recurso = recursoService.findById(id);
+        return recurso.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/")
-    public ResponseEntity<RecursoDTO> crearRecurso(@RequestBody RecursoDTO recursoDTO){
-        RecursoDTO nuevoRecurso = recursoService.save(recursoDTO);
+    public ResponseEntity<Recurso> crearRecurso(@RequestBody Recurso recurso) {
+        Recurso nuevoRecurso = recursoService.save(recurso);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoRecurso);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RecursoDTO> actualizarRecurso(@PathVariable Long id, @RequestBody RecursoDTO recursoDTO) {
-        // Establece el ID del recurso en el DTO
-        recursoDTO.setRecursoId(id); // Esto es importante para que el servicio sepa cuál actualizar
-        RecursoDTO recursoActualizado = recursoService.update(recursoDTO);
+    public ResponseEntity<Recurso> actualizarRecurso(@PathVariable Long id, @RequestBody Recurso recurso) {
+        recurso.setRecursoId(id); // Establece el ID del recurso en la entidad
+        Recurso recursoActualizado = recursoService.update(recurso);
         return ResponseEntity.ok(recursoActualizado);
     }
-
-
 }

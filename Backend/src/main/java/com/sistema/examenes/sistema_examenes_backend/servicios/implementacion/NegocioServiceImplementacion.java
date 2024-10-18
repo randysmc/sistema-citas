@@ -1,8 +1,10 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
 import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
+import com.sistema.examenes.sistema_examenes_backend.DTO.ServicioDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
+import com.sistema.examenes.sistema_examenes_backend.entidades.Servicio;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.NegocioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,62 +22,68 @@ public class NegocioServiceImplementacion implements NegocioService {
 
 
     @Override
-    public Optional<NegocioDTO> findById(Long id) {
-        return negocioRepository.findById(id).map(this::convertNegocioToDTO);
+    public Optional<Negocio> findById(Long id) {
+        return negocioRepository.findById(id);
     }
 
     @Override
-    public List<NegocioDTO> findAll() {
-        return negocioRepository.findAll().stream()
-                .map(this::convertNegocioToDTO)
-                .collect(Collectors.toList());
+    public List<Negocio> findAll() {
+        return negocioRepository.findAll();
     }
 
     @Override
-    public NegocioDTO save(NegocioDTO negocioDTO) {
+    public Negocio save(Negocio negocio) {
         // Verificar si el nombre ya existe
-        if (negocioRepository.existsByNombre(negocioDTO.getNombre())) {
-            throw new IllegalArgumentException("El nombre del recurso ya existe.");
+        if (negocioRepository.existsByNombre(negocio.getNombre())) {
+            throw new IllegalArgumentException("El nombre del negocio ya existe.");
         }
-
-        Negocio negocio = convertNegocioToEntity(negocioDTO);
-        Negocio savedNegocio = negocioRepository.save(negocio);
-        return convertNegocioToDTO(savedNegocio);
+        return negocioRepository.save(negocio);
     }
 
+
     @Override
-    public NegocioDTO update(NegocioDTO negocioDTO) {
-        Negocio existingNegocio = negocioRepository.findById(negocioDTO.getNegocioId())
-                .orElseThrow(() -> new RuntimeException("Negocio no encontrado con ID: " + negocioDTO.getNegocioId()));
+    public Negocio update(Negocio negocio) {
+        Negocio existingNegocio = negocioRepository.findById(negocio.getNegocioId())
+                .orElseThrow(() -> new RuntimeException("Negocio no encontrado con ID: " + negocio.getNegocioId()));
 
         // Solo actualizamos los campos que vienen en la solicitud
-        if (negocioDTO.getNombre() != null) {
-            if (!existingNegocio.getNombre().equals(negocioDTO.getNombre()) && negocioRepository.existsByNombre(negocioDTO.getNombre())) {
+        if (negocio.getNombre() != null) {
+            if (!existingNegocio.getNombre().equals(negocio.getNombre()) && negocioRepository.existsByNombre(negocio.getNombre())) {
                 throw new IllegalArgumentException("El nombre del negocio ya existe.");
             }
-            existingNegocio.setNombre(negocioDTO.getNombre());
+            existingNegocio.setNombre(negocio.getNombre());
         }
 
-        if (negocioDTO.getDescripcion() != null) {
-            existingNegocio.setDescripcion(negocioDTO.getDescripcion());
+        if (negocio.getDescripcion() != null) {
+            existingNegocio.setDescripcion(negocio.getDescripcion());
         }
 
-        if (negocioDTO.getDireccion() != null) {
-            existingNegocio.setDireccion(negocioDTO.getDireccion());
+        if (negocio.getDireccion() != null) {
+            existingNegocio.setDireccion(negocio.getDireccion());
         }
 
-        if (negocioDTO.getTelefono() != null) {
-            existingNegocio.setTelefono(negocioDTO.getTelefono());
+        if (negocio.getTelefono() != null) {
+            existingNegocio.setTelefono(negocio.getTelefono());
         }
 
-        Negocio updatedNegocio = negocioRepository.save(existingNegocio);
-        return convertNegocioToDTO(updatedNegocio);
+        return negocioRepository.save(existingNegocio);
     }
 
 
     @Override
     public void delete(Long id) {
         negocioRepository.deleteById(id);
+    }
+
+
+    /*@Override
+    public List<ServicioDTO> obtenerServiciosPorNegocio(Long negocioId) {
+        Negocio negocio = negocioRepository.findById(negocioId)
+                .orElseThrow(() -> new RuntimeException("Negocio no encontrado con ID: " + negocioId));
+
+        return negocio.getServicios().stream()
+                .map(this::convertServicioToDTO)  // Debes crear este método en tu clase de implementación
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -99,4 +107,14 @@ public class NegocioServiceImplementacion implements NegocioService {
         negocio.setTelefono(dto.getTelefono());
         return negocio;
     }
+
+    private ServicioDTO convertServicioToDTO(Servicio servicio) {
+        ServicioDTO dto = new ServicioDTO();
+        dto.setServicioId(servicio.getServicioId());
+        dto.setNombre(servicio.getNombre());
+        dto.setDescripcion(servicio.getDescripcion());
+        dto.setDuracionServicio(servicio.getDuracionServicio());
+        dto.setPrecio(servicio.getPrecio());
+        return dto;
+    }*/
 }

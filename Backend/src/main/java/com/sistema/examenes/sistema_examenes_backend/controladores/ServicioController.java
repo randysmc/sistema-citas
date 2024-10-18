@@ -2,6 +2,7 @@ package com.sistema.examenes.sistema_examenes_backend.controladores;
 
 
 import com.sistema.examenes.sistema_examenes_backend.DTO.ServicioDTO;
+import com.sistema.examenes.sistema_examenes_backend.entidades.Servicio;
 import com.sistema.examenes.sistema_examenes_backend.servicios.NegocioService;
 import com.sistema.examenes.sistema_examenes_backend.servicios.ServicioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +24,20 @@ public class ServicioController {
     private NegocioService negocioService;
 
     @GetMapping
-    public List<ServicioDTO> obtenerServicios(){
+    public List<Servicio> obtenerServicios() {
         return servicioService.findAll();
     }
 
     @PostMapping("/")
-    public ResponseEntity<ServicioDTO> crearRecurso(@RequestBody ServicioDTO servicioDTO){
-        ServicioDTO nuevoRecurso = servicioService.save(servicioDTO);
+    public ResponseEntity<Servicio> crearRecurso(@RequestBody Servicio servicio) {
+        Servicio nuevoRecurso = servicioService.save(servicio);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoRecurso);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ServicioDTO> actualizarRecurso(@PathVariable Long id, @RequestBody ServicioDTO servicioDTO){
-        servicioDTO.setServicioId(id);
-        ServicioDTO servicioActualizado = servicioService.update(servicioDTO);
+    public ResponseEntity<Servicio> actualizarRecurso(@PathVariable Long id, @RequestBody Servicio servicio) {
+        servicio.setServicioId(id);
+        Servicio servicioActualizado = servicioService.update(servicio);
         return ResponseEntity.ok(servicioActualizado);
     }
 }

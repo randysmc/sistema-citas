@@ -17,60 +17,30 @@ public class RolServiceImplementacion implements RolService {
     @Autowired
     private RolRepository rolRepository;
 
+
     @Override
-    public Optional<RolDTO> findById(Long id) {
-        return rolRepository.findById(id).map(this::convertRolToDTO);
+    public Optional<Rol> findById(Long id) {
+        return rolRepository.findById(id);
     }
 
     @Override
-    public List<RolDTO> findAll() {
-        return rolRepository.findAll().stream()
-                .map(this::convertRolToDTO)
-                .collect(Collectors.toList());
+    public List<Rol> findAll() {
+        return rolRepository.findAll();
     }
 
     @Override
-    public RolDTO save(RolDTO rolDTO) {
-        Rol rol = convertRolToEntity(rolDTO);
-        Rol savedRol = rolRepository.save(rol);
-        return convertRolToDTO(savedRol);
+    public Rol save(Rol rol) {
+        return rolRepository.save(rol);
     }
 
-
     @Override
-    public RolDTO update(RolDTO rolDTO) {
-        Rol rol = convertRolToEntity(rolDTO);
-        Rol updateRol = rolRepository.save(rol);
-        return convertRolToDTO(updateRol);
+    public Rol update(Rol rol) {
+        return rolRepository.save(rol);
     }
 
     @Override
     public void delete(Long id) {
         rolRepository.deleteById(id);
-    }
-
-    /*@Override
-    public Optional<Rol> findById(Long id){
-        return rolRepository.findById(id);
-    }*/
-
-
-
-
-    @Override
-    public RolDTO convertRolToDTO(Rol rol){
-        RolDTO dto = new RolDTO();
-        dto.setId(rol.getRolId());
-        dto.setRolNombre(rol.getRolNombre());
-        return  dto;
-    }
-
-    @Override
-    public Rol convertRolToEntity(RolDTO dto) {
-        Rol rol = new Rol();
-        rol.setRolId(dto.getId());
-        rol.setRolNombre(dto.getRolNombre());
-        return rol;  // Aquí devuelves la entidad 'rol'
     }
 
 

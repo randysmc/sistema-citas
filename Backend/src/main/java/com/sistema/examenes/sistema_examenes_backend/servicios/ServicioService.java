@@ -9,17 +9,13 @@ import java.util.Set;
 
 public interface ServicioService {
 
-    Optional<ServicioDTO> findById(Long id);
+    Optional<Servicio> findById(Long id);
 
-    List<ServicioDTO> findAll();
+    List<Servicio> findAll();
 
-    ServicioDTO save(ServicioDTO servicioDTO);
+    Servicio save(Servicio servicio);
 
-    ServicioDTO update(ServicioDTO servicioDTO);
+    Servicio update(Servicio servicio);
 
     void delete(Long id);
-
-    Servicio convertServicioToEntity(ServicioDTO servicioDTO);
-
-    ServicioDTO convertServicioToDTO(Servicio servicio);
 }

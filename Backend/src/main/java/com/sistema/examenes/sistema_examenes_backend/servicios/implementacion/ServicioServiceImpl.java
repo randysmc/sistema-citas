@@ -24,92 +24,58 @@ public class ServicioServiceImpl  implements ServicioService {
     @Autowired
     private NegocioRepository negocioRepository;
 
-
     @Override
-    public Optional<ServicioDTO> findById(Long id) {
-        return servicioRepository.findById(id).map(this::convertServicioToDTO);
+    public Optional<Servicio> findById(Long id) {
+        return servicioRepository.findById(id);
     }
 
     @Override
-    public List<ServicioDTO> findAll() {
-        return servicioRepository.findAll().stream()
-                .map(this::convertServicioToDTO)
-                .collect(Collectors.toList());
+    public List<Servicio> findAll() {
+        return servicioRepository.findAll();
     }
 
     @Override
-    public ServicioDTO save(ServicioDTO servicioDTO) {
-        //Verificamos si no hay otro servicio con ese nombre
-        if(servicioRepository.existsByNombre(servicioDTO.getNombre())){
+    public Servicio save(Servicio servicio) {
+        // Verificamos si no hay otro servicio con ese nombre
+        if (servicioRepository.existsByNombre(servicio.getNombre())) {
             throw new IllegalArgumentException("El nombre del servicio ya existe");
         }
 
-        Servicio servicio = convertServicioToEntity(servicioDTO);
-        Servicio savedServicio = servicioRepository.save(servicio);
-        return convertServicioToDTO(savedServicio);
+        // Guardamos el servicio
+        return servicioRepository.save(servicio);
     }
 
     @Override
-    public ServicioDTO update(ServicioDTO servicioDTO) {
-        Servicio existingServicio = servicioRepository.findById(servicioDTO.getServicioId())
-                .orElseThrow(() -> new RuntimeException("Servicio no encontrado con ID: " + servicioDTO.getServicioId()));
+    public Servicio update(Servicio servicio) {
+        Servicio existingServicio = servicioRepository.findById(servicio.getServicioId())
+                .orElseThrow(() -> new RuntimeException("Servicio no encontrado con ID: " + servicio.getServicioId()));
 
         // Solo actualizamos los campos que vienen en la solicitud
-        if (servicioDTO.getNombre() != null) {
-            if (!existingServicio.getNombre().equals(servicioDTO.getNombre()) && servicioRepository.existsByNombre(servicioDTO.getNombre())) {
+        if (servicio.getNombre() != null) {
+            if (!existingServicio.getNombre().equals(servicio.getNombre()) && servicioRepository.existsByNombre(servicio.getNombre())) {
                 throw new IllegalArgumentException("El nombre del Servicio ya existe.");
             }
-            existingServicio.setNombre(servicioDTO.getNombre());
+            existingServicio.setNombre(servicio.getNombre());
         }
 
-        if (servicioDTO.getDescripcion() != null) {
-            existingServicio.setDescripcion(servicioDTO.getDescripcion());
+        if (servicio.getDescripcion() != null) {
+            existingServicio.setDescripcion(servicio.getDescripcion());
         }
 
-        if(servicioDTO.getDuracionServicio() != null){
-            existingServicio.setDuracionServicio(servicioDTO.getDuracionServicio());
+        if (servicio.getDuracionServicio() != null) {
+            existingServicio.setDuracionServicio(servicio.getDuracionServicio());
         }
 
-        if(servicioDTO.getPrecio() !=  null){
-            existingServicio.setPrecio(servicioDTO.getPrecio());
+        if (servicio.getPrecio() != null) {
+            existingServicio.setPrecio(servicio.getPrecio());
         }
 
-
-        Servicio updatedServicio = servicioRepository.save(existingServicio);
-        return convertServicioToDTO(updatedServicio);
+        return servicioRepository.save(existingServicio);
     }
 
     @Override
     public void delete(Long id) {
-
+        servicioRepository.deleteById(id);
     }
 
-    @Override
-    public ServicioDTO convertServicioToDTO(Servicio servicio) {
-        ServicioDTO dto = new ServicioDTO();
-        dto.setServicioId(servicio.getServicioId());
-        dto.setDescripcion(servicio.getDescripcion());
-        dto.setNombre(servicio.getNombre());
-        dto.setDuracionServicio(servicio.getDuracionServicio());
-        dto.setPrecio(servicio.getPrecio());
-        dto.setNegocioId(servicio.getNegocio().getNegocioId());
-        return dto;
-    }
-
-    @Override
-        public Servicio convertServicioToEntity(ServicioDTO dto) {
-        Servicio servicio = new Servicio();
-        servicio.setServicioId(dto.getServicioId());
-        servicio.setDescripcion(dto.getDescripcion());
-        servicio.setNombre(dto.getNombre());
-        servicio.setDuracionServicio(dto.getDuracionServicio());
-        servicio.setPrecio(dto.getPrecio());
-
-        Negocio negocio = negocioRepository.findById(dto.getNegocioId())
-                .orElseThrow(() -> new RuntimeException("Negocio no encontrado: " +dto.getNegocioId()));
-
-        servicio.setNegocio(negocio);
-
-        return servicio;
-        }
 }

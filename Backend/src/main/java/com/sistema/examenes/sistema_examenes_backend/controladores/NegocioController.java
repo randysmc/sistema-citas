@@ -1,7 +1,11 @@
 package com.sistema.examenes.sistema_examenes_backend.controladores;
 
 import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
+import com.sistema.examenes.sistema_examenes_backend.DTO.RecursoDTO;
+import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
+import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
 import com.sistema.examenes.sistema_examenes_backend.servicios.NegocioService;
+import com.sistema.examenes.sistema_examenes_backend.servicios.RecursoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,32 +23,34 @@ public class NegocioController {
     @Autowired
     private NegocioService negocioService;
 
+    @Autowired
+    private RecursoService recursoService;
+
     @GetMapping
-    public List<NegocioDTO> obtenerNegocios(){
+    public List<Negocio> obtenerNegocios(){
         return negocioService.findAll();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NegocioDTO> obtenerNegocioPorId(@PathVariable Long id) {
-        Optional<NegocioDTO> negocioDTO = negocioService.findById(id);
-        return negocioDTO.map(ResponseEntity::ok)
+    public ResponseEntity<Negocio> obtenerNegocioPorId(@PathVariable Long id) {
+        Optional<Negocio> negocio = negocioService.findById(id);
+        return negocio.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+
     @PostMapping("/")
-    public ResponseEntity<NegocioDTO> crearNegocio(@RequestBody NegocioDTO negocioDTO) {
-        NegocioDTO nuevoNegocio = negocioService.save(negocioDTO);
+    public ResponseEntity<Negocio> crearNegocio(@RequestBody Negocio negocio) {
+        Negocio nuevoNegocio = negocioService.save(negocio);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoNegocio);
     }
 
     // Actualizar un negocio existente
     @PutMapping("/{id}")
-    public ResponseEntity<NegocioDTO> actualizarNegocio(@PathVariable Long id, @RequestBody NegocioDTO negocioDTO) {
-        //Establece el Id del Negocio en el DTO
-        negocioDTO.setNegocioId(id);
-        NegocioDTO negocioActualizado = negocioService.update(negocioDTO);
+    public ResponseEntity<Negocio> actualizarNegocio(@PathVariable Long id, @RequestBody Negocio negocio) {
+        negocio.setNegocioId(id);
+        Negocio negocioActualizado = negocioService.update(negocio);
         return ResponseEntity.ok(negocioActualizado);
-
     }
 
     // Eliminar un negocio por ID
@@ -53,6 +59,5 @@ public class NegocioController {
         negocioService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
 
 }

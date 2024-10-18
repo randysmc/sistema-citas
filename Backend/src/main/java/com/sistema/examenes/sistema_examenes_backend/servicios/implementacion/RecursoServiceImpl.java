@@ -1,8 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
 
-import com.sistema.examenes.sistema_examenes_backend.DTO.RecursoDTO;
-import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.RecursoRepository;
@@ -26,143 +24,50 @@ public class RecursoServiceImpl implements RecursoService {
     @Autowired
     private NegocioRepository negocioRepository;
 
+
     @Override
-    public Optional<RecursoDTO> findById(Long id) {
-        return recursoRepository.findById(id).map(this::convertRecursoToDTO);
+    public Optional<Recurso> findById(Long id) {
+        return recursoRepository.findById(id);
     }
 
     @Override
-    public List<RecursoDTO> findAll() {
-        return recursoRepository.findAll().stream()
-                .map(this::convertRecursoToDTO)
-                .collect(Collectors.toList());
+    public List<Recurso> findAll() {
+        return recursoRepository.findAll();
     }
 
     @Override
-    public RecursoDTO save(RecursoDTO recursoDTO) {
+    public Recurso save(Recurso recurso) {
         // Verificar si el nombre ya existe
-        if (recursoRepository.existsByNombre(recursoDTO.getNombre())) {
+        if (recursoRepository.existsByNombre(recurso.getNombre())) {
             throw new IllegalArgumentException("El nombre del recurso ya existe.");
         }
-
-        Recurso recurso = convertRecursoToEntity(recursoDTO);
-        Recurso savedRecurso = recursoRepository.save(recurso);
-        return convertRecursoToDTO(savedRecurso);
+        return recursoRepository.save(recurso);
     }
-
 
     @Override
-    public RecursoDTO update(RecursoDTO recursoDTO) {
-        Recurso existingRecurso = recursoRepository.findById(recursoDTO.getRecursoId())
-                .orElseThrow(() -> new RuntimeException("Recurso no encontrado con ID: " + recursoDTO.getRecursoId()));
-        if(recursoDTO.getNombre() != null){
-            if(!existingRecurso.getNombre().equals(recursoDTO.getNombre()) && recursoRepository.existsByNombre(recursoDTO.getNombre())){
+    public Recurso update(Recurso recurso) {
+        Recurso existingRecurso = recursoRepository.findById(recurso.getRecursoId())
+                .orElseThrow(() -> new RuntimeException("Recurso no encontrado con ID: " + recurso.getRecursoId()));
+
+        // Actualiza los campos del recurso existente
+        if (recurso.getNombre() != null) {
+            if (!existingRecurso.getNombre().equals(recurso.getNombre()) && recursoRepository.existsByNombre(recurso.getNombre())) {
                 throw new IllegalArgumentException("El nombre del recurso ya existe");
             }
-            existingRecurso.setNombre(recursoDTO.getNombre());
+            existingRecurso.setNombre(recurso.getNombre());
         }
-        if(recursoDTO.getDescripcion() != null){
-            existingRecurso.setDescripcion(recursoDTO.getDescripcion());
+        if (recurso.getDescripcion() != null) {
+            existingRecurso.setDescripcion(recurso.getDescripcion());
         }
+        existingRecurso.setDisponible(recurso.isDisponible());
 
-        Recurso updateRecurso = recursoRepository.save(existingRecurso);
-        return convertRecursoToDTO(updateRecurso);
+        return recursoRepository.save(existingRecurso);
     }
-
-
 
     @Override
     public void delete(Long id) {
         recursoRepository.deleteById(id);
     }
 
-    @Override
-    public RecursoDTO convertRecursoToDTO(Recurso recurso) {
-        RecursoDTO dto = new RecursoDTO();
-        dto.setRecursoId(recurso.getRecursoId());
-        dto.setDescripcion(recurso.getDescripcion());
-        dto.setNombre(recurso.getNombre());
-        dto.setDisponible(recurso.isDisponible());
-        dto.setNegocioId(recurso.getNegocio().getNegocioId());
-        return  dto;
-    }
 
-    @Override
-    public Recurso convertRecursoToEntity(RecursoDTO dto) {
-        Recurso recurso = new Recurso();
-        recurso.setRecursoId(dto.getRecursoId());
-        recurso.setDescripcion(dto.getDescripcion());
-        recurso.setDisponible(dto.isDisponible());
-        recurso.setNombre(dto.getNombre());
-
-        // Buscar el negocio por su ID y lanzar excepción si no se encuentra
-        Negocio negocio = negocioRepository.findById(dto.getNegocioId())
-                .orElseThrow(() -> new RuntimeException("Negocio no encontrado con ID: " + dto.getNegocioId()));
-
-        recurso.setNegocio(negocio);
-
-        return recurso;
-    }
-
-
-
-
-
-
-
-
-    /*private RecursoDTO convertirARecursoDTO(Recurso recurso) {
-        return new RecursoDTO(
-                recurso.getRecursoId(),
-                recurso.getNombre(),
-                recurso.getDescripcion(),
-                recurso.isDisponible(),
-                recurso.getNegocio().getNegocioId()
-        );
-    }
-
-    // Método para convertir RecursoDTO a entidad Recurso
-    private Recurso convertirAEntidadRecurso(RecursoDTO recursoDTO, Negocio negocio) {
-        Recurso recurso = new Recurso();
-        recurso.setRecursoId(recursoDTO.getRecursoId());
-        recurso.setNombre(recursoDTO.getNombre());
-        recurso.setDescripcion(recursoDTO.getDescripcion());
-        recurso.setDisponible(recursoDTO.isDisponible());
-        recurso.setNegocio(negocio);
-        return recurso;
-    }
-
-
-    @Override
-    public Recurso agregarRercurso(Recurso recurso) {
-        return recursoRepository.save(recurso);
-    }
-
-    @Override
-    public Recurso actualizarRecurso(Recurso recurso) {
-        return recursoRepository.save(recurso);
-    }
-
-    @Override
-    public Set<Recurso> obtenerRecursos() {
-        return new LinkedHashSet<>(recursoRepository.findAll());
-    }
-
-    @Override
-    public Recurso obtenerRecurso(Long recursoId) {
-        return recursoRepository.findById(recursoId).get();
-    }
-
-    @Override
-    public void eliminarRecurso(Long recursoId) {
-        Recurso recurso = new Recurso();
-        recurso.setRecursoId(recursoId);
-        recursoRepository.delete(recurso);
-
-    }
-
-    @Override
-    public Set<Recurso> obtenerRecursosActivos() {
-        return Set.of();
-    }*/
 }
