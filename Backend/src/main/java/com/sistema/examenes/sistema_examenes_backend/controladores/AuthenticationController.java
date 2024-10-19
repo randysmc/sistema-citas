@@ -103,6 +103,8 @@ public class AuthenticationController {
         return (Usuario) this.userDetailsService.loadUserByUsername(principal.getName());
     }
 
+
+
     /*@GetMapping("/actual-usuario")
     public ResponseEntity<?> obtenerUsuarioActual(Principal principal) {
         Usuario usuario = (Usuario) this.userDetailsService.loadUserByUsername(principal.getName());
@@ -131,8 +133,6 @@ public class AuthenticationController {
 
         return ResponseEntity.ok(responseDTO);
     }*/
-
-
 
 }
 

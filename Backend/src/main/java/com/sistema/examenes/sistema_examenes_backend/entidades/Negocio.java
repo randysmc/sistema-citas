@@ -21,6 +21,7 @@ public class Negocio {
     private String telefono;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "negocio")
+    @JsonIgnore
     private Set<UsuarioNegocio> usuarioNegocios = new HashSet<>();
 
     //Un negocio puede tener muchos recursos

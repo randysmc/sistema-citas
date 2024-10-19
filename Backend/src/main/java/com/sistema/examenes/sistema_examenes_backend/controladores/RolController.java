@@ -4,10 +4,9 @@ import com.sistema.examenes.sistema_examenes_backend.DTO.RolDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
 import com.sistema.examenes.sistema_examenes_backend.servicios.RolService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,5 +22,11 @@ public class RolController {
     @GetMapping
     public List<Rol> obtenerRoles() {
         return rolService.findAll();
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<Rol> crearRol(@RequestBody Rol rol) {
+        Rol nuevoRol = rolService.save(rol);
+        return new ResponseEntity<>(nuevoRol, HttpStatus.CREATED);
     }
 }

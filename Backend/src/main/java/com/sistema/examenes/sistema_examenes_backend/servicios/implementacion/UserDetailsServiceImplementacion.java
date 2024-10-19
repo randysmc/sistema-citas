@@ -25,4 +25,8 @@ public class UserDetailsServiceImplementacion implements UserDetailsService {
         }
         return usuario;
     }
+
+    public Usuario getUsuarioByUsername(String username) {
+        return this.usuarioRepository.findByUsername(username);
+    }
 }

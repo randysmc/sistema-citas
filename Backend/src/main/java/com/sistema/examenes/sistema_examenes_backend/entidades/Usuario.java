@@ -3,13 +3,16 @@ package com.sistema.examenes.sistema_examenes_backend.entidades;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "usuarios")
@@ -99,6 +102,13 @@ public class Usuario implements UserDetails {
             autoridades.add(new Authority(usuarioRol.getRol().getRolNombre()));
         });
         return autoridades;
+    }
+
+    public List<NegociosDTO> getNegocios() {
+        return usuarioNegocios.stream()
+                .map(usuarioNegocio -> new NegociosDTO(usuarioNegocio.getNegocio().getNegocioId(),
+                        usuarioNegocio.getNegocio().getNombre())) // Suponiendo que Negocio tiene getId() y getNombre()
+                .collect(Collectors.toList());
     }
 
     public String getPassword() {
