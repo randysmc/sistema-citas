@@ -30,6 +30,8 @@ import { TwoFaComponent } from './pages/two-fa/two-fa.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SidebarComponent } from './pages/admin/sidebar/sidebar.component';
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
+import { ViewRecursosComponent } from './pages/admin/view-recursos/view-recursos.component';
+import { AddRecursosComponent } from './pages/admin/add-recursos/add-recursos.component';
 
 
 
@@ -47,6 +49,8 @@ import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
     ProfileComponent,
     SidebarComponent,
     WelcomeComponent,
+    ViewRecursosComponent,
+    AddRecursosComponent,
 
   ],
   imports: [

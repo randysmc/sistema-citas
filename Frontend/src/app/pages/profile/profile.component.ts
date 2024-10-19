@@ -8,26 +8,23 @@ import { LoginService } from 'src/app/services/login.service';
 })
 export class ProfileComponent {
 
-  user:any = null;
+  user: any = null; // Para almacenar la información del usuario
 
   constructor(
     private loginService: LoginService
-  ){
+  ) {}
 
-  }
-
-  ngOnInit():void{
-    this.user = this.loginService.getUser();
-    /*
+  ngOnInit(): void {
+    // Obtenemos el usuario actual
     this.loginService.getCurrentUser().subscribe(
-      (user:any) => {
-        this.user = user;
+      (user: any) => {
+        this.user = user; // Almacena la información del usuario
+        this.loginService.setUser(user); // Opcional: Actualiza el usuario en el localStorage
       },
       (error) => {
-        alert("error");
+        alert("Error al obtener el usuario");
       }
-    )
-    */
+    );
   }
 
 }

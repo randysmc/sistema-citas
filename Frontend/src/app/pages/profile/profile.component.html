@@ -1,48 +1,57 @@
 <mat-card style="margin-left: 10px;">
-    <h1>Detalles del perfil</h1>
-    <mat-card-content>
-      <div class = "bootstrap-wrapper">
-        <div class = "container">
-          <div class = "text-center">
-            <img
+  <h1>Detalles del perfil</h1>
+  <mat-card-content>
+    <div class="bootstrap-wrapper">
+      <div class="container">
+        <div class="text-center">
+          <img
             src="https://i.pinimg.com/736x/84/ba/50/84ba50b130c0d9c243e6da694545c1e5.jpg"
             alt=""
-            class = "profile-image">
-  
-            <h1 class="mt20">{{ user.nombre }} {{ user.apellido }}</h1>
-          </div>
-          <div class = "row">
-            <div class = "col-md-10 offset-md-1">
-              <table class = "table text-center">
-                <tr>
-                  <td>Nombre de usuario</td>
-                  <td>{{ user.username }}
-                </tr>
-                <tr>
-                  <td>ID</td>
-                  <td>{{ user.id }}</td>
-                </tr>
-                <tr>
-                  <td>Teléfono</td>
-                  <td>{{ user.telefono }}</td>
-                </tr>
-                <tr>
-                  <td>Rol</td>
-                  <td>{{ user.authorities[0].authority }}</td>
-                </tr>
-                <tr>
-                  <td>Estado</td>
-                  
-                  <td>{{ user.enabled ? "Activo" : "No activo"}}</td>
-                </tr>
-              </table>
-            </div>
+            class="profile-image">
+
+          <h1 class="mt20">{{ user.nombre }} {{ user.apellido }}</h1>
+        </div>
+        <div class="row">
+          <div class="col-md-10 offset-md-1">
+            <table class="table text-center">
+              <tr>
+                <td>Nombre de usuario</td>
+                <td>{{ user.username }}</td>
+              </tr>
+              <tr>
+                <td>ID</td>
+                <td>{{ user.id }}</td>
+              </tr>
+              <tr>
+                <td>Teléfono</td>
+                <td>{{ user.telefono }}</td>
+              </tr>
+              <tr>
+                <td>Rol</td>
+                <td>{{ user.authorities[0].authority }}</td>
+              </tr>
+              <tr>
+                <td>Estado</td>
+                <td>{{ user.enabled ? "Activo" : "No activo" }}</td>
+              </tr>
+              <!-- Agregar sección para mostrar el negocio -->
+              <tr>
+                <td>Negocio</td>
+                <td *ngIf="user.negocios && user.negocios.length > 0">
+                  {{ user.negocios[0].nombre }} (ID: {{ user.negocios[0].id }})
+                </td>
+                <td *ngIf="!user.negocios || user.negocios.length === 0">
+                  Sin negocio asociado
+                </td>
+              </tr>
+            </table>
           </div>
         </div>
       </div>
-      <mat-card-actions class = "text-center">
-        <button mat-raised-button color = "primary">Actualizar</button>
-        <button mat-raised-button color = "accent">Compartir</button>
-      </mat-card-actions>
-    </mat-card-content>
-  </mat-card>
+    </div>
+    <mat-card-actions class="text-center">
+      <button mat-raised-button color="primary">Actualizar</button>
+      <button mat-raised-button color="accent">Compartir</button>
+    </mat-card-actions>
+  </mat-card-content>
+</mat-card>

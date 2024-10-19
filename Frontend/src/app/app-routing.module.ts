@@ -10,6 +10,8 @@ import { normalGuard } from './services/normal.guard';
 import { TwoFaComponent } from './pages/two-fa/two-fa.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
+import { ViewRecursosComponent } from './pages/admin/view-recursos/view-recursos.component';
+import { AddRecursosComponent } from './pages/admin/add-recursos/add-recursos.component';
 
 const routes: Routes = [
   {
@@ -40,6 +42,14 @@ const routes: Routes = [
       {
         path: '',
         component:WelcomeComponent
+      },
+      {
+        path: 'recursos',
+        component:ViewRecursosComponent
+      },
+      {
+        path: 'add-recurso',
+        component:AddRecursosComponent
       }
     ]
   },
