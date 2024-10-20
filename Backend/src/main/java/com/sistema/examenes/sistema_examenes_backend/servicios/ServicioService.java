@@ -9,13 +9,13 @@ import java.util.Set;
 
 public interface ServicioService {
 
-    Optional<Servicio> findById(Long id);
+    public Optional<Servicio> findById(Long id);
 
-    List<Servicio> findAll();
+    public List<Servicio> findAll();
 
-    Servicio save(Servicio servicio);
+    public Servicio save(Servicio servicio);
 
-    Servicio update(Servicio servicio);
+    public Servicio update(Servicio servicio);
 
-    void delete(Long id);
+    public void delete(Long id);
 }

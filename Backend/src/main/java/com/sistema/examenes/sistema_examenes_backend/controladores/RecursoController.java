@@ -26,7 +26,7 @@ public class RecursoController {
 
     @GetMapping
     public List<Recurso> obtenerRecursos() {
-        return recursoService.findAll();
+        return recursoService.obtenerRecursos();
     }
 
     @GetMapping("/{id}")
@@ -38,14 +38,14 @@ public class RecursoController {
 
     @PostMapping("/")
     public ResponseEntity<Recurso> crearRecurso(@RequestBody Recurso recurso) {
-        Recurso nuevoRecurso = recursoService.save(recurso);
+        Recurso nuevoRecurso = recursoService.guardarRecurso(recurso);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoRecurso);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Recurso> actualizarRecurso(@PathVariable Long id, @RequestBody Recurso recurso) {
         recurso.setRecursoId(id); // Establece el ID del recurso en la entidad
-        Recurso recursoActualizado = recursoService.update(recurso);
+        Recurso recursoActualizado = recursoService.actualizaRecurso(recurso);
         return ResponseEntity.ok(recursoActualizado);
     }
 }

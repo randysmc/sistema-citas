@@ -31,12 +31,18 @@ public class RecursoServiceImpl implements RecursoService {
     }
 
     @Override
-    public List<Recurso> findAll() {
+    public List<Recurso> obtenerRecursos() {
         return recursoRepository.findAll();
     }
 
     @Override
-    public Recurso save(Recurso recurso) {
+    public Recurso obtenerRecurso(Long id) {
+        return null;
+    }
+
+
+    @Override
+    public Recurso guardarRecurso(Recurso recurso) {
         // Verificar si el nombre ya existe
         if (recursoRepository.existsByNombre(recurso.getNombre())) {
             throw new IllegalArgumentException("El nombre del recurso ya existe.");
@@ -45,7 +51,7 @@ public class RecursoServiceImpl implements RecursoService {
     }
 
     @Override
-    public Recurso update(Recurso recurso) {
+    public Recurso actualizaRecurso(Recurso recurso) {
         Recurso existingRecurso = recursoRepository.findById(recurso.getRecursoId())
                 .orElseThrow(() -> new RuntimeException("Recurso no encontrado con ID: " + recurso.getRecursoId()));
 
@@ -65,9 +71,11 @@ public class RecursoServiceImpl implements RecursoService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void eliminarRecurso(Long id) {
         recursoRepository.deleteById(id);
     }
+
+
 
 
 }

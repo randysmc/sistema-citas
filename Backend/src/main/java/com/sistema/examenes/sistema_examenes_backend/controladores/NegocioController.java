@@ -28,7 +28,7 @@ public class NegocioController {
 
     @GetMapping
     public List<Negocio> obtenerNegocios(){
-        return negocioService.findAll();
+        return negocioService.obtenerNegocios();
     }
 
     @GetMapping("/{id}")
@@ -41,7 +41,7 @@ public class NegocioController {
 
     @PostMapping("/")
     public ResponseEntity<Negocio> crearNegocio(@RequestBody Negocio negocio) {
-        Negocio nuevoNegocio = negocioService.save(negocio);
+        Negocio nuevoNegocio = negocioService.guardarNegocio(negocio);
         return ResponseEntity.status(HttpStatus.CREATED).body(nuevoNegocio);
     }
 
@@ -49,14 +49,14 @@ public class NegocioController {
     @PutMapping("/{id}")
     public ResponseEntity<Negocio> actualizarNegocio(@PathVariable Long id, @RequestBody Negocio negocio) {
         negocio.setNegocioId(id);
-        Negocio negocioActualizado = negocioService.update(negocio);
+        Negocio negocioActualizado = negocioService.actualizarNegocio(negocio);
         return ResponseEntity.ok(negocioActualizado);
     }
 
     // Eliminar un negocio por ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarNegocio(@PathVariable Long id) {
-        negocioService.delete(id);
+        negocioService.eliminarNegocio(id);
         return ResponseEntity.noContent().build();
     }
 

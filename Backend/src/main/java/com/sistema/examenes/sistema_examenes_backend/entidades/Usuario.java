@@ -43,6 +43,16 @@ public class Usuario implements UserDetails {
     @JsonIgnore
     private Set<UsuarioNegocio> usuarioNegocios = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cliente")
+    private Set<Cita> citasComoCliente = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "empleado")
+    private Set<Cita> citasComoEmpleado = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "empleado")
+    private Set<Reserva> reservas = new HashSet<>(); // Un usuario puede tener muchas reservas
+
+
     public Usuario(){
 
     }

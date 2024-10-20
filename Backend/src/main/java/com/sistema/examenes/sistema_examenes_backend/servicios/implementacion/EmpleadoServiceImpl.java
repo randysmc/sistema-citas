@@ -75,8 +75,10 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     @Override
-    public List<Usuario> findAll() {
+    public List<Usuario> obtenerEmpleados() {
         return empleadoRepository.findAll();
     }
+
+
 
 }

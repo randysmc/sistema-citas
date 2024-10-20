@@ -33,6 +33,18 @@ public class Negocio {
     @JsonIgnore
     private Set<Servicio> servicios = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "negocio", cascade = CascadeType.ALL)
+    private Set<DiaFestivo> diasFestivos = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "negocio", cascade = CascadeType.ALL)
+    private Set<HorarioLaboral> horarioLaborales = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "negocio", cascade = CascadeType.ALL)
+    private Set<Cita> citas = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "negocio", cascade = CascadeType.ALL)
+    private Set<Cita> reservas = new LinkedHashSet<>();
+
 
     public Negocio() {
     }

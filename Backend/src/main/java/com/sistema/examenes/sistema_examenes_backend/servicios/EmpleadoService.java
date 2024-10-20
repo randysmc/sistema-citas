@@ -19,5 +19,5 @@ public interface EmpleadoService {
 
     public void eliminarEmpleado(Long empleadoId);
 
-    public List<Usuario> findAll();
+    public List<Usuario> obtenerEmpleados();
 }

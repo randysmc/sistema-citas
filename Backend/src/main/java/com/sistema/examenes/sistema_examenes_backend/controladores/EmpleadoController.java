@@ -33,7 +33,7 @@ public class EmpleadoController {
 
     @GetMapping
     public List<Usuario> obtenerEmpleados() {
-        return empleadoService.findAll();
+        return empleadoService.obtenerEmpleados();
     }
 
     // Guardar un nuevo empleado

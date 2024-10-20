@@ -27,12 +27,17 @@ public class NegocioServiceImplementacion implements NegocioService {
     }
 
     @Override
-    public List<Negocio> findAll() {
+    public List<Negocio> obtenerNegocios() {
         return negocioRepository.findAll();
     }
 
     @Override
-    public Negocio save(Negocio negocio) {
+    public Negocio obtenerNegocio(Long id) {
+        return null;
+    }
+
+    @Override
+    public Negocio guardarNegocio(Negocio negocio) {
         // Verificar si el nombre ya existe
         if (negocioRepository.existsByNombre(negocio.getNombre())) {
             throw new IllegalArgumentException("El nombre del negocio ya existe.");
@@ -42,7 +47,7 @@ public class NegocioServiceImplementacion implements NegocioService {
 
 
     @Override
-    public Negocio update(Negocio negocio) {
+    public Negocio actualizarNegocio(Negocio negocio) {
         Negocio existingNegocio = negocioRepository.findById(negocio.getNegocioId())
                 .orElseThrow(() -> new RuntimeException("Negocio no encontrado con ID: " + negocio.getNegocioId()));
 
@@ -71,50 +76,9 @@ public class NegocioServiceImplementacion implements NegocioService {
 
 
     @Override
-    public void delete(Long id) {
+    public void eliminarNegocio(Long id) {
         negocioRepository.deleteById(id);
     }
 
 
-    /*@Override
-    public List<ServicioDTO> obtenerServiciosPorNegocio(Long negocioId) {
-        Negocio negocio = negocioRepository.findById(negocioId)
-                .orElseThrow(() -> new RuntimeException("Negocio no encontrado con ID: " + negocioId));
-
-        return negocio.getServicios().stream()
-                .map(this::convertServicioToDTO)  // Debes crear este método en tu clase de implementación
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public NegocioDTO convertNegocioToDTO(Negocio negocio) {
-        NegocioDTO dto = new NegocioDTO();
-        dto.setNegocioId(negocio.getNegocioId());
-        dto.setNombre(negocio.getNombre());
-        dto.setDireccion(negocio.getDireccion());
-        dto.setDescripcion(negocio.getDescripcion());
-        dto.setTelefono(negocio.getTelefono());
-        return dto;
-    }
-
-    @Override
-    public Negocio convertNegocioToEntity(NegocioDTO dto) {
-        Negocio negocio = new Negocio();
-        negocio.setNegocioId(dto.getNegocioId());
-        negocio.setNombre(dto.getNombre());
-        negocio.setDireccion(dto.getDireccion());
-        negocio.setDescripcion(dto.getDescripcion());
-        negocio.setTelefono(dto.getTelefono());
-        return negocio;
-    }
-
-    private ServicioDTO convertServicioToDTO(Servicio servicio) {
-        ServicioDTO dto = new ServicioDTO();
-        dto.setServicioId(servicio.getServicioId());
-        dto.setNombre(servicio.getNombre());
-        dto.setDescripcion(servicio.getDescripcion());
-        dto.setDuracionServicio(servicio.getDuracionServicio());
-        dto.setPrecio(servicio.getPrecio());
-        return dto;
-    }*/
 }

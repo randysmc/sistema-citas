@@ -10,15 +10,15 @@ public interface NegocioService {
 
     Optional<Negocio> findById(Long id);
 
-    //NegocioDTO findById(Long id);
+    public List<Negocio> obtenerNegocios();
 
-    List<Negocio> findAll();
+    public Negocio obtenerNegocio(Long id);
 
-    Negocio save(Negocio negocio);
+    public Negocio guardarNegocio(Negocio negocio);
 
-    Negocio update(Negocio negocio);
+    public Negocio actualizarNegocio(Negocio negocio);
 
-    void delete(Long id);
+    public void eliminarNegocio(Long id);
 
     //List<NegocioDTO> obtenerServiciosPorNegocio(Long negocioId);
 

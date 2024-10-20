@@ -11,13 +11,15 @@ import java.util.Set;
 
 public interface RecursoService {
 
-    Optional<Recurso> findById(Long id);
+    public Optional<Recurso> findById(Long id);
 
-    List<Recurso> findAll();
+    public List<Recurso> obtenerRecursos();
 
-    Recurso save(Recurso recurso);
+    public Recurso obtenerRecurso(Long id);
 
-    Recurso update(Recurso recurso);
+    public Recurso guardarRecurso(Recurso recurso);
 
-    void delete(Long id);
+    public Recurso actualizaRecurso(Recurso recurso);
+
+    public void eliminarRecurso(Long id);
 }

@@ -1,6 +1,8 @@
 package com.sistema.examenes.sistema_examenes_backend.entidades;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "recursos")
@@ -18,6 +20,12 @@ public class Recurso {
     //Muchos recursos pueden pertenecerle a un Negocio
     @ManyToOne (fetch = FetchType.EAGER)
     private Negocio negocio;
+
+    @OneToMany(mappedBy = "recurso", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Cita> citas = new HashSet<>();
+
+    @OneToMany(mappedBy = "recurso", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Reserva> reservas = new HashSet<>();
 
 
     public Recurso() {

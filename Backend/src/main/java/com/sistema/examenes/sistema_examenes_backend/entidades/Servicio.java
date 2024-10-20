@@ -2,6 +2,8 @@ package com.sistema.examenes.sistema_examenes_backend.entidades;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table (name = "servicios")
@@ -18,6 +20,10 @@ public class Servicio {
 
     @ManyToOne (fetch = FetchType.EAGER)
     private Negocio negocio;
+
+    @OneToMany(mappedBy = "servicio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Cita> citas = new HashSet<>();
+
 
     public Servicio(Long servicioId, String nombre, String descripcion, Integer duracionServicio, BigDecimal precio, Negocio negocio) {
         this.servicioId = servicioId;
