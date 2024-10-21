@@ -18,5 +18,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     List<Reserva> findByNegocioAndEmpleadoAndRecursoAndFecha(Negocio negocio, Usuario empleado, Recurso recurso, LocalDate fecha);
     List<Reserva> findByNegocioAndRecursoAndFecha(Negocio negocio, Recurso recurso, LocalDate fecha);
 
+    List<Reserva> findByNegocioAndEmpleadoAndFecha(Negocio negocio, Usuario empleado, LocalDate fecha);
+
 
 }

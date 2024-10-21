@@ -244,6 +244,7 @@ public class CitaServiceImpl implements CitaService {
     }
 
 
+
     private boolean hayConflictoConReservas(Cita cita) {
         Negocio negocio = cita.getNegocio();
         Usuario empleado = cita.getEmpleado();
@@ -252,10 +253,11 @@ public class CitaServiceImpl implements CitaService {
         LocalTime horaInicio = cita.getHoraInicio();
         LocalTime horaFin = cita.getHoraFin();
 
-        // Busca reservas que coincidan con el negocio, empleado, recurso y fecha
+        // Busca reservas que coincidan con el negocio, recurso y fecha
         List<Reserva> reservasConflicto = reservaRepository
-                .findByNegocioAndEmpleadoAndRecursoAndFecha(negocio, empleado, recurso, fecha);
+                .findByNegocioAndRecursoAndFecha(negocio, recurso, fecha);
 
+        // Verifica si hay traslape en los horarios
         for (Reserva reserva : reservasConflicto) {
             LocalTime reservaHoraInicio = reserva.getHoraInicio();
             LocalTime reservaHoraFin = reserva.getHoraFin();
@@ -263,13 +265,34 @@ public class CitaServiceImpl implements CitaService {
             // Verifica si hay traslape en los horarios
             boolean traslape = (horaInicio.isBefore(reservaHoraFin) && horaFin.isAfter(reservaHoraInicio));
 
+            // Si hay traslape, verifica si el empleado es diferente
             if (traslape) {
-                return true; // Hay conflicto, ya que hay un traslape de horario
+                // Aseguramos que el recurso ya está ocupado por otro empleado
+                if (!reserva.getEmpleado().equals(empleado)) {
+                    return true; // Hay conflicto, ya que hay un traslape de horario con otro empleado
+                }
+            }
+        }
+
+        // Busca reservas que coincidan solo con el empleado y la fecha
+        List<Reserva> reservasEmpleado = reservaRepository
+                .findByNegocioAndEmpleadoAndFecha(negocio, empleado, fecha);
+
+        for (Reserva reserva : reservasEmpleado) {
+            LocalTime reservaHoraInicio = reserva.getHoraInicio();
+            LocalTime reservaHoraFin = reserva.getHoraFin();
+
+            // Verifica si hay traslape en los horarios
+            boolean traslapeEmpleado = (horaInicio.isBefore(reservaHoraFin) && horaFin.isAfter(reservaHoraInicio));
+
+            if (traslapeEmpleado) {
+                return true; // Hay conflicto, ya que el empleado ya tiene una reserva
             }
         }
 
         return false; // No hay conflicto
     }
+
 
 
 
