@@ -17,6 +17,7 @@ public class Servicio {
     private String descripcion;
     private Integer duracionServicio;
     private BigDecimal precio;
+    private Boolean disponible;
 
     @ManyToOne (fetch = FetchType.EAGER)
     private Negocio negocio;
@@ -83,5 +84,21 @@ public class Servicio {
 
     public void setNegocio(Negocio negocio) {
         this.negocio = negocio;
+    }
+
+    public Boolean getDisponible() {
+        return disponible;
+    }
+
+    public void setDisponible(Boolean disponible) {
+        this.disponible = disponible;
+    }
+
+    public Set<Cita> getCitas() {
+        return citas;
+    }
+
+    public void setCitas(Set<Cita> citas) {
+        this.citas = citas;
     }
 }

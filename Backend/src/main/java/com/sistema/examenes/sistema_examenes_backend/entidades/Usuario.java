@@ -44,13 +44,21 @@ public class Usuario implements UserDetails {
     private Set<UsuarioNegocio> usuarioNegocios = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cliente")
+    @JsonIgnore
     private Set<Cita> citasComoCliente = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "empleado")
+    @JsonIgnore
     private Set<Cita> citasComoEmpleado = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "empleado")
-    private Set<Reserva> reservas = new HashSet<>(); // Un usuario puede tener muchas reservas
+    @JsonIgnore
+    private Set<Reserva> reservasComoEmpleado = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cliente")
+    @JsonIgnore
+    private Set<Reserva> reservasComoCliente = new HashSet<>();
+
 
 
     public Usuario(){
@@ -216,5 +224,38 @@ public class Usuario implements UserDetails {
     public void setUsuarioNegocios(Set<UsuarioNegocio> usuarioNegocios) {
         this.usuarioNegocios = usuarioNegocios;
     }
+
+    public Set<Cita> getCitasComoCliente() {
+        return citasComoCliente;
+    }
+
+    public void setCitasComoCliente(Set<Cita> citasComoCliente) {
+        this.citasComoCliente = citasComoCliente;
+    }
+
+    public Set<Cita> getCitasComoEmpleado() {
+        return citasComoEmpleado;
+    }
+
+    public void setCitasComoEmpleado(Set<Cita> citasComoEmpleado) {
+        this.citasComoEmpleado = citasComoEmpleado;
+    }
+
+    public Set<Reserva> getReservasComoEmpleado() {
+        return reservasComoEmpleado;
+    }
+
+    public void setReservasComoEmpleado(Set<Reserva> reservasComoEmpleado) {
+        this.reservasComoEmpleado = reservasComoEmpleado;
+    }
+
+    public Set<Reserva> getReservasComoCliente() {
+        return reservasComoCliente;
+    }
+
+    public void setReservasComoCliente(Set<Reserva> reservasComoCliente) {
+        this.reservasComoCliente = reservasComoCliente;
+    }
+
 
 }

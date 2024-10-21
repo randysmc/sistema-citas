@@ -65,7 +65,7 @@ public class RecursoServiceImpl implements RecursoService {
         if (recurso.getDescripcion() != null) {
             existingRecurso.setDescripcion(recurso.getDescripcion());
         }
-        existingRecurso.setDisponible(recurso.isDisponible());
+        existingRecurso.setDisponible(recurso.getDisponible());
 
         return recursoRepository.save(existingRecurso);
     }

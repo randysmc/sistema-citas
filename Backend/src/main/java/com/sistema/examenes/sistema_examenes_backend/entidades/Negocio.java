@@ -1,6 +1,7 @@
 package com.sistema.examenes.sistema_examenes_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -34,16 +35,20 @@ public class Negocio {
     private Set<Servicio> servicios = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "negocio", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<DiaFestivo> diasFestivos = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "negocio", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<HorarioLaboral> horarioLaborales = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "negocio", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "negocio",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Cita> citas = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "negocio", cascade = CascadeType.ALL)
-    private Set<Cita> reservas = new LinkedHashSet<>();
+    @JsonIgnore
+    private Set<Reserva> reservas = new LinkedHashSet<>();
 
 
     public Negocio() {
@@ -120,5 +125,37 @@ public class Negocio {
 
     public void setServicios(Set<Servicio> servicios) {
         this.servicios = servicios;
+    }
+
+    public Set<DiaFestivo> getDiasFestivos() {
+        return diasFestivos;
+    }
+
+    public void setDiasFestivos(Set<DiaFestivo> diasFestivos) {
+        this.diasFestivos = diasFestivos;
+    }
+
+    public Set<HorarioLaboral> getHorarioLaborales() {
+        return horarioLaborales;
+    }
+
+    public void setHorarioLaborales(Set<HorarioLaboral> horarioLaborales) {
+        this.horarioLaborales = horarioLaborales;
+    }
+
+    public Set<Cita> getCitas() {
+        return citas;
+    }
+
+    public void setCitas(Set<Cita> citas) {
+        this.citas = citas;
+    }
+
+    public Set<Reserva> getReservas() {
+        return reservas;
+    }
+
+    public void setReservas(Set<Reserva> reservas) {
+        this.reservas = reservas;
     }
 }

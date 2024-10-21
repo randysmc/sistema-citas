@@ -1,5 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sistema.examenes.sistema_examenes_backend.Enums.DiaSemana;
 
 import javax.persistence.*;

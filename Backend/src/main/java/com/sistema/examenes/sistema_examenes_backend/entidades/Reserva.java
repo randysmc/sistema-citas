@@ -16,6 +16,7 @@ public class Reserva {
     private LocalDate fecha;
     private LocalTime horaInicio;
     private LocalTime horaFin;
+    private Boolean activa;
 
     @ManyToOne
     private Cita cita;
@@ -28,6 +29,105 @@ public class Reserva {
 
     @ManyToOne
     private  Usuario empleado;
+
+    @ManyToOne
+    private Usuario cliente;
+
+
+    public Reserva() {
+    }
+
+    public Reserva(Long reservaId, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, Boolean activa, Cita cita, Negocio negocio, Recurso recurso, Usuario empleado) {
+        this.reservaId = reservaId;
+        this.fecha = fecha;
+        this.horaInicio = horaInicio;
+        this.horaFin = horaFin;
+        this.activa = activa;
+        this.cita = cita;
+        this.negocio = negocio;
+        this.recurso = recurso;
+        this.empleado = empleado;
+    }
+
+    public Long getReservaId() {
+        return reservaId;
+    }
+
+    public void setReservaId(Long reservaId) {
+        this.reservaId = reservaId;
+    }
+
+    public LocalDate getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDate fecha) {
+        this.fecha = fecha;
+    }
+
+    public LocalTime getHoraInicio() {
+        return horaInicio;
+    }
+
+    public void setHoraInicio(LocalTime horaInicio) {
+        this.horaInicio = horaInicio;
+    }
+
+    public LocalTime getHoraFin() {
+        return horaFin;
+    }
+
+    public void setHoraFin(LocalTime horaFin) {
+        this.horaFin = horaFin;
+    }
+
+    public Boolean getActiva() {
+        return activa;
+    }
+
+    public void setActiva(Boolean activa) {
+        this.activa = activa;
+    }
+
+    public Cita getCita() {
+        return cita;
+    }
+
+    public void setCita(Cita cita) {
+        this.cita = cita;
+    }
+
+    public Negocio getNegocio() {
+        return negocio;
+    }
+
+    public void setNegocio(Negocio negocio) {
+        this.negocio = negocio;
+    }
+
+    public Recurso getRecurso() {
+        return recurso;
+    }
+
+    public void setRecurso(Recurso recurso) {
+        this.recurso = recurso;
+    }
+
+    public Usuario getEmpleado() {
+        return empleado;
+    }
+
+    public void setEmpleado(Usuario empleado) {
+        this.empleado = empleado;
+    }
+
+    public Usuario getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Usuario cliente) {
+        this.cliente = cliente;
+    }
 
 
 }

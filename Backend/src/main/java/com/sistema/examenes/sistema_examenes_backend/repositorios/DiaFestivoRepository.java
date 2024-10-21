@@ -5,11 +5,15 @@ import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface DiaFestivoRepository extends JpaRepository<DiaFestivo, Long> {
     Optional<DiaFestivo> findByNegocioAndFecha(Negocio negocio, LocalDate fecha);
 
     Optional<DiaFestivo> findByNegocioAndFechaAndAnyo(Negocio negocio, LocalDate fecha, Integer anyo);
+
+    //Aqui vamos a ver los días festivos de cada negocio
+    List<DiaFestivo> findByNegocio_NegocioId(Long negocioId);
 
 }

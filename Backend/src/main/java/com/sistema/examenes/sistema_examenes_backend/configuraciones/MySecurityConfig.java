@@ -68,6 +68,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                         "/roles/**",
                         "/horarios-laborales/**",
                         "/dias-festivos/**",
+                        "/citas/**",
                         "/negocios/**").permitAll() // Permitir acceso sin autenticación
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated() // Otras rutas requieren autenticación

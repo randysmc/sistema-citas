@@ -1,5 +1,7 @@
 package com.sistema.examenes.sistema_examenes_backend.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
@@ -17,6 +19,7 @@ public class DiaFestivo {
     private Integer anyo;
 
     @ManyToOne (fetch = FetchType.EAGER)
+
     private Negocio negocio;
 
     public DiaFestivo() {
