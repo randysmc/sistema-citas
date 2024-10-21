@@ -83,11 +83,19 @@ public class CitaServiceImpl implements CitaService {
             throw new IllegalArgumentException("El empleado no tiene permisos para realizar este servicio");
         }
 
-
         cita.setHoraFin(horaFin);
+
+        if (hayConflictoConReservas(cita)) {
+            throw new IllegalArgumentException("El recurso, empleado o negocio ya tiene una reserva en ese horario.");
+        }
+
+
         cita.setEstado(EstadoCita.AGENDADA);
 
         Cita nuevaCita = citaRepository.save(cita);
+
+        crearReserva(nuevaCita);
+
         return cita;
     }
 
@@ -218,6 +226,53 @@ public class CitaServiceImpl implements CitaService {
         // Si pasa todas las validaciones, entonces el empleado es válido
         return true;
     }
+
+    public Reserva crearReserva(Cita cita) {
+        Reserva reserva = new Reserva();
+
+        reserva.setFecha(cita.getFecha());
+        reserva.setHoraInicio(cita.getHoraInicio());
+        reserva.setHoraFin(cita.getHoraFin());
+        reserva.setActiva(true); // Siempre activa al crear una nueva reserva
+        reserva.setCita(cita);
+        reserva.setNegocio(cita.getNegocio());
+        reserva.setRecurso(cita.getRecurso());
+        reserva.setEmpleado(cita.getEmpleado());
+        reserva.setCliente(cita.getCliente());
+
+        return reservaRepository.save(reserva);
+    }
+
+
+    private boolean hayConflictoConReservas(Cita cita) {
+        Negocio negocio = cita.getNegocio();
+        Usuario empleado = cita.getEmpleado();
+        Recurso recurso = cita.getRecurso();
+        LocalDate fecha = cita.getFecha();
+        LocalTime horaInicio = cita.getHoraInicio();
+        LocalTime horaFin = cita.getHoraFin();
+
+        // Busca reservas que coincidan con el negocio, empleado, recurso y fecha
+        List<Reserva> reservasConflicto = reservaRepository
+                .findByNegocioAndEmpleadoAndRecursoAndFecha(negocio, empleado, recurso, fecha);
+
+        for (Reserva reserva : reservasConflicto) {
+            LocalTime reservaHoraInicio = reserva.getHoraInicio();
+            LocalTime reservaHoraFin = reserva.getHoraFin();
+
+            // Verifica si hay traslape en los horarios
+            boolean traslape = (horaInicio.isBefore(reservaHoraFin) && horaFin.isAfter(reservaHoraInicio));
+
+            if (traslape) {
+                return true; // Hay conflicto, ya que hay un traslape de horario
+            }
+        }
+
+        return false; // No hay conflicto
+    }
+
+
+
 
 
 

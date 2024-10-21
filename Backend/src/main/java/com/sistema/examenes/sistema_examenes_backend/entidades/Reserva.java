@@ -21,10 +21,10 @@ public class Reserva {
     @ManyToOne
     private Cita cita;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.EAGER)
     private Negocio negocio;
 
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.EAGER)
     private Recurso recurso;
 
     @ManyToOne
