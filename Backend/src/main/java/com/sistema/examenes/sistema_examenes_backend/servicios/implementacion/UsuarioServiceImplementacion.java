@@ -69,15 +69,23 @@ public class UsuarioServiceImplementacion implements UsuarioService {
     }
 
 
+
     @Override
     public Usuario obtenerUsuario(String username) {
         return usuarioRepository.findByUsername(username);
     }
 
+
     @Override
     public void eliminarUsuario(Long usuarioId) {
         usuarioRepository.deleteById(usuarioId);
     }
+
+    @Override
+    public List<Usuario> obtenerUsuarios() {
+        return usuarioRepository.findAll();
+    }
+
 
     @Override
     public Usuario actualizarUsuario(Usuario usuario) throws Exception {
@@ -91,25 +99,22 @@ public class UsuarioServiceImplementacion implements UsuarioService {
         usuarioExistente.setApellido(usuario.getApellido());
         usuarioExistente.setTelefono(usuario.getTelefono());
         usuarioExistente.setPerfil(usuario.getPerfil());  // Actualizar la foto de perfil
-        usuarioExistente.setCui(usuario.getCui());
-        usuarioExistente.setNit(usuario.getNit());
+        //usuarioExistente.setCui(usuario.getCui());
+        //usuarioExistente.setNit(usuario.getNit());
 
         // Guardar los cambios (sin modificar los roles)
         return usuarioRepository.save(usuarioExistente);
     }
 
-    @Override
-    public List<Usuario> obtenerUsuarios() {
-        return usuarioRepository.findAll();
-    }
+
 
     @Override
-    public List<Usuario> listarUsuarioActivos() {
+    public List<Usuario> listarUsuariosActivos() {
         return usuarioRepository.findByEnabledTrue();
     }
 
     @Override
-    public List<Usuario> listarUsuarioNoActivos() {
+    public List<Usuario> listarUsuariosNoActivos() {
         return usuarioRepository.findByEnabledFalse();
     }
 

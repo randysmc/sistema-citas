@@ -20,4 +20,15 @@ public interface EmpleadoService {
     public void eliminarEmpleado(Long empleadoId);
 
     public List<Usuario> obtenerEmpleados();
+
+    public Usuario actualizarEmpleado(Usuario empleado) throws  Exception;
+
+    public List<Usuario> listarEmpleadosActivos();
+
+    public List<Usuario> listarEmpleadosNoActivos();
+
+    public Usuario activarEmpleado(Long id);
+
+    public Usuario desactivarEmpleado(Long id);
+
 }

@@ -4,6 +4,7 @@ import com.sistema.examenes.sistema_examenes_backend.DTO.EmpleadoDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
 import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioNegocio;
 import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioRol;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.UsuarioExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.EmpleadoRepository;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.RolRepository;
@@ -40,10 +41,23 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     @Override
     public Usuario guardarEmpleado(Usuario empleado, Set<UsuarioRol> usuarioRoles, Set<UsuarioNegocio> usuarioNegocios) throws Exception {
-        Usuario empleadoLocal = empleadoRepository.findByUsername(empleado.getUsername());
-        if (empleadoLocal != null) {
-            throw new Exception("El empleado ya existe");
+
+        if (empleadoRepository.findByUsername(empleado.getUsername()) != null) {
+            throw new UsuarioExistenteException("El nombre de usuario ya existe");
         }
+
+        if (empleadoRepository.findByEmail(empleado.getEmail()) != null) {
+            throw new UsuarioExistenteException("El correo electrónico ya existe");
+        }
+
+        if (empleadoRepository.findByNit(empleado.getNit()) != null) {
+            throw new UsuarioExistenteException("El NIT ya existe");
+        }
+
+        if (empleadoRepository.findByCui(empleado.getCui()) != null) {
+            throw new UsuarioExistenteException("El CUI ya existe");
+        }
+
 
         empleado.setPassword(bCryptPasswordEncoder.encode(empleado.getPassword()));
 
@@ -64,6 +78,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         return empleadoRepository.save(empleado);
     }
 
+
     @Override
     public Usuario obtenerEmpleado(String username) {
         return empleadoRepository.findByUsername(username);
@@ -74,11 +89,67 @@ public class EmpleadoServiceImpl implements EmpleadoService {
         empleadoRepository.deleteById(empleadoId);
     }
 
+
     @Override
     public List<Usuario> obtenerEmpleados() {
         return empleadoRepository.findAll();
     }
 
+    @Override
+    public Usuario actualizarEmpleado(Usuario empleado) throws Exception {
+        Usuario empleadoExistente = empleadoRepository.findById(empleado.getId())
+                .orElseThrow(() -> new Exception("Empleado no encontrado"));
+
+        //Actualizamos los campos permitidos
+        empleadoExistente.setUsername(empleado.getUsername());
+        empleadoExistente.setNombre(empleado.getNombre());
+        empleadoExistente.setTelefono(empleado.getTelefono());
+        empleadoExistente.setPerfil(empleado.getPerfil());
+
+        return empleadoRepository.save(empleadoExistente);
+    }
+
+    @Override
+    public List<Usuario> listarEmpleadosActivos() {
+        List<Usuario> todosEmpleadosActivos = empleadoRepository.findByEnabledTrue();
+
+        // Filtrar solo aquellos con rol de EMPLEADO
+        return todosEmpleadosActivos.stream()
+                .filter(usuario -> usuario.getUsuarioRoles().stream()
+                        .anyMatch(usuarioRol -> usuarioRol.getRol().getRolNombre().equals("EMPLEADO")))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Usuario> listarEmpleadosNoActivos() {
+        List<Usuario> todosEmpleadosActivos = empleadoRepository.findByEnabledFalse();
+
+        // Filtrar solo aquellos con rol de EMPLEADO
+        return todosEmpleadosActivos.stream()
+                .filter(usuario -> usuario.getUsuarioRoles().stream()
+                        .anyMatch(usuarioRol -> usuarioRol.getRol().getRolNombre().equals("EMPLEADO")))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Usuario activarEmpleado(Long id) {
+        Usuario usuario = empleadoRepository.findById(id).orElse(null);
+        if (usuario != null) {
+            usuario.setEnabled(true); // Cambiar el estado a activo
+            return empleadoRepository.save(usuario);
+        }
+        return null; // O lanzar una excepción si no se encuentra
+    }
+
+    @Override
+    public Usuario desactivarEmpleado(Long id) {
+        Usuario usuario = empleadoRepository.findById(id).orElse(null);
+        if (usuario != null) {
+            usuario.setEnabled(false); // Cambiar el estado a inactivo
+            return empleadoRepository.save(usuario);
+        }
+        return null; // O lanzar una excepción si no se encuentra
+    }
 
 
 }

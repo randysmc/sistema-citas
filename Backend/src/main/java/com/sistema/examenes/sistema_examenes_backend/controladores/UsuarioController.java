@@ -39,13 +39,13 @@ public class UsuarioController {
 
     @GetMapping("/activos")
     public ResponseEntity<List<Usuario>> listarUsuariosActivos() {
-        List<Usuario> usuariosActivos = usuarioService.listarUsuarioActivos();
+        List<Usuario> usuariosActivos = usuarioService.listarUsuariosActivos();
         return ResponseEntity.ok(usuariosActivos);
     }
 
     @GetMapping("/desactivados")
     public ResponseEntity<List<Usuario>> listarUsuariosNoActivos() {
-        List<Usuario> usuariosNoActivos = usuarioService.listarUsuarioNoActivos();
+        List<Usuario> usuariosNoActivos = usuarioService.listarUsuariosNoActivos();
         return ResponseEntity.ok(usuariosNoActivos);
     }
 

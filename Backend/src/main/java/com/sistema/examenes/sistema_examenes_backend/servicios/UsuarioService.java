@@ -23,9 +23,9 @@ public interface UsuarioService {
 
     public List<Usuario> obtenerUsuarios();
 
-    public List<Usuario> listarUsuarioActivos();
+    public List<Usuario> listarUsuariosActivos();
 
-    public List<Usuario> listarUsuarioNoActivos();
+    public List<Usuario> listarUsuariosNoActivos();
 
     public Usuario activarUsuario(Long id);
 
