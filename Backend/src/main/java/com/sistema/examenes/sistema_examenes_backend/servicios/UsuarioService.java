@@ -19,7 +19,17 @@ public interface UsuarioService {
 
     public void eliminarUsuario(Long usuarioId);
 
-    public List<Usuario> findAll();
+    public Usuario actualizarUsuario(Usuario usuario) throws  Exception;
+
+    public List<Usuario> obtenerUsuarios();
+
+    public List<Usuario> listarUsuarioActivos();
+
+    public List<Usuario> listarUsuarioNoActivos();
+
+    public Usuario activarUsuario(Long id);
+
+    public Usuario desactivarUsuario(Long id);
 
 
 }

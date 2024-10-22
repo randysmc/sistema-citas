@@ -4,22 +4,27 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "negocios")
+@Table(name = "negocios", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "nombre")
+})
 public class Negocio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long negocioId;
-
+    @NotBlank(message = "El nombre del negocio no puede estar vacío.")
     private String nombre;
+    @NotBlank(message = "La dirección no puede estar vacía.")
     private String direccion;
     private String descripcion;
     private String telefono;
+    private String fotoPerfil;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "negocio")
     @JsonIgnore
@@ -54,12 +59,13 @@ public class Negocio {
     public Negocio() {
     }
 
-    public Negocio(Long negocioId, String direccion, String nombre, String descripcion, String telefono) {
+    public Negocio(Long negocioId, String direccion, String nombre, String descripcion, String telefono, String fotoPerfil) {
         this.negocioId = negocioId;
         this.direccion = direccion;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.telefono = telefono;
+        this.fotoPerfil = fotoPerfil;
 
     }
 
@@ -157,5 +163,13 @@ public class Negocio {
 
     public void setReservas(Set<Reserva> reservas) {
         this.reservas = reservas;
+    }
+
+    public String getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(String fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
     }
 }

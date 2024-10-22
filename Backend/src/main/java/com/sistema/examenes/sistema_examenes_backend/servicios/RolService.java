@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RolService {
-    Optional<Rol> findById(Long id);
-    List<Rol> findAll();
-    Rol save(Rol rol);
-    Rol update(Rol rol);
-    void delete(Long id);
+    public Optional<Rol> findById(Long id);
+    public List<Rol> findAll();
+    public Rol save(Rol rol);
+    public Rol update(Rol rol);
+    public void delete(Long id);
 }

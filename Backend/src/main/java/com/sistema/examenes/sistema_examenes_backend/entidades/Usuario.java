@@ -8,6 +8,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -15,24 +17,39 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "usuarios", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email"),
+        @UniqueConstraint(columnNames = "nit"),
+        @UniqueConstraint(columnNames = "cui")
+})
 public class Usuario implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "El nombre de usuario no puede estar vacío.")
     private String username;
+    @NotBlank(message = "Password no puede estar vacío.")
     private String password;
+    @NotBlank(message = "El nombre no puede estar vacío.")
     private String nombre;
+    @NotBlank(message = "El apellido no puede estar vacío.")
     private String apellido;
+    @Email(message = "El email debe ser válido.")
+    @NotBlank(message = "El email no puede estar vacío.")
     private String email;
     private String telefono;
     private boolean enabled = true;
     private String perfil;
+    @NotBlank(message = "El NIT no puede estar vacío.")
     private String nit;
+    @NotBlank(message = "El CUI no puede estar vacío.")
     private String cui;
     private boolean tfa = true;
+
+
 
 
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER,mappedBy = "usuario")
@@ -59,15 +76,10 @@ public class Usuario implements UserDetails {
     @JsonIgnore
     private Set<Reserva> reservasComoCliente = new HashSet<>();
 
-
-
-    public Usuario(){
-
+    public Usuario() {
     }
 
-
-
-    public Usuario(Long id, String username, String password, String nombre, String apellido, String email, String telefono, boolean enabled, String perfil, String nit, String cui, boolean tfa) {
+    public Usuario(Long id, String username, String password, String nombre, String apellido, String email, String telefono, Boolean enabled, String perfil, String nit, String cui, Boolean tfa) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -77,8 +89,8 @@ public class Usuario implements UserDetails {
         this.telefono = telefono;
         this.enabled = enabled;
         this.perfil = perfil;
-        this.cui = cui;
         this.nit = nit;
+        this.cui = cui;
         this.tfa = tfa;
     }
 

@@ -1,6 +1,10 @@
 package com.sistema.examenes.sistema_examenes_backend.entidades;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,9 +16,11 @@ public class Servicio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long servicioId;
-
+    @Column(unique = true)
     private String nombre;
+    @NotBlank(message = "La descripcion no puede estar vacía.")
     private String descripcion;
+    @NotNull(message = "La duracion no puede estar vacía.")
     private Integer duracionServicio;
     private BigDecimal precio;
     private Boolean disponible;
@@ -23,6 +29,7 @@ public class Servicio {
     private Negocio negocio;
 
     @OneToMany(mappedBy = "servicio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Set<Cita> citas = new HashSet<>();
 
 

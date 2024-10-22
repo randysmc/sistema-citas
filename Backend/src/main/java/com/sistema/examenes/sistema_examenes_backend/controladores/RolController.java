@@ -24,7 +24,7 @@ public class RolController {
         return rolService.findAll();
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<Rol> crearRol(@RequestBody Rol rol) {
         Rol nuevoRol = rolService.save(rol);
         return new ResponseEntity<>(nuevoRol, HttpStatus.CREATED);

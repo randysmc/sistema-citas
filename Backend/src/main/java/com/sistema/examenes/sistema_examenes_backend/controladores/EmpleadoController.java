@@ -49,6 +49,8 @@ public class EmpleadoController {
         empleado.setTelefono(empleadoDTO.getTelefono());
         empleado.setEnabled(empleadoDTO.isEnabled());
         empleado.setPerfil(empleadoDTO.getPerfil());
+        empleado.setNit(empleadoDTO.getNit());
+        empleado.setCui(empleadoDTO.getCui());
 
         // Manejar los roles
         Set<UsuarioRol> usuarioRoles = new HashSet<>();

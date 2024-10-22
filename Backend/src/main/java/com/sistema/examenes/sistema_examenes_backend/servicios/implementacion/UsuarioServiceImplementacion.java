@@ -5,6 +5,7 @@ import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
 import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioNegocio;
 import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioRol;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.UsuarioExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.RolRepository;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.UsuarioRepository;
@@ -19,7 +20,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
-//Estereotipos
 public class UsuarioServiceImplementacion implements UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -37,11 +37,23 @@ public class UsuarioServiceImplementacion implements UsuarioService {
         return usuarioRepository.findById(id);
     }
 
+
     @Override
     public Usuario guardarUsuario(Usuario usuario, Set<UsuarioRol> usuarioRoles) throws Exception {
-        Usuario usuarioLocal = usuarioRepository.findByUsername(usuario.getUsername());
-        if (usuarioLocal != null) {
-            throw new Exception("El usuario ya existe");
+        if (usuarioRepository.findByUsername(usuario.getUsername()) != null) {
+            throw new UsuarioExistenteException("El nombre de usuario ya existe");
+        }
+
+        if (usuarioRepository.findByEmail(usuario.getEmail()) != null) {
+            throw new UsuarioExistenteException("El correo electrónico ya existe");
+        }
+
+        if (usuarioRepository.findByNit(usuario.getNit()) != null) {
+            throw new UsuarioExistenteException("El NIT ya existe");
+        }
+
+        if (usuarioRepository.findByCui(usuario.getCui()) != null) {
+            throw new UsuarioExistenteException("El CUI ya existe");
         }
 
         usuario.setPassword(bCryptPasswordEncoder.encode(usuario.getPassword()));
@@ -56,6 +68,7 @@ public class UsuarioServiceImplementacion implements UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
+
     @Override
     public Usuario obtenerUsuario(String username) {
         return usuarioRepository.findByUsername(username);
@@ -67,10 +80,56 @@ public class UsuarioServiceImplementacion implements UsuarioService {
     }
 
     @Override
-    public List<Usuario> findAll() {
+    public Usuario actualizarUsuario(Usuario usuario) throws Exception {
+        // Verificar si el usuario existe
+        Usuario usuarioExistente = usuarioRepository.findById(usuario.getId())
+                .orElseThrow(() -> new Exception("Usuario no encontrado"));
+
+        // Actualizar solo los campos permitidos
+        usuarioExistente.setUsername(usuario.getUsername());
+        usuarioExistente.setNombre(usuario.getNombre());
+        usuarioExistente.setApellido(usuario.getApellido());
+        usuarioExistente.setTelefono(usuario.getTelefono());
+        usuarioExistente.setPerfil(usuario.getPerfil());  // Actualizar la foto de perfil
+        usuarioExistente.setCui(usuario.getCui());
+        usuarioExistente.setNit(usuario.getNit());
+
+        // Guardar los cambios (sin modificar los roles)
+        return usuarioRepository.save(usuarioExistente);
+    }
+
+    @Override
+    public List<Usuario> obtenerUsuarios() {
         return usuarioRepository.findAll();
     }
 
+    @Override
+    public List<Usuario> listarUsuarioActivos() {
+        return usuarioRepository.findByEnabledTrue();
+    }
 
+    @Override
+    public List<Usuario> listarUsuarioNoActivos() {
+        return usuarioRepository.findByEnabledFalse();
+    }
 
+    @Override
+    public Usuario activarUsuario(Long id) {
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        if (usuario != null) {
+            usuario.setEnabled(true); // Cambiar el estado a activo
+            return usuarioRepository.save(usuario);
+        }
+        return null; // O lanzar una excepción si no se encuentra
+    }
+
+    @Override
+    public Usuario desactivarUsuario(Long id) {
+        Usuario usuario = usuarioRepository.findById(id).orElse(null);
+        if (usuario != null) {
+            usuario.setEnabled(false); // Cambiar el estado a inactivo
+            return usuarioRepository.save(usuario);
+        }
+        return null; // O lanzar una excepción si no se encuentra
+    }
 }
