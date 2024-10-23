@@ -1,0 +1,20 @@
+<mat-card class="mt-3">
+    <mat-card-header>
+      <div mat-list-avatar [ngStyle]="{'background-image': 'url(' + (negocio.fotoPerfil ? negocio.fotoPerfil : 'assets/default.jpg') + ')'}">
+        <img mat-list-avatar [src]="negocio.fotoPerfil" alt="Negocio">
+      </div>
+      <mat-card-title>{{ negocio.nombre }}</mat-card-title>
+      <mat-card-subtitle>{{ negocio.direccion }}</mat-card-subtitle>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <p>{{ negocio.descripcion }}</p>
+      <p><mat-icon>phone</mat-icon> {{ negocio.telefono }}</p>
+    </mat-card-content>
+  
+    <!-- Botón para actualizar negocio -->
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="actualizarNegocio()">Actualizar Negocio</button>
+    </mat-card-actions>
+  </mat-card>
+  

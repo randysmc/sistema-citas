@@ -15,6 +15,9 @@ import {MatCardModule} from '@angular/material/card';
 import {MatToolbarModule} from '@angular/material/toolbar'; 
 import {MatIconModule} from '@angular/material/icon'; 
 import {MatListModule} from '@angular/material/list';
+import { ReactiveFormsModule } from '@angular/forms';
+
+
 
 
 
@@ -34,6 +37,16 @@ import { ViewRecursosComponent } from './pages/admin/view-recursos/view-recursos
 import { AddRecursosComponent } from './pages/admin/add-recursos/add-recursos.component';
 
 
+import { AddUsersComponent } from './pages/super-user/add-users/add-users.component';
+import { ViewUsersComponent } from './pages/super-user/view-users/view-users.component';
+import { AddNegociosComponent } from './pages/super-user/add-negocios/add-negocios.component';
+import { ViewNegociosComponent } from './pages/super-user/view-negocios/view-negocios.component';
+import { SuperuDashboardComponent } from './pages/super-user/superu-dashboard/superu-dashboard.component';
+import { SuperuSidebarComponent } from './pages/super-user/superu-sidebar/superu-sidebar.component';
+import { SuperuWelcomeComponent } from './pages/super-user/superu-welcome/superu-welcome.component';
+import { DetalleNegocioComponent } from './pages/super-user/detalle-negocio/detalle-negocio.component';
+
+
 
 
 @NgModule({
@@ -51,6 +64,14 @@ import { AddRecursosComponent } from './pages/admin/add-recursos/add-recursos.co
     WelcomeComponent,
     ViewRecursosComponent,
     AddRecursosComponent,
+    AddUsersComponent,
+    ViewUsersComponent,
+    AddNegociosComponent,
+    ViewNegociosComponent,
+    SuperuDashboardComponent,
+    SuperuSidebarComponent,
+    SuperuWelcomeComponent,
+    DetalleNegocioComponent,
 
   ],
   imports: [
@@ -66,7 +87,8 @@ import { AddRecursosComponent } from './pages/admin/add-recursos/add-recursos.co
     MatCardModule,
     MatToolbarModule,
     MatIconModule,
-    MatListModule
+    MatListModule,
+    ReactiveFormsModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

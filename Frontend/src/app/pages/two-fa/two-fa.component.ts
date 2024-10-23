@@ -52,13 +52,17 @@ export class TwoFaComponent {
           console.log(user);
   
           // Navegar según el rol del usuario
-          if (this.loginService.getUserRole() === "ADMIN") {
+          if(this.loginService.getUserRole() === "SUPERUSUARIO"){
+            this.router.navigate(['superusuario']);
+            this.loginService.loginStatusSubjec.next(true);
+          } else if (this.loginService.getUserRole() === "ADMINISTRADOR") {
             this.router.navigate(['admin']);
             this.loginService.loginStatusSubjec.next(true);
           } else if (this.loginService.getUserRole() === "CLIENTE") {
             this.router.navigate(['user-dashboard']);
             this.loginService.loginStatusSubjec.next(true);
-          } else {
+          }  
+          else {
             this.loginService.logout();
           }
         });

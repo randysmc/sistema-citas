@@ -19,7 +19,7 @@ export class SignupComponent implements OnInit{
     telefono: '',
     cui: '',
     nit: '',
-    roles: [2]
+    roles: [4]
 
   }
 

@@ -7,11 +7,18 @@ import { DashboardComponent } from './pages/admin/dashboard/dashboard.component'
 import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboard.component';
 import { AdminGuard } from './services/admin.guard';
 import { normalGuard } from './services/normal.guard';
+import { superusuarioGuard } from './services/superusuario.guard'
 import { TwoFaComponent } from './pages/two-fa/two-fa.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
 import { ViewRecursosComponent } from './pages/admin/view-recursos/view-recursos.component';
 import { AddRecursosComponent } from './pages/admin/add-recursos/add-recursos.component';
+import { SuperuDashboardComponent } from './pages/super-user/superu-dashboard/superu-dashboard.component';
+import { ViewNegociosComponent } from './pages/super-user/view-negocios/view-negocios.component';
+import { AddNegociosComponent } from './pages/super-user/add-negocios/add-negocios.component';
+import { AddUsersComponent } from './pages/super-user/add-users/add-users.component';
+import { ViewUsersComponent } from './pages/super-user/view-users/view-users.component';
+import { DetalleNegocioComponent } from './pages/super-user/detalle-negocio/detalle-negocio.component';
 
 const routes: Routes = [
   {
@@ -29,11 +36,43 @@ const routes: Routes = [
     component:LoginComponent,
     pathMatch: 'full'
   },
+
+  {
+    path: 'superusuario',
+    component:SuperuDashboardComponent,
+    //canActivate:[superusuarioGuard],
+    children:[
+      {
+        path:'profile',
+        component:ProfileComponent
+      },
+      {
+        path:"negocios",
+        component:ViewNegociosComponent
+      },
+      {
+        path:'add-negocio',
+        component:AddNegociosComponent
+      },
+      {
+        path:'negocios/:id',
+        component:DetalleNegocioComponent
+      },
+      {
+        path:'users',
+        component:ViewUsersComponent
+      },
+      {
+        path:'add-user',
+        component:AddUsersComponent
+      }
+
+    ]
+  },
   {
     path: 'admin',
     component:DashboardComponent,
-    //pathMatch: 'full',
-    canActivate:[AdminGuard],
+    //canActivate:[AdminGuard],
     children:[
       {
         path:'profile',
