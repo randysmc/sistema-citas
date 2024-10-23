@@ -2,15 +2,22 @@ package com.sistema.examenes.sistema_examenes_backend.controladores;
 
 import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
 import com.sistema.examenes.sistema_examenes_backend.DTO.RecursoDTO;
+import com.sistema.examenes.sistema_examenes_backend.entidades.ErrorResponse;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
+import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.NegocioExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.servicios.NegocioService;
 import com.sistema.examenes.sistema_examenes_backend.servicios.RecursoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,33 +38,144 @@ public class NegocioController {
         return negocioService.obtenerNegocios();
     }
 
+
     @GetMapping("/{id}")
-    public ResponseEntity<Negocio> obtenerNegocioPorId(@PathVariable Long id) {
-        Optional<Negocio> negocio = negocioService.findById(id);
-        return negocio.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<?> obtenerUsuarioPorId(@PathVariable Long id) {
+        Optional<Negocio> negocioOptional = negocioService.findById(id);
+
+        if (negocioOptional.isPresent()) {
+            return ResponseEntity.ok(negocioOptional.get());
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("Negocio no encontrado", "No hay negocios con el ID proporcionado: " + id));
+        }
     }
 
 
     @PostMapping("/")
-    public ResponseEntity<Negocio> crearNegocio(@RequestBody Negocio negocio) {
-        Negocio nuevoNegocio = negocioService.guardarNegocio(negocio);
-        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoNegocio);
+    public ResponseEntity<?> crearNegocio(
+            @RequestPart("nombre") String nombre,
+            @RequestPart("direccion") String direccion,
+            @RequestPart("descripcion") String descripcion,
+            @RequestPart("telefono") String telefono,
+            @RequestPart("fotoPerfil") MultipartFile fotoPerfil) {
+
+        try {
+            // Validar que todos los campos estén presentes y no vacíos
+            if (nombre.isEmpty() || direccion.isEmpty() || descripcion.isEmpty() || telefono.isEmpty() || fotoPerfil.isEmpty()) {
+                return new ResponseEntity<>("Todos los campos son obligatorios.", HttpStatus.BAD_REQUEST);
+            }
+
+            // Crear un nuevo negocio con los campos recibidos
+            Negocio nuevoNegocio = new Negocio();
+            nuevoNegocio.setNombre(nombre);
+            nuevoNegocio.setDireccion(direccion);
+            nuevoNegocio.setDescripcion(descripcion);
+            nuevoNegocio.setTelefono(telefono);
+
+            // Guardar la imagen y asignar la ruta al negocio
+            String rutaImagen = guardarImagen(fotoPerfil, nombre);
+            nuevoNegocio.setFotoPerfil(rutaImagen);
+
+
+            Negocio negocioGuardado = negocioService.guardarNegocio(nuevoNegocio);
+
+
+            return new ResponseEntity<>(negocioGuardado, HttpStatus.CREATED);
+
+        } catch (NegocioExistenteException ex) {
+            // Responder con estado 400 (BAD REQUEST) si el negocio ya existe
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(ex.getMessage(), "el nombre del negocio esta duplicado"));
+        } catch (Exception ex) {
+            // Responder con estado 500 (INTERNAL SERVER ERROR) para cualquier otro error
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Error inesperado", ex.getMessage()));
+        }
     }
 
-    // Actualizar un negocio existente
+
+
+
     @PutMapping("/{id}")
-    public ResponseEntity<Negocio> actualizarNegocio(@PathVariable Long id, @RequestBody Negocio negocio) {
-        negocio.setNegocioId(id);
-        Negocio negocioActualizado = negocioService.actualizarNegocio(negocio);
-        return ResponseEntity.ok(negocioActualizado);
+    public ResponseEntity<?> actualizarNegocio(
+            @PathVariable Long id,
+            @RequestPart(required = false) String nombre,
+            @RequestPart(required = false) String direccion,
+            @RequestPart(required = false) String descripcion,
+            @RequestPart(required = false) String telefono,
+            @RequestPart(required = false) MultipartFile fotoPerfil) {
+
+        try {
+            // Obtener el negocio existente
+            Negocio negocioExistente = negocioService.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Negocio no encontrado con ID: " + id));
+
+            // Actualizar solo los campos que vienen en la solicitud
+            if (nombre != null && !nombre.isEmpty()) {
+                negocioExistente.setNombre(nombre);
+            }
+            if (direccion != null && !direccion.isEmpty()) {
+                negocioExistente.setDireccion(direccion);
+            }
+            if (descripcion != null && !descripcion.isEmpty()) {
+                negocioExistente.setDescripcion(descripcion);
+            }
+            if (telefono != null && !telefono.isEmpty()) {
+                negocioExistente.setTelefono(telefono);
+            }
+
+            // Manejo de la imagen
+            if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
+                // Guardar la nueva imagen y asignar la ruta al negocio
+                String rutaImagen = guardarImagen(fotoPerfil, negocioExistente.getNombre());
+                negocioExistente.setFotoPerfil(rutaImagen);
+            }
+
+            // Delegar la actualización al servicio
+            Negocio negocioActualizado = negocioService.actualizarNegocio(negocioExistente);
+
+            // Responder con el negocio actualizado
+            return ResponseEntity.ok(negocioActualizado);
+
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse(ex.getMessage(), "El negocio no se pudo actualizar."));
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ErrorResponse("Negocio no encontrado.", "No se encontró un negocio con el ID proporcionado."));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Error inesperado", ex.getMessage()));
+        }
     }
+
+
+
 
     // Eliminar un negocio por ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarNegocio(@PathVariable Long id) {
         negocioService.eliminarNegocio(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private String guardarImagen(MultipartFile file, String username) throws IOException {
+        String nombreArchivo = username + "_" + file.getOriginalFilename();
+        String rutaDirectorio = "src/main/resources/static/img/negocio/";
+        String rutaArchivo = Paths.get(rutaDirectorio, nombreArchivo).toString();
+
+        // Crear la carpeta si no existe
+        java.io.File directorio = new java.io.File(rutaDirectorio);
+        if (!directorio.exists()) {
+            directorio.mkdirs();  // Crear el directorio incluyendo subdirectorios
+        }
+
+        // Guardar el archivo en la carpeta especificada
+        Files.write(Paths.get(rutaArchivo), file.getBytes());
+
+        // Retornar la ruta relativa para guardar en la base de datos
+        return "/img/usuario/" + nombreArchivo;
     }
 
 }

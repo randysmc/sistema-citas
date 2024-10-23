@@ -5,6 +5,7 @@ import com.sistema.examenes.sistema_examenes_backend.DTO.ServicioDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Servicio;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.NegocioExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.NegocioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class NegocioServiceImplementacion implements NegocioService {
     public Negocio guardarNegocio(Negocio negocio) {
         // Verificar si el nombre ya existe
         if (negocioRepository.existsByNombre(negocio.getNombre())) {
-            throw new IllegalArgumentException("El nombre del negocio ya existe.");
+            throw new NegocioExistenteException("El nombre del negocio ya existe.");
         }
         return negocioRepository.save(negocio);
     }

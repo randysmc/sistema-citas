@@ -22,7 +22,4 @@ public interface NegocioService {
 
     //List<NegocioDTO> obtenerServiciosPorNegocio(Long negocioId);
 
-    //Negocio convertNegocioToEntity(NegocioDTO negocioDTO);
-
-    //NegocioDTO convertNegocioToDTO(Negocio negocio);
 }

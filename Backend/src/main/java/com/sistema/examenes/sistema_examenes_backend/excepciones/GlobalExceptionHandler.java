@@ -16,6 +16,14 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(ex.getMessage(), "Asegúrate de que el nombre de usuario, email, CUI o NIT no estén duplicados."));
     }
 
+    @ExceptionHandler(NegocioExistenteException.class)
+    public ResponseEntity<ErrorResponse> manejarNegocioExistenteException(NegocioExistenteException ex) {
+        // Devolver el mensaje de error en formato JSON
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ex.getMessage(), "Asegúrate de que el nombre de negocio no este duplicado."));
+    }
+
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> manejarGlobalException(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
