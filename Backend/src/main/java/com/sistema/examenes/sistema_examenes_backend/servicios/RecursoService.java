@@ -22,4 +22,12 @@ public interface RecursoService {
     public Recurso actualizaRecurso(Recurso recurso);
 
     public void eliminarRecurso(Long id);
+
+    public List<Recurso> obtenerRecursosDisponibles();
+
+    public List<Recurso> obtenerRecursosNoDisponibles();
+
+    void cambiarDisponibilidad(Long recursoId, boolean disponible);
+
+
 }

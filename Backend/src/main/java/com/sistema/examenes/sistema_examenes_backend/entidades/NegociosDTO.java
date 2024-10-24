@@ -1,4 +1,4 @@
-package com.sistema.examenes.sistema_examenes_backend.entidades;
+/*package com.sistema.examenes.sistema_examenes_backend.entidades;
 
 public class NegociosDTO {
     private Long id; // O cualquier otro identificador que necesites
@@ -28,3 +28,4 @@ public class NegociosDTO {
         this.nombre = nombre;
     }
 }
+*/

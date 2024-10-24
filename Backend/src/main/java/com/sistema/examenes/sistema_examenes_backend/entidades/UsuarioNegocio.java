@@ -1,4 +1,4 @@
-package com.sistema.examenes.sistema_examenes_backend.entidades;
+/*package com.sistema.examenes.sistema_examenes_backend.entidades;
 
 import javax.persistence.*;
 
@@ -40,3 +40,4 @@ public class UsuarioNegocio {
         this.negocio = negocio;
     }
 }
+*/

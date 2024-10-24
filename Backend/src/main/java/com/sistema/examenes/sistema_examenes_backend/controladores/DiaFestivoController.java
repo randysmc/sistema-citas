@@ -25,12 +25,27 @@ public class DiaFestivoController {
         return new ResponseEntity<>(diaFestivoService.obtenerDias(), HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<DiaFestivo> guardar(@RequestBody DiaFestivo diaFestivo) {
 
+    // Endpoint para obtener los días festivos recurrentes
+    @GetMapping("/recurrentes")
+    public ResponseEntity<List<DiaFestivo>> obtenerRecurrentes() {
+        return new ResponseEntity<>(diaFestivoService.obtenerDiasRecurrentes(), HttpStatus.OK);
+    }
+
+    // Endpoint para obtener los días festivos no recurrentes
+    @GetMapping("/no-recurrentes")
+    public ResponseEntity<List<DiaFestivo>> obtenerNoRecurrentes() {
+        return new ResponseEntity<>(diaFestivoService.obtenerDiasNoRecurrentes(), HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> guardar(@RequestBody DiaFestivo diaFestivo) {
+        try {
             DiaFestivo nuevoDiaFestivo = diaFestivoService.guardar(diaFestivo);
             return new ResponseEntity<>(nuevoDiaFestivo, HttpStatus.CREATED);
-
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
 

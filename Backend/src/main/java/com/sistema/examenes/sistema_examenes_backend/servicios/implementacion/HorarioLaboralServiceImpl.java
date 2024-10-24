@@ -1,6 +1,7 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.HorarioLaboral;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.HorarioExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.HorarioLaboralRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.HorarioLaboralService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,11 @@ public class HorarioLaboralServiceImpl implements HorarioLaboralService {
     @Override
     public HorarioLaboral guardarHorario(HorarioLaboral horarioLaboral) {
         // Verificar si ya existe un horario que se traslape
-        List<HorarioLaboral> horariosExistentes = horarioLaboralRepository.findByNegocioAndDia(
-                horarioLaboral.getNegocio(), horarioLaboral.getDia());
+        List<HorarioLaboral> horariosExistentes = horarioLaboralRepository.findAll(); // Obtener todos los horarios
 
         for (HorarioLaboral existente : horariosExistentes) {
             if (horariosSeTraslapan(horarioLaboral, existente)) {
-                throw new IllegalArgumentException("El horario laboral se traslapa con un horario existente.");
+                throw new HorarioExistenteException("El horario laboral se traslapa con un horario existente.");
             }
         }
 

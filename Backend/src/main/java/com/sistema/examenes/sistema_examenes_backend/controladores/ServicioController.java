@@ -40,4 +40,37 @@ public class ServicioController {
         Servicio servicioActualizado = servicioService.update(servicio);
         return ResponseEntity.ok(servicioActualizado);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Servicio> obtenerServicioPorId(@PathVariable Long id) {
+        Servicio servicio = servicioService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Servicio no encontrado con ID: " + id));
+        return ResponseEntity.ok(servicio);
+    }
+
+    // Obtener servicios disponibles
+    @GetMapping("/disponibles")
+    public List<Servicio> obtenerServiciosDisponibles() {
+        return servicioService.findByDisponibleTrue();
+    }
+
+    // Obtener servicios no disponibles
+    @GetMapping("/no-disponibles")
+    public List<Servicio> obtenerServiciosNoDisponibles() {
+        return servicioService.findByDisponibleFalse();
+    }
+
+    // Poner un servicio como disponible (disponible = true)
+    @PutMapping("/habilitar/{id}")
+    public ResponseEntity<?> habilitarServicio(@PathVariable Long id) {
+        servicioService.cambiarDisponibilidad(id, true);
+        return ResponseEntity.ok("Servicio habilitado correctamente");
+    }
+
+    // Poner un servicio como no disponible (disponible = false)
+    @PutMapping("/deshabilitar/{id}")
+    public ResponseEntity<?> deshabilitarServicio(@PathVariable Long id) {
+        servicioService.cambiarDisponibilidad(id, false);
+        return ResponseEntity.ok("Servicio deshabilitado correctamente");
+    }
 }

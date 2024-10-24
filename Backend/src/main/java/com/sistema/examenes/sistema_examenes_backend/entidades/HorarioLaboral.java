@@ -20,19 +20,18 @@ public class HorarioLaboral {
     private LocalTime horaFin;
     private String tipoHorario;
 
-    @ManyToOne (fetch = FetchType.EAGER)
-    private Negocio negocio;
+
 
     public HorarioLaboral() {
     }
 
-    public HorarioLaboral(Long horarioLaboralId, DiaSemana dia, LocalTime horaInicio, LocalTime horaFin, String tipoHorario, Negocio negocio) {
+    public HorarioLaboral(Long horarioLaboralId, DiaSemana dia, LocalTime horaInicio, LocalTime horaFin, String tipoHorario) {
         this.horarioLaboralId = horarioLaboralId;
         this.dia = dia;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
         this.tipoHorario = tipoHorario;
-        this.negocio = negocio;
+
     }
 
     public Long getHorarioLaboralId() {
@@ -75,13 +74,6 @@ public class HorarioLaboral {
         this.tipoHorario = tipoHorario;
     }
 
-    public Negocio getNegocio() {
-        return negocio;
-    }
-
-    public void setNegocio(Negocio negocio) {
-        this.negocio = negocio;
-    }
 
 
 }

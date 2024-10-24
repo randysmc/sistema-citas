@@ -18,4 +18,10 @@ public interface ServicioService {
     public Servicio update(Servicio servicio);
 
     public void delete(Long id);
+
+    public List<Servicio> findByDisponibleTrue();
+
+    public List<Servicio> findByDisponibleFalse();
+
+    public void cambiarDisponibilidad(Long servicioId, boolean disponible);
 }

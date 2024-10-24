@@ -25,11 +25,7 @@ public class Cita {
     private EstadoCita estado;
 
     @ManyToOne (fetch = FetchType.EAGER)
-    private Negocio negocio;
-
-    @ManyToOne (fetch = FetchType.EAGER)
     private Recurso recurso;
-
 
     @ManyToOne (fetch = FetchType.EAGER)
     private Servicio servicio;
@@ -37,25 +33,23 @@ public class Cita {
     @ManyToOne (fetch = FetchType.EAGER)
     private Usuario cliente;
 
-
     @ManyToOne (fetch = FetchType.EAGER)
     private Usuario empleado;
 
-    @OneToMany(mappedBy = "cita", cascade = CascadeType.ALL, fetch = FetchType.LAZY) //
+    /*@OneToMany(mappedBy = "cita", cascade = CascadeType.ALL, fetch = FetchType.LAZY) //
     @JsonIgnore
-    private Set<Reserva> reservas = new HashSet<>();
+    private Set<Reserva> reservas = new HashSet<>();*/
 
 
     public Cita() {
     }
 
-    public Cita(Long idCita, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, EstadoCita estado, Negocio negocio, Recurso recurso, Servicio servicio, Usuario cliente, Usuario empleado) {
+    public Cita(Long idCita, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, EstadoCita estado, Recurso recurso, Servicio servicio, Usuario cliente, Usuario empleado) {
         this.idCita = idCita;
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
         this.estado = estado;
-        this.negocio = negocio;
         this.recurso = recurso;
         this.servicio = servicio;
         this.cliente = cliente;
@@ -102,13 +96,6 @@ public class Cita {
         this.estado = estado;
     }
 
-    public Negocio getNegocio() {
-        return negocio;
-    }
-
-    public void setNegocio(Negocio negocio) {
-        this.negocio = negocio;
-    }
 
     public Recurso getRecurso() {
         return recurso;
@@ -142,11 +129,11 @@ public class Cita {
         this.empleado = empleado;
     }
 
-    public Set<Reserva> getReservas() {
+    /*public Set<Reserva> getReservas() {
         return reservas;
     }
 
     public void setReservas(Set<Reserva> reservas) {
         this.reservas = reservas;
-    }
+    }*/
 }

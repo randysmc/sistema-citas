@@ -25,21 +25,19 @@ public class Servicio {
     private BigDecimal precio;
     private Boolean disponible;
 
-    @ManyToOne (fetch = FetchType.EAGER)
-    private Negocio negocio;
 
-    @OneToMany(mappedBy = "servicio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    /*@OneToMany(mappedBy = "servicio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<Cita> citas = new HashSet<>();
+    private Set<Cita> citas = new HashSet<>();*/
 
 
-    public Servicio(Long servicioId, String nombre, String descripcion, Integer duracionServicio, BigDecimal precio, Negocio negocio) {
+    public Servicio(Long servicioId, String nombre, String descripcion, Integer duracionServicio, BigDecimal precio) {
         this.servicioId = servicioId;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracionServicio = duracionServicio;
         this.precio = precio;
-        this.negocio = negocio;
+
     }
 
     public Servicio() {
@@ -85,13 +83,6 @@ public class Servicio {
         this.precio = precio;
     }
 
-    public Negocio getNegocio() {
-        return negocio;
-    }
-
-    public void setNegocio(Negocio negocio) {
-        this.negocio = negocio;
-    }
 
     public Boolean getDisponible() {
         return disponible;
@@ -101,11 +92,11 @@ public class Servicio {
         this.disponible = disponible;
     }
 
-    public Set<Cita> getCitas() {
+    /*public Set<Cita> getCitas() {
         return citas;
     }
 
     public void setCitas(Set<Cita> citas) {
         this.citas = citas;
-    }
+    }*/
 }

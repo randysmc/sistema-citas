@@ -1,4 +1,4 @@
-package com.sistema.examenes.sistema_examenes_backend.repositorios;
+/*package com.sistema.examenes.sistema_examenes_backend.repositorios;
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
@@ -22,3 +22,4 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
 
 }
+*/

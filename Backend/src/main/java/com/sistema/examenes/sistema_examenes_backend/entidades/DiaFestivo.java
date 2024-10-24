@@ -18,20 +18,16 @@ public class DiaFestivo {
     private boolean recurrente;
     private Integer anyo;
 
-    @ManyToOne (fetch = FetchType.EAGER)
-
-    private Negocio negocio;
 
     public DiaFestivo() {
     }
 
-    public DiaFestivo(Long idDiaFestivo, LocalDate fecha, String descripcion, boolean recurrente, Integer anyo, Negocio negocio) {
+    public DiaFestivo(Long idDiaFestivo, LocalDate fecha, String descripcion, boolean recurrente, Integer anyo) {
         this.idDiaFestivo = idDiaFestivo;
         this.fecha = fecha;
         this.descripcion = descripcion;
         this.recurrente = recurrente;
         this.anyo = anyo;
-        this.negocio = negocio;
     }
 
     public Long getIdDiaFestivo() {
@@ -72,14 +68,6 @@ public class DiaFestivo {
 
     public void setAnyo(Integer anyo) {
         this.anyo = anyo;
-    }
-
-    public Negocio getNegocio() {
-        return negocio;
-    }
-
-    public void setNegocio(Negocio negocio) {
-        this.negocio = negocio;
     }
 
 

@@ -2,7 +2,7 @@ package com.sistema.examenes.sistema_examenes_backend.servicios;
 
 import com.sistema.examenes.sistema_examenes_backend.DTO.UsuarioDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
-import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioNegocio;
+
 import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioRol;
 
 import java.util.List;

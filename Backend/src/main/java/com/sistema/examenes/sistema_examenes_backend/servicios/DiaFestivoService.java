@@ -20,4 +20,8 @@ public interface DiaFestivoService {
     public DiaFestivo actualizar(DiaFestivo diaFestivo);
 
     public void eliminarDia(Long id);
+
+    public List<DiaFestivo> obtenerDiasRecurrentes();
+
+    public List<DiaFestivo> obtenerDiasNoRecurrentes();
 }

@@ -56,11 +56,8 @@ public class Usuario implements UserDetails {
     @JsonIgnore
     private Set<UsuarioRol> usuarioRoles = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "usuario")
-    @JsonIgnore
-    private Set<UsuarioNegocio> usuarioNegocios = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cliente")
+    /*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cliente")
     @JsonIgnore
     private Set<Cita> citasComoCliente = new HashSet<>();
 
@@ -74,7 +71,7 @@ public class Usuario implements UserDetails {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cliente")
     @JsonIgnore
-    private Set<Reserva> reservasComoCliente = new HashSet<>();
+    private Set<Reserva> reservasComoCliente = new HashSet<>();*/
 
     public Usuario() {
     }
@@ -134,12 +131,6 @@ public class Usuario implements UserDetails {
         return autoridades;
     }
 
-    public List<NegociosDTO> getNegocios() {
-        return usuarioNegocios.stream()
-                .map(usuarioNegocio -> new NegociosDTO(usuarioNegocio.getNegocio().getNegocioId(),
-                        usuarioNegocio.getNegocio().getNombre())) // Suponiendo que Negocio tiene getId() y getNombre()
-                .collect(Collectors.toList());
-    }
 
     public String getPassword() {
         return password;
@@ -229,15 +220,8 @@ public class Usuario implements UserDetails {
         this.tfa = tfa;
     }
 
-    public Set<UsuarioNegocio> getUsuarioNegocios() {
-        return usuarioNegocios;
-    }
 
-    public void setUsuarioNegocios(Set<UsuarioNegocio> usuarioNegocios) {
-        this.usuarioNegocios = usuarioNegocios;
-    }
-
-    public Set<Cita> getCitasComoCliente() {
+    /*public Set<Cita> getCitasComoCliente() {
         return citasComoCliente;
     }
 
@@ -267,7 +251,7 @@ public class Usuario implements UserDetails {
 
     public void setReservasComoCliente(Set<Reserva> reservasComoCliente) {
         this.reservasComoCliente = reservasComoCliente;
-    }
+    }*/
 
 
 }

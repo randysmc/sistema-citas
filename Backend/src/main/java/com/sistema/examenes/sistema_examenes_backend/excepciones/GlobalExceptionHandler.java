@@ -23,6 +23,18 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse(ex.getMessage(), "Asegúrate de que el nombre de negocio no este duplicado."));
     }
 
+    @ExceptionHandler(RecursoExistenteException.class)
+    public ResponseEntity<ErrorResponse> manejarRecursoExistenteException(HorarioExistenteException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ex.getMessage(), "El nombre del recurso que intentas guardar ya existe"));
+    }
+
+    @ExceptionHandler(HorarioExistenteException.class)
+    public ResponseEntity<ErrorResponse> manejarHorarioExistenteException(HorarioExistenteException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse(ex.getMessage(), "El horario que intentas guardar ya existe o se traslapa con otro."));
+    }
+
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> manejarGlobalException(Exception ex) {

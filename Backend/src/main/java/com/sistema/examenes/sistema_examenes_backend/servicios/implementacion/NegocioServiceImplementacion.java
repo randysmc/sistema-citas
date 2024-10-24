@@ -3,8 +3,6 @@ package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
 import com.sistema.examenes.sistema_examenes_backend.DTO.ServicioDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
-import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
-import com.sistema.examenes.sistema_examenes_backend.entidades.Servicio;
 import com.sistema.examenes.sistema_examenes_backend.excepciones.NegocioExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.NegocioService;

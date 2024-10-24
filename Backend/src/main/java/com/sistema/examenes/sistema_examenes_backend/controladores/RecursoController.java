@@ -48,4 +48,31 @@ public class RecursoController {
         Recurso recursoActualizado = recursoService.actualizaRecurso(recurso);
         return ResponseEntity.ok(recursoActualizado);
     }
+
+    // Obtener recursos disponibles
+    @GetMapping("/disponibles")
+    public ResponseEntity<List<Recurso>> obtenerRecursosDisponibles() {
+        List<Recurso> recursosDisponibles = recursoService.obtenerRecursosDisponibles();
+        return ResponseEntity.ok(recursosDisponibles);
+    }
+
+    // Obtener recursos no disponibles
+    @GetMapping("/no-disponibles")
+    public ResponseEntity<List<Recurso>> obtenerRecursosNoDisponibles() {
+        List<Recurso> recursosNoDisponibles = recursoService.obtenerRecursosNoDisponibles();
+        return ResponseEntity.ok(recursosNoDisponibles);
+    }
+
+    @PutMapping("/habilitar/{id}")
+    public ResponseEntity<?> habilitarRecurso(@PathVariable Long id) {
+        recursoService.cambiarDisponibilidad(id, true);
+        return ResponseEntity.ok("Recurso habilitado correctamente");
+    }
+
+    // Cambiar disponibilidad a false (deshabilitar recurso)
+    @PutMapping("/deshabilitar/{id}")
+    public ResponseEntity<?> deshabilitarRecurso(@PathVariable Long id) {
+        recursoService.cambiarDisponibilidad(id, false);
+        return ResponseEntity.ok("Recurso deshabilitado correctamente");
+    }
 }

@@ -1,7 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
-import com.sistema.examenes.sistema_examenes_backend.DTO.ServicioDTO;
-import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
+
 import com.sistema.examenes.sistema_examenes_backend.entidades.Servicio;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.ServicioRepository;
@@ -21,8 +20,6 @@ public class ServicioServiceImpl  implements ServicioService {
     @Autowired
     private ServicioRepository servicioRepository;
 
-    @Autowired
-    private NegocioRepository negocioRepository;
 
     @Override
     public Optional<Servicio> findById(Long id) {
@@ -76,6 +73,25 @@ public class ServicioServiceImpl  implements ServicioService {
     @Override
     public void delete(Long id) {
         servicioRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Servicio> findByDisponibleTrue() {
+        return servicioRepository.findByDisponibleTrue();
+    }
+
+    @Override
+    public List<Servicio> findByDisponibleFalse() {
+        return servicioRepository.findByDisponibleFalse();
+    }
+
+    @Override
+    public void cambiarDisponibilidad(Long servicioId, boolean disponible) {
+        Servicio servicio = servicioRepository.findById(servicioId)
+                .orElseThrow(() -> new RuntimeException("Servicio no encontrado con ID: " + servicioId));
+
+        servicio.setDisponible(disponible);
+        servicioRepository.save(servicio);
     }
 
 }

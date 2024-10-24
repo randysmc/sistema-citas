@@ -2,7 +2,7 @@ package com.sistema.examenes.sistema_examenes_backend.servicios;
 
 import com.sistema.examenes.sistema_examenes_backend.DTO.EmpleadoDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
-import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioNegocio;
+
 import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioRol;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public interface EmpleadoService {
 
     Optional<Usuario> findById(Long id);
 
-    public Usuario guardarEmpleado(Usuario empleado, Set<UsuarioRol> usuarioRoles, Set<UsuarioNegocio> usuarioNegocios) throws Exception;
+    public Usuario guardarEmpleado(Usuario empleado, Set<UsuarioRol> usuarioRoles) throws Exception;
 
     public Usuario obtenerEmpleado(String username);
 

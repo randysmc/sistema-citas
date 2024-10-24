@@ -3,7 +3,7 @@ package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 import com.sistema.examenes.sistema_examenes_backend.DTO.UsuarioDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
-import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioNegocio;
+
 import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioRol;
 import com.sistema.examenes.sistema_examenes_backend.excepciones.UsuarioExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;

@@ -98,17 +98,10 @@ public class EmpleadoController {
                 usuarioRoles.add(usuarioRol);
             }
 
-            // Manejar los negocios
-            Set<UsuarioNegocio> usuarioNegocios = new HashSet<>();
-            for (Long negocioId : empleadoDTO.getNegocios()) {
-                UsuarioNegocio usuarioNegocio = new UsuarioNegocio();
-                usuarioNegocio.setNegocio(negocioService.findById(negocioId).orElseThrow(() -> new Exception("Negocio no encontrado")));
-                usuarioNegocio.setUsuario(empleado);
-                usuarioNegocios.add(usuarioNegocio);
-            }
+
 
             // Guardar el usuario usando el servicio
-            Usuario nuevoEmpleado = empleadoService.guardarEmpleado(empleado, usuarioRoles, usuarioNegocios);
+            Usuario nuevoEmpleado = empleadoService.guardarEmpleado(empleado, usuarioRoles);
 
             // Retornar respuesta exitosa
             return new ResponseEntity<>(nuevoEmpleado, HttpStatus.CREATED); // Código 201 para creación exitosa

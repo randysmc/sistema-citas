@@ -2,6 +2,8 @@ package com.sistema.examenes.sistema_examenes_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sistema.examenes.sistema_examenes_backend.Enums.DiaSemana;
+import com.sistema.examenes.sistema_examenes_backend.Enums.TipoRecurso;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -19,30 +21,27 @@ public class Recurso {
     private String nombre;
     private String descripcion;
     private Boolean disponible;
+    @Enumerated(EnumType.STRING)
+    private TipoRecurso tipo;
 
-    //Muchos recursos pueden pertenecerle a un Negocio
-    @ManyToOne (fetch = FetchType.EAGER)
 
-    private Negocio negocio;
-
-    @OneToMany(mappedBy = "recurso", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    /*@OneToMany(mappedBy = "recurso", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Cita> citas = new HashSet<>();
 
     @OneToMany(mappedBy = "recurso", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonIgnore
-    private Set<Reserva> reservas = new HashSet<>();
+    private Set<Reserva> reservas = new HashSet<>();*/
 
-
-    public Recurso() {
-    }
-
-    public Recurso(Long recursoId, String nombre, String descripcion, boolean disponible, Negocio negocio) {
+    public Recurso(Long recursoId, String nombre, String descripcion, Boolean disponible, TipoRecurso tipo) {
         this.recursoId = recursoId;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.disponible = disponible;
-        this.negocio = negocio;
+        this.tipo = tipo;
+    }
+
+    public Recurso() {
     }
 
     public Long getRecursoId() {
@@ -77,7 +76,15 @@ public class Recurso {
         this.disponible = disponible;
     }
 
-    public Set<Cita> getCitas() {
+    public TipoRecurso getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoRecurso tipo) {
+        this.tipo = tipo;
+    }
+
+    /*public Set<Cita> getCitas() {
         return citas;
     }
 
@@ -91,13 +98,6 @@ public class Recurso {
 
     public void setReservas(Set<Reserva> reservas) {
         this.reservas = reservas;
-    }
+    }*/
 
-    public Negocio getNegocio() {
-        return negocio;
-    }
-
-    public void setNegocio(Negocio negocio) {
-        this.negocio = negocio;
-    }
 }

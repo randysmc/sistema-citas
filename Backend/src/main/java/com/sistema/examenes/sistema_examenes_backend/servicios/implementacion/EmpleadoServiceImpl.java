@@ -2,7 +2,7 @@ package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
 import com.sistema.examenes.sistema_examenes_backend.DTO.EmpleadoDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
-import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioNegocio;
+
 import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioRol;
 import com.sistema.examenes.sistema_examenes_backend.excepciones.UsuarioExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.EmpleadoRepository;
@@ -40,7 +40,7 @@ public class EmpleadoServiceImpl implements EmpleadoService {
     }
 
     @Override
-    public Usuario guardarEmpleado(Usuario empleado, Set<UsuarioRol> usuarioRoles, Set<UsuarioNegocio> usuarioNegocios) throws Exception {
+    public Usuario guardarEmpleado(Usuario empleado, Set<UsuarioRol> usuarioRoles) throws Exception {
 
         if (empleadoRepository.findByUsername(empleado.getUsername()) != null) {
             throw new UsuarioExistenteException("El nombre de usuario ya existe");
@@ -68,12 +68,6 @@ public class EmpleadoServiceImpl implements EmpleadoService {
             empleado.getUsuarioRoles().add(usuarioRol);
         }
 
-        // Asignar negocios
-        for (UsuarioNegocio usuarioNegocio : usuarioNegocios) {
-            usuarioNegocio.setUsuario(empleado);
-            negocioRepository.save(usuarioNegocio.getNegocio());
-            empleado.getUsuarioNegocios().add(usuarioNegocio);
-        }
 
         return empleadoRepository.save(empleado);
     }

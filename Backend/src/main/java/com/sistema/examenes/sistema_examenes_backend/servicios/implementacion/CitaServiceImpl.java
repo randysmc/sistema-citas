@@ -29,14 +29,12 @@ public class CitaServiceImpl implements CitaService {
     @Autowired
     private ServicioRepository servicioRepository;
 
-    @Autowired
-    private ReservaRepository reservaRepository;
+    //@Autowired
+    //private ReservaRepository reservaRepository;
 
     @Autowired
     private CitaRepository citaRepository;
 
-    @Autowired
-    private NegocioRepository negocioRepository;
 
     @Autowired
     private EmpleadoRepository empleadoRepository;
@@ -46,7 +44,6 @@ public class CitaServiceImpl implements CitaService {
     @Override
     public Cita crearCita(Cita cita) {
 
-        Long negocioId = cita.getNegocio().getNegocioId();
         LocalDate fecha = cita.getFecha();
         LocalTime horaInicio = cita.getHoraInicio();
         Long servicioId = cita.getServicio().getServicioId();
@@ -58,16 +55,15 @@ public class CitaServiceImpl implements CitaService {
             throw new IllegalArgumentException("El empleado no puede ser nulo para crear una cita.");
         }
 
-        Negocio negocio = negocioRepository.findById(negocioId)
-                .orElseThrow(() -> new IllegalArgumentException("Negocio no encontrado con id: " + negocioId));
 
-        if (esDiaFestivo(fecha, negocioId)) {
+
+        if (esDiaFestivo(fecha)) {
             throw new IllegalArgumentException("No se pueden crear citas en días festivos.");
         }
 
         LocalTime horaFin = calcularHoraFin(horaInicio, servicioId);
 
-        if(!esHorarioLaboral(fecha, horaInicio, horaFin, negocioId)){
+        if(!esHorarioLaboral(fecha, horaInicio, horaFin)){
             throw new IllegalArgumentException("No se puede crear citas fuera de horario laboral");
         }
 
@@ -79,22 +75,22 @@ public class CitaServiceImpl implements CitaService {
             throw  new IllegalArgumentException("El servicio no esta disponible o no existe");
         }
 
-        if(!esEmpleadoValido(empleadoId, negocioId)){
+        if(!esEmpleadoValido(empleadoId)){
             throw new IllegalArgumentException("El empleado no tiene permisos para realizar este servicio");
         }
 
         cita.setHoraFin(horaFin);
 
-        if (hayConflictoConReservas(cita)) {
+        /*if (hayConflictoConReservas(cita)) {
             throw new IllegalArgumentException("El recurso, empleado o negocio ya tiene una reserva en ese horario.");
-        }
+        }*/
 
 
         cita.setEstado(EstadoCita.AGENDADA);
 
         Cita nuevaCita = citaRepository.save(cita);
 
-        crearReserva(nuevaCita);
+        //crearReserva(nuevaCita);
 
         return cita;
     }
@@ -128,10 +124,11 @@ public class CitaServiceImpl implements CitaService {
         return List.of();
     }
 
-    private boolean esDiaFestivo(LocalDate fecha, Long negocioId) {
-        List<DiaFestivo> diasFestivos = diaFestivoRepository.findByNegocio_NegocioId(negocioId);
+    private boolean esDiaFestivo(LocalDate fecha) {
+        List<DiaFestivo> diasFestivos = diaFestivoRepository.findAll(); // Cambiado para obtener todos los días festivos
         return diasFestivos.stream().anyMatch(diaFestivo -> diaFestivo.getFecha().equals(fecha));
     }
+
 
     private LocalTime calcularHoraFin(LocalTime horaInicio, Long servicioId) {
         Servicio servicio = servicioRepository.findById(servicioId)
@@ -139,27 +136,19 @@ public class CitaServiceImpl implements CitaService {
         return horaInicio.plusMinutes(servicio.getDuracionServicio());
     }
 
-    private boolean esHorarioLaboral(LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, Long negocioId) {
+    private boolean esHorarioLaboral(LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
         // Convertir el día de la semana a DiaSemana
         DayOfWeek dayOfWeek = fecha.getDayOfWeek();
         DiaSemana diaSemana = DiaSemanaConverter.convertirADiaSemana(dayOfWeek);
 
-        System.out.println("Fecha: " + fecha);
-        System.out.println("Día de la semana: " + diaSemana);
-        System.out.println("Hora Inicio: " + horaInicio);
-        System.out.println("Hora Fin: " + horaFin);
-        System.out.println("Negocio ID: " + negocioId);
+        List<HorarioLaboral> horarios = horarioLaboralRepository.findByDia(diaSemana);
 
-        // Obtener horarios laborales para el negocio y el día de la semana
-        List<HorarioLaboral> horarios = horarioLaboralRepository.findByNegocio_NegocioIdAndDia(negocioId, diaSemana);
 
-        // Verificar si hay horarios laborales
         if (horarios.isEmpty()) {
             System.out.println("No hay horarios laborales definidos para este día.");
             return false; // No hay horarios laborales definidos para este día
         }
 
-        // Verificar si la horaInicio y horaFin están dentro de algún horario laboral
         for (HorarioLaboral horario : horarios) {
             System.out.println("Horario laboral encontrado: " + horario.getDia() +
                     " de " + horario.getHoraInicio() + " a " + horario.getHoraFin());
@@ -175,11 +164,11 @@ public class CitaServiceImpl implements CitaService {
     }
 
 
+
     private boolean recursoDisponible(Long recursoId) {
-        // Buscar el recurso por su ID
+
         Recurso recurso = recursoRepository.findById(recursoId).orElse(null);
 
-        // Verificar si el recurso existe y si está disponible (atributo `disponible` es true)
         return recurso != null && recurso.getDisponible();
     }
 
@@ -189,17 +178,14 @@ public class CitaServiceImpl implements CitaService {
         return servicio != null && servicio.getDisponible();
     }
 
-    private boolean esEmpleadoValido(Long empleadoId, Long negocioId) {
-        // Buscar al empleado (usuario) por su ID
+    private boolean esEmpleadoValido(Long empleadoId) {
         Usuario empleado = empleadoRepository.findById(empleadoId).orElse(null);
 
-        // Si el empleado no existe, retornar false y mostrar un mensaje
         if (empleado == null) {
             System.out.println("El empleado no existe.");
             return false;
         }
 
-        // Verificar si el empleado está habilitado (enabled == true)
         if (!empleado.isEnabled()) {
             System.out.println("El empleado no está activo.");
             return false;
@@ -214,20 +200,11 @@ public class CitaServiceImpl implements CitaService {
             return false;
         }
 
-        // Verificar que el empleado esté asociado al negocio
-        boolean perteneceAlNegocio = empleado.getNegocios().stream()
-                .anyMatch(negocio -> negocio.getId().equals(negocioId));
-
-        if (!perteneceAlNegocio) {
-            System.out.println("El empleado no está asociado al negocio.");
-            return false;
-        }
-
         // Si pasa todas las validaciones, entonces el empleado es válido
         return true;
     }
 
-    public Reserva crearReserva(Cita cita) {
+    /*public Reserva crearReserva(Cita cita) {
         Reserva reserva = new Reserva();
 
         reserva.setFecha(cita.getFecha());
@@ -241,11 +218,11 @@ public class CitaServiceImpl implements CitaService {
         reserva.setCliente(cita.getCliente());
 
         return reservaRepository.save(reserva);
-    }
+    }*/
 
 
 
-    private boolean hayConflictoConReservas(Cita cita) {
+    /*private boolean hayConflictoConReservas(Cita cita) {
         Negocio negocio = cita.getNegocio();
         Usuario empleado = cita.getEmpleado();
         Recurso recurso = cita.getRecurso();
@@ -292,7 +269,7 @@ public class CitaServiceImpl implements CitaService {
 
         return false; // No hay conflicto
     }
-
+*/
 
 
 

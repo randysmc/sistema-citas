@@ -26,12 +26,12 @@ public class Negocio {
     private String telefono;
     private String fotoPerfil;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "negocio")
+    /*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "negocio")
     @JsonIgnore
-    private Set<UsuarioNegocio> usuarioNegocios = new HashSet<>();
+    private Set<UsuarioNegocio> usuarioNegocios = new HashSet<>();*/
 
     //Un negocio puede tener muchos recursos
-    @OneToMany(mappedBy = "negocio", cascade = CascadeType.ALL)
+    /*@OneToMany(mappedBy = "negocio", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Recurso> recursos =  new LinkedHashSet<>();
 
@@ -53,7 +53,7 @@ public class Negocio {
 
     @OneToMany(mappedBy = "negocio", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Reserva> reservas = new LinkedHashSet<>();
+    private Set<Reserva> reservas = new LinkedHashSet<>();*/
 
 
     public Negocio() {
@@ -109,61 +109,6 @@ public class Negocio {
         this.telefono = telefono;
     }
 
-    public Set<UsuarioNegocio> getUsuarioNegocios() {
-        return usuarioNegocios;
-    }
-
-    public void setUsuarioNegocios(Set<UsuarioNegocio> usuarioNegocios) {
-        this.usuarioNegocios = usuarioNegocios;
-    }
-
-    public Set<Recurso> getRecursos() {
-        return recursos;
-    }
-
-    public void setRecursos(Set<Recurso> recursos) {
-        this.recursos = recursos;
-    }
-
-    public Set<Servicio> getServicios() {
-        return servicios;
-    }
-
-    public void setServicios(Set<Servicio> servicios) {
-        this.servicios = servicios;
-    }
-
-    public Set<DiaFestivo> getDiasFestivos() {
-        return diasFestivos;
-    }
-
-    public void setDiasFestivos(Set<DiaFestivo> diasFestivos) {
-        this.diasFestivos = diasFestivos;
-    }
-
-    public Set<HorarioLaboral> getHorarioLaborales() {
-        return horarioLaborales;
-    }
-
-    public void setHorarioLaborales(Set<HorarioLaboral> horarioLaborales) {
-        this.horarioLaborales = horarioLaborales;
-    }
-
-    public Set<Cita> getCitas() {
-        return citas;
-    }
-
-    public void setCitas(Set<Cita> citas) {
-        this.citas = citas;
-    }
-
-    public Set<Reserva> getReservas() {
-        return reservas;
-    }
-
-    public void setReservas(Set<Reserva> reservas) {
-        this.reservas = reservas;
-    }
 
     public String getFotoPerfil() {
         return fotoPerfil;

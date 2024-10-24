@@ -1,4 +1,4 @@
-package com.sistema.examenes.sistema_examenes_backend.entidades;
+/*package com.sistema.examenes.sistema_examenes_backend.entidades;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -131,3 +131,4 @@ public class Reserva {
 
 
 }
+*/
