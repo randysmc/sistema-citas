@@ -10,16 +10,25 @@ import com.sistema.examenes.sistema_examenes_backend.excepciones.NegocioExistent
 import com.sistema.examenes.sistema_examenes_backend.servicios.NegocioService;
 import com.sistema.examenes.sistema_examenes_backend.servicios.RecursoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/negocios")
@@ -74,27 +83,24 @@ public class NegocioController {
             nuevoNegocio.setTelefono(telefono);
 
             // Guardar la imagen y asignar la ruta al negocio
-            String rutaImagen = guardarImagen(fotoPerfil, nombre);
+            String rutaImagen = guardarImagen(fotoPerfil, nombre);  // Llama a la nueva función mejorada
             nuevoNegocio.setFotoPerfil(rutaImagen);
 
-
+            // Guardar el negocio en la base de datos
             Negocio negocioGuardado = negocioService.guardarNegocio(nuevoNegocio);
-
 
             return new ResponseEntity<>(negocioGuardado, HttpStatus.CREATED);
 
         } catch (NegocioExistenteException ex) {
             // Responder con estado 400 (BAD REQUEST) si el negocio ya existe
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorResponse(ex.getMessage(), "el nombre del negocio esta duplicado"));
+                    .body(new ErrorResponse(ex.getMessage(), "El nombre del negocio está duplicado"));
         } catch (Exception ex) {
             // Responder con estado 500 (INTERNAL SERVER ERROR) para cualquier otro error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("Error inesperado", ex.getMessage()));
         }
     }
-
-
 
 
     @PutMapping("/{id}")
@@ -127,6 +133,11 @@ public class NegocioController {
 
             // Manejo de la imagen
             if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
+                // Eliminar la imagen anterior si existe
+                if (negocioExistente.getFotoPerfil() != null && !negocioExistente.getFotoPerfil().isEmpty()) {
+                    eliminarImagen(negocioExistente.getFotoPerfil());
+                }
+
                 // Guardar la nueva imagen y asignar la ruta al negocio
                 String rutaImagen = guardarImagen(fotoPerfil, negocioExistente.getNombre());
                 negocioExistente.setFotoPerfil(rutaImagen);
@@ -152,7 +163,6 @@ public class NegocioController {
 
 
 
-
     // Eliminar un negocio por ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarNegocio(@PathVariable Long id) {
@@ -160,22 +170,50 @@ public class NegocioController {
         return ResponseEntity.noContent().build();
     }
 
-    private String guardarImagen(MultipartFile file, String username) throws IOException {
-        String nombreArchivo = username + "_" + file.getOriginalFilename();
-        String rutaDirectorio = "src/main/resources/static/img/negocio/";
+    private String guardarImagen(MultipartFile file, String nombreNegocio) throws IOException {
+        String nombreArchivo = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+
+        // Define la ruta dentro de static
+        String rutaDirectorio = "src/main/resources/static/uploads/negocio/";
         String rutaArchivo = Paths.get(rutaDirectorio, nombreArchivo).toString();
 
-        // Crear la carpeta si no existe
-        java.io.File directorio = new java.io.File(rutaDirectorio);
+        // Crear el directorio si no existe
+        File directorio = new File(rutaDirectorio);
         if (!directorio.exists()) {
-            directorio.mkdirs();  // Crear el directorio incluyendo subdirectorios
+            directorio.mkdirs();  // Crear el directorio si no existe
         }
 
-        // Guardar el archivo en la carpeta especificada
-        Files.write(Paths.get(rutaArchivo), file.getBytes());
+        // Guardar la imagen en la ruta especificada
+        byte[] bytesImg = file.getBytes();
+        Path rutaCompleta = Paths.get(rutaArchivo);
+        Files.write(rutaCompleta, bytesImg);
 
         // Retornar la ruta relativa para guardar en la base de datos
-        return "/img/usuario/" + nombreArchivo;
+        return "/uploads/negocio/" + nombreArchivo;
     }
+
+
+
+    private void eliminarImagen(String rutaImagen) {
+        try {
+            Path rutaCompleta = Paths.get(rutaImagen.startsWith("/") ? "uploads" + rutaImagen : "uploads/" + rutaImagen);
+
+            // Verifica si el archivo existe antes de intentar eliminarlo
+            if (Files.exists(rutaCompleta)) {
+                Files.delete(rutaCompleta);
+            } else {
+                System.out.println("La imagen no existe: " + rutaCompleta.toString());
+            }
+        } catch (IOException e) {
+            System.err.println("No se pudo eliminar la imagen: " + e.getMessage());
+        }
+    }
+
+
+
+
+
+
+
 
 }

@@ -13,13 +13,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -165,22 +164,26 @@ public class UsuarioController {
 
 
 
-    private String guardarImagen(MultipartFile file, String username) throws IOException {
-        String nombreArchivo = username + "_" + file.getOriginalFilename();
-        String rutaDirectorio = "src/main/resources/static/img/usuario/";
+    private String guardarImagen(MultipartFile file, String nombreNegocio) throws IOException {
+        String nombreArchivo = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
+
+        // Define la ruta dentro de static
+        String rutaDirectorio = "src/main/resources/static/uploads/usuario/";
         String rutaArchivo = Paths.get(rutaDirectorio, nombreArchivo).toString();
 
-        // Crear la carpeta si no existe
-        java.io.File directorio = new java.io.File(rutaDirectorio);
+        // Crear el directorio si no existe
+        File directorio = new File(rutaDirectorio);
         if (!directorio.exists()) {
-            directorio.mkdirs();  // Crear el directorio incluyendo subdirectorios
+            directorio.mkdirs();  // Crear el directorio si no existe
         }
 
-        // Guardar el archivo en la carpeta especificada
-        Files.write(Paths.get(rutaArchivo), file.getBytes());
+        // Guardar la imagen en la ruta especificada
+        byte[] bytesImg = file.getBytes();
+        Path rutaCompleta = Paths.get(rutaArchivo);
+        Files.write(rutaCompleta, bytesImg);
 
         // Retornar la ruta relativa para guardar en la base de datos
-        return "/img/usuario/" + nombreArchivo;
+        return "/uploads/usuario/" + nombreArchivo;
     }
 
 
