@@ -15,14 +15,46 @@ public class CitaController {
     @Autowired
     private CitaService citaService;
 
-    @GetMapping
-    public List<Cita> obtenerCitas(){
-        return citaService.obtenerCitas();
-    }
-
     @PostMapping
     public ResponseEntity<Cita> crearCita(@RequestBody Cita cita) {
         Cita nuevaCita = citaService.crearCita(cita);
-        return ResponseEntity.ok(nuevaCita);
+        return ResponseEntity.status(201).body(nuevaCita); // 201 Created
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Cita>> obtenerCitas() {
+        List<Cita> citas = citaService.obtenerCitas();
+        return ResponseEntity.ok(citas); // 200 OK
+    }
+
+    @GetMapping("/usuario/{usuarioId}")
+    public ResponseEntity<List<Cita>> obtenerCitaPorUsuario(@PathVariable Long usuarioId) {
+        List<Cita> citas = citaService.obtenerCitaPorUsuario(usuarioId);
+        return ResponseEntity.ok(citas); // 200 OK
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Cita> obtenerCitaPorId(@PathVariable Long id) {
+        Cita cita = citaService.obtenerCitaPorId(id);
+        return ResponseEntity.ok(cita); // 200 OK
+    }
+
+    @PutMapping
+    public ResponseEntity<Cita> actualizarCita(@RequestBody Cita cita) {
+        Cita citaActualizada = citaService.actualizaCita(cita);
+        return ResponseEntity.ok(citaActualizada); // 200 OK
+    }
+
+    @PutMapping("/{id}/cancelar")
+    public ResponseEntity<Cita> cancelarCita(@PathVariable Long id) {
+        Cita citaCancelada = citaService.cancelarCita(id);
+        return ResponseEntity.ok(citaCancelada); // 200 OK
+    }
+
+
+    @GetMapping("/empleado/{empleadoId}")
+    public ResponseEntity<List<Cita>> obtenerCitaPorEmpleado(@PathVariable Long empleadoId) {
+        List<Cita> citas = citaService.obtenerCitaPorEmpleado(empleadoId);
+        return ResponseEntity.ok(citas); // 200 OK
     }
 }

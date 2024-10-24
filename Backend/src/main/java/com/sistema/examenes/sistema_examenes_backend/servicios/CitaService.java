@@ -16,7 +16,7 @@ public interface CitaService {
 
     public Cita actualizaCita(Cita cita);
 
-    public void cancelarCita(Long id);
+    public Cita cancelarCita(Long id);
 
     public List<Cita> obtenerCitaPorEmpleado(Long empleadoId);
 }

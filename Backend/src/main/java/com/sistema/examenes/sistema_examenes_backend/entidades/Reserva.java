@@ -1,4 +1,4 @@
-/*package com.sistema.examenes.sistema_examenes_backend.entidades;
+package com.sistema.examenes.sistema_examenes_backend.entidades;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -22,9 +22,6 @@ public class Reserva {
     private Cita cita;
 
     @ManyToOne (fetch = FetchType.EAGER)
-    private Negocio negocio;
-
-    @ManyToOne (fetch = FetchType.EAGER)
     private Recurso recurso;
 
     @ManyToOne
@@ -37,14 +34,13 @@ public class Reserva {
     public Reserva() {
     }
 
-    public Reserva(Long reservaId, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, Boolean activa, Cita cita, Negocio negocio, Recurso recurso, Usuario empleado) {
+    public Reserva(Long reservaId, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin, Boolean activa, Cita cita, Recurso recurso, Usuario empleado) {
         this.reservaId = reservaId;
         this.fecha = fecha;
         this.horaInicio = horaInicio;
         this.horaFin = horaFin;
         this.activa = activa;
         this.cita = cita;
-        this.negocio = negocio;
         this.recurso = recurso;
         this.empleado = empleado;
     }
@@ -97,13 +93,6 @@ public class Reserva {
         this.cita = cita;
     }
 
-    public Negocio getNegocio() {
-        return negocio;
-    }
-
-    public void setNegocio(Negocio negocio) {
-        this.negocio = negocio;
-    }
 
     public Recurso getRecurso() {
         return recurso;
@@ -131,4 +120,3 @@ public class Reserva {
 
 
 }
-*/

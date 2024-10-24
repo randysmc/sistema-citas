@@ -29,8 +29,8 @@ public class CitaServiceImpl implements CitaService {
     @Autowired
     private ServicioRepository servicioRepository;
 
-    //@Autowired
-    //private ReservaRepository reservaRepository;
+    @Autowired
+    private ReservaRepository reservaRepository;
 
     @Autowired
     private CitaRepository citaRepository;
@@ -81,47 +81,61 @@ public class CitaServiceImpl implements CitaService {
 
         cita.setHoraFin(horaFin);
 
-        /*if (hayConflictoConReservas(cita)) {
-            throw new IllegalArgumentException("El recurso, empleado o negocio ya tiene una reserva en ese horario.");
-        }*/
+        if (hayConflictoConReservas(cita)) {
+            throw new IllegalArgumentException("El recurso o empleado ya tiene una reservacion en este horario y fecha");
+        }
 
 
         cita.setEstado(EstadoCita.AGENDADA);
 
         Cita nuevaCita = citaRepository.save(cita);
 
-        //crearReserva(nuevaCita);
+        crearReserva(nuevaCita);
 
         return cita;
     }
 
-    @Override
-    public List<Cita> obtenerCitaPorUsuario(Long usuarioId) {
-        return List.of();
-    }
 
     @Override
     public List<Cita> obtenerCitas(){
         return citaRepository.findAll();
     }
+
+    @Override
+    public List<Cita> obtenerCitaPorUsuario(Long usuarioId) {
+        return citaRepository.findByClienteId(usuarioId);
+    }
+
     @Override
     public Cita obtenerCitaPorId(Long id) {
-        return null;
+        return citaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cita no encontrada con id: " + id));
     }
+
 
     @Override
     public Cita actualizaCita(Cita cita) {
         return null;
     }
 
-    @Override
-    public void cancelarCita(Long id) {
 
+    @Override
+    public Cita cancelarCita(Long id) {
+        Cita cita = citaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cita no encontrada con id: " + id));
+
+        // Eliminar la reserva relacionada si existe
+        // eliminarReserva(cita);
+
+        // Cambiar el estado de la cita a CANCELADA
+        cita.setEstado(EstadoCita.CANCELADA);
+        return citaRepository.save(cita);
     }
+
 
     @Override
     public List<Cita> obtenerCitaPorEmpleado(Long empleadoId) {
-        return List.of();
+        return citaRepository.findByEmpleadoId(empleadoId);
     }
 
     private boolean esDiaFestivo(LocalDate fecha) {
@@ -204,7 +218,7 @@ public class CitaServiceImpl implements CitaService {
         return true;
     }
 
-    /*public Reserva crearReserva(Cita cita) {
+    public Reserva crearReserva(Cita cita) {
         Reserva reserva = new Reserva();
 
         reserva.setFecha(cita.getFecha());
@@ -212,18 +226,16 @@ public class CitaServiceImpl implements CitaService {
         reserva.setHoraFin(cita.getHoraFin());
         reserva.setActiva(true); // Siempre activa al crear una nueva reserva
         reserva.setCita(cita);
-        reserva.setNegocio(cita.getNegocio());
         reserva.setRecurso(cita.getRecurso());
         reserva.setEmpleado(cita.getEmpleado());
         reserva.setCliente(cita.getCliente());
 
         return reservaRepository.save(reserva);
-    }*/
+    }
 
 
 
-    /*private boolean hayConflictoConReservas(Cita cita) {
-        Negocio negocio = cita.getNegocio();
+    private boolean hayConflictoConReservas(Cita cita) {
         Usuario empleado = cita.getEmpleado();
         Recurso recurso = cita.getRecurso();
         LocalDate fecha = cita.getFecha();
@@ -232,7 +244,7 @@ public class CitaServiceImpl implements CitaService {
 
         // Busca reservas que coincidan con el negocio, recurso y fecha
         List<Reserva> reservasConflicto = reservaRepository
-                .findByNegocioAndRecursoAndFecha(negocio, recurso, fecha);
+                .findByRecursoAndFecha(recurso, fecha);
 
         // Verifica si hay traslape en los horarios
         for (Reserva reserva : reservasConflicto) {
@@ -253,7 +265,7 @@ public class CitaServiceImpl implements CitaService {
 
         // Busca reservas que coincidan solo con el empleado y la fecha
         List<Reserva> reservasEmpleado = reservaRepository
-                .findByNegocioAndEmpleadoAndFecha(negocio, empleado, fecha);
+                .findByEmpleadoAndFecha(empleado, fecha);
 
         for (Reserva reserva : reservasEmpleado) {
             LocalTime reservaHoraInicio = reserva.getHoraInicio();
@@ -269,12 +281,6 @@ public class CitaServiceImpl implements CitaService {
 
         return false; // No hay conflicto
     }
-*/
-
-
-
-
-
 
 
 
