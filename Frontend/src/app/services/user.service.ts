@@ -8,10 +8,12 @@ import baserUrl from './helper';
 export class UserService {
 
   constructor(
-    private hhtpClient: HttpClient
+    private httpClient: HttpClient
   ) { }
 
   public registrarUsuario(user:any){
-    return this.hhtpClient.post(`${baserUrl}/usuarios/`, user)
+    return this.httpClient.post(`${baserUrl}/usuarios/`, user)
   }
+
+  
 }

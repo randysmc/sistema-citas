@@ -7,18 +7,18 @@ import { DashboardComponent } from './pages/admin/dashboard/dashboard.component'
 import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboard.component';
 import { AdminGuard } from './services/admin.guard';
 import { normalGuard } from './services/normal.guard';
-import { superusuarioGuard } from './services/superusuario.guard'
 import { TwoFaComponent } from './pages/two-fa/two-fa.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
 import { ViewRecursosComponent } from './pages/admin/view-recursos/view-recursos.component';
 import { AddRecursosComponent } from './pages/admin/add-recursos/add-recursos.component';
-import { SuperuDashboardComponent } from './pages/super-user/superu-dashboard/superu-dashboard.component';
-import { ViewNegociosComponent } from './pages/super-user/view-negocios/view-negocios.component';
-import { AddNegociosComponent } from './pages/super-user/add-negocios/add-negocios.component';
-import { AddUsersComponent } from './pages/super-user/add-users/add-users.component';
-import { ViewUsersComponent } from './pages/super-user/view-users/view-users.component';
-import { DetalleNegocioComponent } from './pages/super-user/detalle-negocio/detalle-negocio.component';
+import { ViewRecursoDetailComponent } from './pages/admin/view-recurso-detail/view-recurso-detail.component';
+import { UpdateRecursoComponent } from './pages/admin/update-recurso/update-recurso.component';
+import { CalendarComponent } from './pages/calendar/calendar.component';
+import { ViewUserDetailComponent } from './pages/admin/view-user-detail/view-user-detail.component';
+import { UpdateUserComponent } from './pages/admin/update-user/update-user.component';
+import { ViewUsersComponent } from './pages/admin/view-users/view-users.component';
+import { AddUsersComponent } from './pages/admin/add-users/add-users.component';
 
 const routes: Routes = [
   {
@@ -38,38 +38,6 @@ const routes: Routes = [
   },
 
   {
-    path: 'superusuario',
-    component:SuperuDashboardComponent,
-    //canActivate:[superusuarioGuard],
-    children:[
-      {
-        path:'profile',
-        component:ProfileComponent
-      },
-      {
-        path:"negocios",
-        component:ViewNegociosComponent
-      },
-      {
-        path:'add-negocio',
-        component:AddNegociosComponent
-      },
-      {
-        path:'negocios/:id',
-        component:DetalleNegocioComponent
-      },
-      {
-        path:'users',
-        component:ViewUsersComponent
-      },
-      {
-        path:'add-user',
-        component:AddUsersComponent
-      }
-
-    ]
-  },
-  {
     path: 'admin',
     component:DashboardComponent,
     //canActivate:[AdminGuard],
@@ -77,6 +45,27 @@ const routes: Routes = [
       {
         path:'profile',
         component:ProfileComponent
+      },
+      {
+        path: 'calendario',
+        component: CalendarComponent,
+        //canActivate: [normalGuard, AdminGuard, superusuarioGuard], // Si quieres que sea accesible solo si están logueados, usando tus guards
+      },
+      {
+        path: 'users',
+        component: ViewUsersComponent
+      },
+      {
+        path: 'add-user',
+        component:AddUsersComponent
+      },
+      {
+        path: 'users/:id',
+        component:ViewUserDetailComponent
+      },
+      {
+        path: 'update-user/:id',
+        component: UpdateUserComponent
       },
       {
         path: '',
@@ -89,6 +78,14 @@ const routes: Routes = [
       {
         path: 'add-recurso',
         component:AddRecursosComponent
+      },
+      {
+        path: 'recursos/:id',
+        component:ViewRecursoDetailComponent
+      },
+      {
+        path: 'update-recurso/:id',
+        component:UpdateRecursoComponent
       }
     ]
   },
@@ -102,7 +99,8 @@ const routes: Routes = [
     path: 'two-fa',
     component: TwoFaComponent,
     pathMatch: 'full'
-  }
+  },
+
 ];
 
 @NgModule({

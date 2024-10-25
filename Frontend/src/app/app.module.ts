@@ -16,6 +16,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon'; 
 import {MatListModule} from '@angular/material/list';
 import { ReactiveFormsModule } from '@angular/forms';
+import {MatSelectModule} from '@angular/material/select';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 
 
@@ -35,16 +37,15 @@ import { SidebarComponent } from './pages/admin/sidebar/sidebar.component';
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
 import { ViewRecursosComponent } from './pages/admin/view-recursos/view-recursos.component';
 import { AddRecursosComponent } from './pages/admin/add-recursos/add-recursos.component';
+import { ViewRecursoDetailComponent } from './pages/admin/view-recurso-detail/view-recurso-detail.component';
+import { UpdateRecursoComponent } from './pages/admin/update-recurso/update-recurso.component';
+import { CalendarComponent } from './pages/calendar/calendar.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
+import { AddUsersComponent } from './pages/admin/add-users/add-users.component';
+import { ViewUserDetailComponent } from './pages/admin/view-user-detail/view-user-detail.component';
+import { UpdateUserComponent } from './pages/admin/update-user/update-user.component';
+import { ViewUsersComponent } from './pages/admin/view-users/view-users.component';
 
-
-import { AddUsersComponent } from './pages/super-user/add-users/add-users.component';
-import { ViewUsersComponent } from './pages/super-user/view-users/view-users.component';
-import { AddNegociosComponent } from './pages/super-user/add-negocios/add-negocios.component';
-import { ViewNegociosComponent } from './pages/super-user/view-negocios/view-negocios.component';
-import { SuperuDashboardComponent } from './pages/super-user/superu-dashboard/superu-dashboard.component';
-import { SuperuSidebarComponent } from './pages/super-user/superu-sidebar/superu-sidebar.component';
-import { SuperuWelcomeComponent } from './pages/super-user/superu-welcome/superu-welcome.component';
-import { DetalleNegocioComponent } from './pages/super-user/detalle-negocio/detalle-negocio.component';
 
 
 
@@ -64,14 +65,13 @@ import { DetalleNegocioComponent } from './pages/super-user/detalle-negocio/deta
     WelcomeComponent,
     ViewRecursosComponent,
     AddRecursosComponent,
+    ViewRecursoDetailComponent,
+    UpdateRecursoComponent,
+    CalendarComponent,
+    ViewUserDetailComponent,
+    UpdateUserComponent,
     AddUsersComponent,
-    ViewUsersComponent,
-    AddNegociosComponent,
-    ViewNegociosComponent,
-    SuperuDashboardComponent,
-    SuperuSidebarComponent,
-    SuperuWelcomeComponent,
-    DetalleNegocioComponent,
+    ViewUsersComponent
 
   ],
   imports: [
@@ -82,13 +82,17 @@ import { DetalleNegocioComponent } from './pages/super-user/detalle-negocio/deta
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     FormsModule,
     MatSnackBarModule,
     MatCardModule,
     MatToolbarModule,
     MatIconModule,
     MatListModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatCheckboxModule,
+    FullCalendarModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

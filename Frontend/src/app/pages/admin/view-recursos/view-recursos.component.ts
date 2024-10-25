@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { RecursoService } from 'src/app/services/recurso.service';
 import Swal from 'sweetalert2';
 
@@ -7,26 +8,55 @@ import Swal from 'sweetalert2';
   templateUrl: './view-recursos.component.html',
   styleUrls: ['./view-recursos.component.css']
 })
-export class ViewRecursosComponent {
+export class ViewRecursosComponent implements OnInit {
 
-  recursos:any = [
+  recursos: any = [];
+  recursosDisponibles: any = [];
+  recursosNoDisponibles: any = [];
+  filtroSeleccionado: string = 'todos'; // valor inicial del filtro
 
-  ]
+  constructor(private recursoService: RecursoService, private router: Router) {}
 
-  constructor(private recursoService:RecursoService){
-
+  ngOnInit(): void {
+    this.listarTodosRecursos();
+    this.listarRecursosDisponibles();
+    this.listarRecursosNoDisponibles();
   }
 
-  ngOnInit(): void{
+  listarTodosRecursos() {
     this.recursoService.listarRecursos().subscribe(
-      (dato:any) => {
+      (dato: any) => {
         this.recursos = dato;
-        console.log(this.recursos);
       },
-      (error)=>{
-        console.log(error);
-        Swal.fire('Error!', 'Error al cargar los recursos', 'error')
+      (error) => {
+        Swal.fire('Error!', 'Error al cargar los recursos', 'error');
       }
-    )
+    );
+  }
+
+  listarRecursosDisponibles() {
+    this.recursoService.obtenerRecursosDisponibles().subscribe(
+      (dato: any) => {
+        this.recursosDisponibles = dato;
+      },
+      (error) => {
+        Swal.fire('Error!', 'Error al cargar los recursos disponibles', 'error');
+      }
+    );
+  }
+
+  listarRecursosNoDisponibles() {
+    this.recursoService.obtenerRecursosNoDisponibles().subscribe(
+      (dato: any) => {
+        this.recursosNoDisponibles = dato;
+      },
+      (error) => {
+        Swal.fire('Error!', 'Error al cargar los recursos no disponibles', 'error');
+      }
+    );
+  }
+
+  verDetalle(id: number) {
+    this.router.navigate(['/admin/recursos', id]);
   }
 }

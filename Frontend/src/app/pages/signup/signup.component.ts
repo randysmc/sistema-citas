@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 import Swal from 'sweetalert2';
 
@@ -16,16 +17,18 @@ export class SignupComponent implements OnInit{
     nombre: '',
     apellido: '',
     email: '',
+    perfil: 'default.jpg',
     telefono: '',
     cui: '',
     nit: '',
-    roles: [4]
+    roles: [3]
 
   }
 
   constructor(
     private userService:UserService,
-    private snack:MatSnackBar  
+    private snack:MatSnackBar,
+    private router: Router  
   ){ }
 
   ngOnInit(): void {
@@ -47,6 +50,7 @@ export class SignupComponent implements OnInit{
       (data) =>  {
         console.log(data);
         Swal .fire('Usuario registrado', 'usuario registrado con exito en el sistema', 'success')
+        this.router.navigate(['login']);
       },(error) => {
         console.log(error);
         this.snack.open("Ha ocurrido un error!", "Aceptar", {

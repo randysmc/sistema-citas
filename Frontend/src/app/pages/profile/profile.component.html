@@ -34,16 +34,6 @@
                 <td>Estado</td>
                 <td>{{ user.enabled ? "Activo" : "No activo" }}</td>
               </tr>
-              <!-- Agregar sección para mostrar el negocio -->
-              <tr>
-                <td>Negocio</td>
-                <td *ngIf="user.negocios && user.negocios.length > 0">
-                  {{ user.negocios[0].nombre }} (ID: {{ user.negocios[0].id }})
-                </td>
-                <td *ngIf="!user.negocios || user.negocios.length === 0">
-                  Sin negocio asociado
-                </td>
-              </tr>
             </table>
           </div>
         </div>

@@ -1,19 +1,79 @@
-<mat-card>
-    <mat-list>
-      <div mat-subheader>
-        Todas las categorías
-      </div>
-      <mat-list-item *ngFor = "let r of recursos">
-        <mat-icon mat-list-icon>recursos</mat-icon>
-        <div mat-line>{{ r.nombre }}</div>
-        <div mat-line>{{ r.descripcion }}</div>
-        <div mat-line>{{ r.disponible }}</div>
+<mat-card class="recursos-card">
+  <!-- Encabezado del card -->
+  <mat-toolbar color="primary">
+    <span>Gestión de Recursos</span>
+  </mat-toolbar>
 
-        <mat-divider></mat-divider>
-      </mat-list-item>
-    </mat-list>
-  
-    <div class="container text-center mt20">
-      <button routerLink="/admin/add-recurso" mat-raised-button color="primary">Agregar categoría</button>
-    </div>
-  </mat-card>
+  <!-- Selector de filtro -->
+  <mat-form-field appearance="outline" class="filter-form-field">
+    <mat-label>Filtrar recursos</mat-label>
+    <mat-select [(value)]="filtroSeleccionado">
+      <mat-option value="todos">Todos</mat-option>
+      <mat-option value="disponibles">Disponibles</mat-option>
+      <mat-option value="noDisponibles">No Disponibles</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Lista de recursos -->
+  <div class="recursos-list">
+    <div mat-subheader>Recursos {{ filtroSeleccionado | titlecase }}</div>
+
+    <ng-container *ngIf="filtroSeleccionado === 'todos'">
+      <mat-card *ngFor="let r of recursos" (click)="verDetalle(r.recursoId)" class="list-item" matRipple>
+        <mat-icon mat-list-icon>folder</mat-icon>
+        
+        <!-- Título y descripción con mayor separación -->
+        <div class="item-content">
+          <div class="item-title">
+            <strong>Nombre:</strong> {{ r.nombre }}
+          </div>
+          <div class="item-description">
+            <strong>Descripción:</strong> {{ r.descripcion }}
+          </div>
+          <div class="item-status" [ngClass]="{'disponible': r.disponible, 'no-disponible': !r.disponible}">
+            <strong>Estado:</strong> {{ r.disponible ? 'Disponible' : 'No disponible' }}
+          </div>
+        </div>
+      </mat-card>
+    </ng-container>
+
+    <ng-container *ngIf="filtroSeleccionado === 'disponibles'">
+      <mat-card *ngFor="let r of recursosDisponibles" (click)="verDetalle(r.recursoId)" class="list-item" matRipple>
+        <mat-icon mat-list-icon>folder</mat-icon>
+        <div class="item-content">
+          <div class="item-title">
+            <strong>Nombre:</strong> {{ r.nombre }}
+          </div>
+          <div class="item-description">
+            <strong>Descripción:</strong> {{ r.descripcion }}
+          </div>
+          <div class="item-status disponible">
+            <strong>Estado:</strong> Disponible
+          </div>
+        </div>
+      </mat-card>
+    </ng-container>
+
+    <ng-container *ngIf="filtroSeleccionado === 'noDisponibles'">
+      <mat-card *ngFor="let r of recursosNoDisponibles" (click)="verDetalle(r.recursoId)" class="list-item" matRipple>
+        <mat-icon mat-list-icon>folder</mat-icon>
+        <div class="item-content">
+          <div class="item-title">
+            <strong>Nombre:</strong> {{ r.nombre }}
+          </div>
+          <div class="item-description">
+            <strong>Descripción:</strong> {{ r.descripcion }}
+          </div>
+          <div class="item-status no-disponible">
+            <strong>Estado:</strong> No disponible
+          </div>
+        </div>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  <!-- Botón para agregar recurso -->
+  <div class="container text-center mt20">
+    <button routerLink="/admin/add-recurso" mat-raised-button color="primary">Agregar recurso</button>
+  </div>
+</mat-card>

@@ -1,0 +1,9 @@
+.calendar-container {
+    max-width: 800px; /* Ancho máximo */
+    margin: 0 auto;   /* Centrar el contenedor */
+    padding: 20px;    /* Espaciado alrededor del calendario */
+    border: 1px solid #ccc; /* Opcional: borde alrededor del calendario */
+    border-radius: 8px; /* Opcional: bordes redondeados */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Opcional: sombra */
+  }
+  

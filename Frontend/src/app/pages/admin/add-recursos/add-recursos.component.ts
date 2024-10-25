@@ -1,8 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { RecursoService } from 'src/app/services/recurso.service';
-import { LoginService } from 'src/app/services/login.service';  // Importamos el LoginService
 import Swal from 'sweetalert2';
 
 @Component({
@@ -10,57 +9,68 @@ import Swal from 'sweetalert2';
   templateUrl: './add-recursos.component.html',
   styleUrls: ['./add-recursos.component.css']
 })
-export class AddRecursosComponent {
+export class AddRecursosComponent implements OnInit {
 
+  @Input() recursoEdit: any; // Para recibir el recurso a editar
   recurso = {
     nombre: '',
     descripcion: '',
-    negocio: {
-      negocioId: 1 // Lo inicializamos temporalmente
-    }
-  }
+    disponible: true,
+    tipo: 'PERSONAL' // Valor por defecto
+  };
+
+  tipos = ['PERSONAL', 'INSTALACION']; // Opciones del selector para el tipo
 
   constructor(
     private recursoService: RecursoService,
     private snack: MatSnackBar,
-    private router: Router,
-    private loginService: LoginService  // Inyectamos el LoginService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    // Obtenemos el usuario actual y asignamos el negocioId
-    this.loginService.getCurrentUser().subscribe(
-      (user: any) => {
-        if (user && user.negocios && user.negocios.length > 0) {
-          this.recurso.negocio.negocioId = user.negocios[0].id; // Asignamos el negocioId del usuario logueado
-        }
-      },
-      (error) => {
-        console.log('Error al obtener el usuario', error);
-      }
-    );
+    // Si existe un recurso para editar, carga sus datos
+    if (this.recursoEdit) {
+      this.recurso = {
+        ...this.recursoEdit
+      };
+    }
   }
 
   formSubmit() {
-    if (this.recurso.nombre.trim() == '' || this.recurso.nombre == null) {
+    if (this.recurso.nombre.trim() === '' || this.recurso.nombre == null) {
       this.snack.open("El título es requerido !!", '', {
         duration: 3000
       });
       return;
     }
 
-    // Llamamos al servicio para agregar el recurso
-    this.recursoService.agregarRecurso(this.recurso).subscribe(
-      (dato: any) => {
-        this.recurso.nombre = '';
-        this.recurso.descripcion = '';
-        Swal.fire('Recurso agregado', 'El recurso ha sido agregado con éxito', 'success');
-        this.router.navigate(['/admin/recursos']);
-      },
-      (error) => {
-        console.log(error);
-        Swal.fire('Error !!', 'Error al guardar la categoría', 'error');
-      }
-    );
+    // Verificar si es una actualización o creación
+    if (this.recursoEdit) {
+      // Llamamos al servicio para actualizar el recurso
+      this.recursoService.actualizarRecurso(this.recursoEdit.recursoId, this.recurso).subscribe(
+        (dato: any) => {
+          Swal.fire('Recurso actualizado', 'El recurso ha sido actualizado con éxito', 'success');
+          this.router.navigate(['/admin/recursos']);
+        },
+        (error) => {
+          console.log(error);
+          Swal.fire('Error !!', 'Error al actualizar el recurso', 'error');
+        }
+      );
+    } else {
+      // Llamamos al servicio para agregar el recurso
+      this.recursoService.agregarRecurso(this.recurso).subscribe(
+        (dato: any) => {
+          this.recurso.nombre = '';
+          this.recurso.descripcion = '';
+          Swal.fire('Recurso agregado', 'El recurso ha sido agregado con éxito', 'success');
+          this.router.navigate(['/admin/recursos']);
+        },
+        (error) => {
+          console.log(error);
+          Swal.fire('Error !!', 'Error al guardar el recurso', 'error');
+        }
+      );
+    }
   }
 }
