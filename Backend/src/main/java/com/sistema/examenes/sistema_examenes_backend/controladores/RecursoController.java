@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -63,16 +64,17 @@ public class RecursoController {
         return ResponseEntity.ok(recursosNoDisponibles);
     }
 
+
     @PutMapping("/habilitar/{id}")
     public ResponseEntity<?> habilitarRecurso(@PathVariable Long id) {
         recursoService.cambiarDisponibilidad(id, true);
-        return ResponseEntity.ok("Recurso habilitado correctamente");
+        return ResponseEntity.ok(Map.of("message", "Recurso habilitado correctamente"));
     }
 
-    // Cambiar disponibilidad a false (deshabilitar recurso)
     @PutMapping("/deshabilitar/{id}")
     public ResponseEntity<?> deshabilitarRecurso(@PathVariable Long id) {
         recursoService.cambiarDisponibilidad(id, false);
-        return ResponseEntity.ok("Recurso deshabilitado correctamente");
+        return ResponseEntity.ok(Map.of("message", "Recurso deshabilitado correctamente"));
     }
+
 }

@@ -11,14 +11,15 @@ import java.util.List;
 
 public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
-    //public List<Reserva> findByNegocioAndFecha(Long negocioId, LocalDate fecha);
 
     public List<Reserva> findByEmpleadoIdAndFecha(Long empleadoId, LocalDate fecha);
 
-    //List<Reserva> findByNegocioAndEmpleadoAndRecursoAndFecha(Negocio negocio, Usuario empleado, Recurso recurso, LocalDate fecha);
-    List<Reserva> findByRecursoAndFecha(Recurso recurso, LocalDate fecha);
+    public List<Reserva> findByRecursoAndFecha(Recurso recurso, LocalDate fecha);
 
-    List<Reserva> findByEmpleadoAndFecha(Usuario empleado, LocalDate fecha);
+    public List<Reserva> findByEmpleadoAndFecha(Usuario empleado, LocalDate fecha);
 
+    public List<Reserva> findByEmpleadoId(Long empleadoId);
+
+    List<Reserva> findByActivaTrue();
 
 }
