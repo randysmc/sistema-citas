@@ -7,4 +7,14 @@ import { Component } from '@angular/core';
 })
 export class DashboardComponent {
 
+  sidebarVisible = true;
+
+  toggleSidebar() {
+    this.sidebarVisible = !this.sidebarVisible;
+    const sidebar = document.getElementById('sidebar');
+    if (sidebar) {
+      sidebar.style.display = this.sidebarVisible ? 'block' : 'none';
+    }
+  }
+  
 }

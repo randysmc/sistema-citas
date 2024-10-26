@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,4 +7,9 @@ import { Component } from '@angular/core';
 })
 export class SidebarComponent {
 
+  @Output() sidebarClosed = new EventEmitter<void>();
+
+  closeSidebar() {
+    this.sidebarClosed.emit(); // Emitir un evento cuando se cierra el sidebar
+  }
 }

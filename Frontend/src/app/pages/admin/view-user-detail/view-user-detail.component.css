@@ -1,0 +1,82 @@
+.detalle-usuario-card {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra para profundidad */
+    background-color: #fff; /* Color de fondo blanco */
+    transition: transform 0.3s; /* Transición suave para el hover */
+}
+
+.detalle-usuario-card:hover {
+    transform: scale(1.02); /* Efecto de aumento al pasar el mouse */
+}
+
+.mat-card-content {
+    margin-bottom: 20px; /* Separación de los botones */
+}
+
+.table {
+    width: 100%; /* Asegurar que la tabla ocupe el 100% del ancho */
+    margin-bottom: 20px; /* Separación entre la tabla y los botones */
+    border-collapse: collapse; /* Colapsar bordes */
+}
+
+.table tr {
+    border-bottom: 1px solid #ccc; /* Línea divisoria entre filas */
+}
+
+.table td {
+    padding: 10px; /* Espaciado interno de las celdas */
+    text-align: left; /* Alinear texto a la izquierda */
+}
+
+.table td:last-child {
+    text-align: right; /* Alinear el último campo a la derecha */
+}
+
+.estado-usuario {
+    font-weight: bold; /* Negrita para resaltar el estado */
+}
+
+.activado {
+    color: green; /* Color verde para activo */
+}
+
+.no-activado {
+    color: red; /* Color rojo para no activo */
+}
+
+.mat-card-actions {
+    display: flex;
+    justify-content: space-between; /* Espaciado entre botones */
+    margin-top: 20px; /* Separación superior */
+}
+
+button {
+    flex: 1; /* Hacer que los botones ocupen el mismo espacio */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    border: none; /* Sin borde */
+    cursor: pointer; /* Cambia el cursor al pasar el mouse */
+    transition: background-color 0.3s; /* Transición suave para el color de fondo */
+    margin: 0 5px; /* Espaciado entre botones */
+}
+
+button.primary {
+    background-color: #007bff; /* Azul */
+    color: white; /* Texto blanco */
+}
+
+button.primary:hover {
+    background-color: #0056b3; /* Azul más oscuro al hacer hover */
+}
+
+button.accent {
+    background-color: #28a745; /* Verde */
+    color: white; /* Texto blanco */
+}
+
+button.accent:hover {
+    background-color: #218838; /* Verde más oscuro al hacer hover */
+}
