@@ -86,7 +86,13 @@ public class EmpleadoServiceImpl implements EmpleadoService {
 
     @Override
     public List<Usuario> obtenerEmpleados() {
-        return empleadoRepository.findAll();
+        List<Usuario> todosUsuarios = empleadoRepository.findAll();
+
+        // Filtra solo los que tienen la autoridad "CLIENTE"
+        return todosUsuarios.stream()
+                .filter(usuario -> usuario.getAuthorities().stream()
+                        .anyMatch(authority -> authority.getAuthority().equals("EMPLEADO")))
+                .collect(Collectors.toList());
     }
 
     @Override

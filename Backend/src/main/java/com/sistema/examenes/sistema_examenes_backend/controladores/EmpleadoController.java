@@ -25,6 +25,8 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/empleados")
+@CrossOrigin(origins = "http://localhost:4200")
+
 public class EmpleadoController {
 
     @Autowired
@@ -39,6 +41,7 @@ public class EmpleadoController {
 
     @GetMapping
     public List<Usuario> obtenerEmpleados() {
+
         return empleadoService.obtenerEmpleados();
     }
 
@@ -74,7 +77,7 @@ public class EmpleadoController {
 
 
     @PostMapping("/")
-    public ResponseEntity<?> guardarE(@RequestBody EmpleadoDTO empleadoDTO) {
+    public ResponseEntity<?> guardarEmpleado(@RequestBody EmpleadoDTO empleadoDTO) {
         try {
             // Convertir UsuarioDTO a la entidad Usuario
             Usuario empleado = new Usuario();
@@ -118,7 +121,7 @@ public class EmpleadoController {
         }
     }
 
-    @PutMapping("/actualizar/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Usuario> actualizarUsuario(
             @PathVariable Long id,
             @RequestPart(value = "username", required = false) String username,

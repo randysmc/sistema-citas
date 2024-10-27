@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/servicios")
@@ -64,13 +65,13 @@ public class ServicioController {
     @PutMapping("/habilitar/{id}")
     public ResponseEntity<?> habilitarServicio(@PathVariable Long id) {
         servicioService.cambiarDisponibilidad(id, true);
-        return ResponseEntity.ok("Servicio habilitado correctamente");
+        return ResponseEntity.ok(Map.of("message", "Servicio habilitado correctamente"));
     }
 
     // Poner un servicio como no disponible (disponible = false)
     @PutMapping("/deshabilitar/{id}")
     public ResponseEntity<?> deshabilitarServicio(@PathVariable Long id) {
         servicioService.cambiarDisponibilidad(id, false);
-        return ResponseEntity.ok("Servicio deshabilitado correctamente");
+        return ResponseEntity.ok(Map.of("message", "Servicio deshabilitado correctamente"));
     }
 }

@@ -83,8 +83,16 @@ public class UsuarioServiceImplementacion implements UsuarioService {
 
     @Override
     public List<Usuario> obtenerUsuarios() {
-        return usuarioRepository.findAll();
+        // Obtiene todos los usuarios
+        List<Usuario> todosUsuarios = usuarioRepository.findAll();
+
+        // Filtra solo los que tienen la autoridad "CLIENTE"
+        return todosUsuarios.stream()
+                .filter(usuario -> usuario.getAuthorities().stream()
+                        .anyMatch(authority -> authority.getAuthority().equals("CLIENTE")))
+                .collect(Collectors.toList());
     }
+
 
 
     @Override
@@ -110,12 +118,22 @@ public class UsuarioServiceImplementacion implements UsuarioService {
 
     @Override
     public List<Usuario> listarUsuariosActivos() {
-        return usuarioRepository.findByEnabledTrue();
+        List<Usuario> todosUsuariosActivos = usuarioRepository.findByEnabledTrue();
+
+        return todosUsuariosActivos.stream()
+                .filter(usuario -> usuario.getAuthorities().stream()
+                        .anyMatch(authority -> authority.getAuthority().equals("CLIENTE")))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Usuario> listarUsuariosNoActivos() {
-        return usuarioRepository.findByEnabledFalse();
+        List<Usuario> todosUsuariosNoActivos = usuarioRepository.findByEnabledFalse();
+
+        return todosUsuariosNoActivos.stream()
+                .filter(usuario -> usuario.getAuthorities().stream()
+                        .anyMatch(authority -> authority.getAuthority().equals("CLIENTE")))
+                .collect(Collectors.toList());
     }
 
     @Override

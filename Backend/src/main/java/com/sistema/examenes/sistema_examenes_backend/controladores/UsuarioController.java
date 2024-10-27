@@ -36,6 +36,12 @@ public class UsuarioController {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
+    @GetMapping
+    public ResponseEntity<List<Usuario>> listarUsuarios() {
+        List<Usuario> usuarios = usuarioService.obtenerUsuarios();
+        return ResponseEntity.ok(usuarios);
+    }
+
     @GetMapping("/activos")
     public ResponseEntity<List<Usuario>> listarUsuariosActivos() {
         List<Usuario> usuariosActivos = usuarioService.listarUsuariosActivos();
@@ -114,7 +120,7 @@ public class UsuarioController {
 
 
 
-    @PutMapping("/actualizar/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Usuario> actualizarUsuario(
             @PathVariable Long id,
             @RequestPart(value = "username", required = false) String username,
