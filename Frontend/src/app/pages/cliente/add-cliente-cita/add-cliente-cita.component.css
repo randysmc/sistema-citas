@@ -1,0 +1,13 @@
+.form-calendar-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .formulario-cita {
+    width: 45%;
+  }
+  
+  .calendar-container {
+    width: 50%;
+  }
+  
