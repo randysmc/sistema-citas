@@ -1,0 +1,64 @@
+<div class="bootstrap-wrapper">
+  <div class="container">
+    <div class="row" style="margin-top: 20px;">
+      <div class="col-md-6 offset-md-3">
+        <h2 class="text-center">Configurar Horario Laboral</h2>
+
+        <form (ngSubmit)="onSubmit()">
+          <!-- Día de la Semana -->
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Día de la Semana</mat-label>
+            <mat-select [(ngModel)]="horarioLaboral.dia" name="dia" required>
+              <mat-option value="LUNES">Lunes</mat-option>
+              <mat-option value="MARTES">Martes</mat-option>
+              <mat-option value="MIERCOLES">Miércoles</mat-option>
+              <mat-option value="JUEVES">Jueves</mat-option>
+              <mat-option value="VIERNES">Viernes</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Hora de Inicio -->
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Hora de Inicio</mat-label>
+            <input
+              matInput
+              type="time"
+              [(ngModel)]="horarioLaboral.horaInicio"
+              name="horaInicio"
+              required
+            />
+            <mat-hint>Formato 24 horas (HH:mm)</mat-hint>
+          </mat-form-field>
+
+          <!-- Hora de Fin -->
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Hora de Fin</mat-label>
+            <input
+              matInput
+              type="time"
+              [(ngModel)]="horarioLaboral.horaFin"
+              name="horaFin"
+              required
+            />
+            <mat-hint>Formato 24 horas (HH:mm)</mat-hint>
+          </mat-form-field>
+
+          <!-- Tipo de Horario -->
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Tipo de Horario</mat-label>
+            <mat-select [(ngModel)]="horarioLaboral.tipoHorario" name="tipoHorario" required>
+              <mat-option value="MAÑANA">Mañana</mat-option>
+              <mat-option value="TARDE">Tarde</mat-option>
+              <mat-option value="NOCHE">Noche</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Botón de Envío -->
+          <button mat-raised-button color="primary" type="submit" class="full-width mt-3">
+            Guardar Horario
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

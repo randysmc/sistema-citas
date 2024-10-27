@@ -27,20 +27,23 @@ export class AddDiaFestivoComponent {
 
     // Validaciones simples
     if (!this.diaFestivo.descripcion) {
-      Swal.fire('Error', 'La descripción es obligatoria', 'error');
-      return;
+        Swal.fire('Error', 'La descripción es obligatoria', 'error');
+        return;
     }
 
     // Agrega el día festivo usando el servicio
     this.diasFestivoService.agregarDiaFestivo(this.diaFestivo).subscribe(
-      response => {
-        Swal.fire('Éxito', 'Día festivo agregado correctamente', 'success');
-        this.router.navigate(['/admin/calendario']); // Redirige a la lista de días festivos
-      },
-      error => {
-        console.error('Error al agregar el día festivo', error);
-        Swal.fire('Error', 'Hubo un problema al agregar el día festivo', 'error');
-      }
+        response => {
+            Swal.fire('Éxito', 'Día festivo agregado correctamente', 'success');
+            this.router.navigate(['/admin/calendario']); // Redirige a la lista de días festivos
+        },
+        error => {
+            console.error('Error al agregar el día festivo', error);
+            // Extrae el mensaje de error del backend
+            const errorMessage = error?.error || 'Hubo un problema al agregar el día festivo';
+            Swal.fire('Error', errorMessage, 'error');
+        }
     );
-  }
+}
+
 }
