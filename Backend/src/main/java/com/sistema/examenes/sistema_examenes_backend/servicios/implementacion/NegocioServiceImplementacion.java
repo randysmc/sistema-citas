@@ -69,6 +69,12 @@ public class NegocioServiceImplementacion implements NegocioService {
         if (negocio.getTelefono() != null) {
             existingNegocio.setTelefono(negocio.getTelefono());
         }
+        if (negocio.getEmail() != null) {
+            existingNegocio.setTelefono(negocio.getTelefono());
+        }
+        if (negocio.getSlogan() != null) {
+            existingNegocio.setTelefono(negocio.getTelefono());
+        }
 
         return negocioRepository.save(existingNegocio);
     }

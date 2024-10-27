@@ -2,6 +2,7 @@ package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
 import com.sistema.examenes.sistema_examenes_backend.Enums.DiaSemana;
 import com.sistema.examenes.sistema_examenes_backend.Enums.EstadoCita;
+import com.sistema.examenes.sistema_examenes_backend.Enums.TipoRecurso;
 import com.sistema.examenes.sistema_examenes_backend.configuraciones.DiaSemanaConverter;
 import com.sistema.examenes.sistema_examenes_backend.entidades.*;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.*;
@@ -43,57 +44,69 @@ public class CitaServiceImpl implements CitaService {
 
     @Override
     public Cita crearCita(Cita cita) {
-
         LocalDate fecha = cita.getFecha();
         LocalTime horaInicio = cita.getHoraInicio();
         Long servicioId = cita.getServicio().getServicioId();
         Long recursoId = cita.getRecurso().getRecursoId();
-        Long empleadoId = cita.getEmpleado().getId();
-        Long clienteId = cita.getCliente().getId();
 
-        if (cita.getEmpleado() == null) {
-            throw new IllegalArgumentException("El empleado no puede ser nulo para crear una cita.");
+        // Validación de fecha futura
+        if (fecha.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("La cita debe ser programada para una fecha futura.");
         }
 
+        // Obtener recurso
+        Recurso recurso = recursoRepository.findById(recursoId)
+                .orElseThrow(() -> new IllegalArgumentException("Recurso no encontrado"));
 
+        // Verificar tipo de recurso
+        if (recurso.getTipo() == TipoRecurso.PERSONAL) {
+            // Para recursos de tipo PERSONAL, verificar que haya un empleado
+            if (cita.getEmpleado() == null) {
+                throw new IllegalArgumentException("El empleado es obligatorio para crear una cita con un recurso personal.");
+            }
 
+            Long empleadoId = cita.getEmpleado().getId();
+            // Validar si el empleado es válido
+            if (!esEmpleadoValido(empleadoId)) {
+                throw new IllegalArgumentException("El empleado no tiene permisos para realizar este servicio.");
+            }
+        } else if (recurso.getTipo() == TipoRecurso.INSTALACION) {
+            // Para recursos de tipo INSTALACIÓN, no se necesita un empleado
+            cita.setEmpleado(null); // Asegurarse de que no se asigna un empleado
+        }
+
+        // Validaciones existentes...
         if (esDiaFestivo(fecha)) {
             throw new IllegalArgumentException("No se pueden crear citas en días festivos.");
         }
 
         LocalTime horaFin = calcularHoraFin(horaInicio, servicioId);
 
-        if(!esHorarioLaboral(fecha, horaInicio, horaFin)){
-            throw new IllegalArgumentException("No se puede crear citas fuera de horario laboral");
+        if (!esHorarioLaboral(fecha, horaInicio, horaFin)) {
+            throw new IllegalArgumentException("No se puede crear citas fuera de horario laboral.");
         }
 
         if (!recursoDisponible(recursoId)) {
             throw new IllegalArgumentException("El recurso no está disponible o no existe.");
         }
 
-        if(!servicioDisponible(servicioId)){
-            throw  new IllegalArgumentException("El servicio no esta disponible o no existe");
-        }
-
-        if(!esEmpleadoValido(empleadoId)){
-            throw new IllegalArgumentException("El empleado no tiene permisos para realizar este servicio");
+        if (!servicioDisponible(servicioId)) {
+            throw new IllegalArgumentException("El servicio no está disponible o no existe.");
         }
 
         cita.setHoraFin(horaFin);
 
         if (hayConflictoConReservas(cita)) {
-            throw new IllegalArgumentException("El recurso o empleado ya tiene una reservacion en este horario y fecha");
+            throw new IllegalArgumentException("El recurso o empleado ya tiene una reservación en este horario y fecha.");
         }
 
-
         cita.setEstado(EstadoCita.AGENDADA);
-
         Cita nuevaCita = citaRepository.save(cita);
-
         crearReserva(nuevaCita);
 
-        return cita;
+        return nuevaCita; // Retornar la nueva cita
     }
+
 
 
     @Override
@@ -129,6 +142,19 @@ public class CitaServiceImpl implements CitaService {
 
         // Cambiar el estado de la cita a CANCELADA
         cita.setEstado(EstadoCita.CANCELADA);
+        return citaRepository.save(cita);
+    }
+
+    @Override
+    public Cita confirmarCita(Long id) {
+        Cita cita = citaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cita no encontrada con id: " + id));
+
+        // Eliminar la reserva relacionada si existe
+        // eliminarReserva(cita);
+
+        // Cambiar el estado de la cita a CANCELADA
+        cita.setEstado(EstadoCita.CONFIRMADA);
         return citaRepository.save(cita);
     }
 
@@ -218,8 +244,13 @@ public class CitaServiceImpl implements CitaService {
         return true;
     }
 
+
     public Reserva crearReserva(Cita cita) {
         Reserva reserva = new Reserva();
+
+        // Agregar logs para depuración
+        System.out.println("Cita para crear reserva: " + cita);
+        System.out.println("Empleado en la cita: " + cita.getEmpleado());
 
         reserva.setFecha(cita.getFecha());
         reserva.setHoraInicio(cita.getHoraInicio());
@@ -227,7 +258,14 @@ public class CitaServiceImpl implements CitaService {
         reserva.setActiva(true); // Siempre activa al crear una nueva reserva
         reserva.setCita(cita);
         reserva.setRecurso(cita.getRecurso());
-        reserva.setEmpleado(cita.getEmpleado());
+
+        // Verifica si el recurso es de tipo PERSONAL
+        if (cita.getRecurso().getTipo() == TipoRecurso.PERSONAL) {
+            reserva.setEmpleado(cita.getEmpleado()); // Asigna el empleado si es PERSONAL
+        } else {
+            reserva.setEmpleado(cita.getEmpleado()); // No asignar empleado si no es PERSONAL
+        }
+
         reserva.setCliente(cita.getCliente());
 
         return reservaRepository.save(reserva);
@@ -235,43 +273,51 @@ public class CitaServiceImpl implements CitaService {
 
 
 
+
+
     private boolean hayConflictoConReservas(Cita cita) {
-        Usuario empleado = cita.getEmpleado();
         Recurso recurso = cita.getRecurso();
         LocalDate fecha = cita.getFecha();
         LocalTime horaInicio = cita.getHoraInicio();
         LocalTime horaFin = cita.getHoraFin();
 
-        // Busca reservas que coincidan con el negocio, recurso y fecha
-        List<Reserva> reservasConflicto = reservaRepository
-                .findByRecursoAndFecha(recurso, fecha);
+        // Verifica si hay conflicto con reservas del recurso
+        if (hayConflictoConReservasDelRecurso(recurso, fecha, horaInicio, horaFin)) {
+            return true; // Conflicto encontrado, no se puede crear la reserva
+        }
+
+        // Si el recurso es PERSONAL, verifica conflictos con reservas del empleado
+        if (recurso.getTipo() == TipoRecurso.PERSONAL) {
+            return hayConflictoConReservasDelEmpleado(cita.getEmpleado(), fecha, horaInicio, horaFin);
+        }
+
+        return false; // No hay conflicto
+    }
+
+    private boolean hayConflictoConReservasDelRecurso(Recurso recurso, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
+        List<Reserva> reservasConflicto = reservaRepository.findByRecursoAndFecha(recurso, fecha);
 
         // Verifica si hay traslape en los horarios
         for (Reserva reserva : reservasConflicto) {
             LocalTime reservaHoraInicio = reserva.getHoraInicio();
             LocalTime reservaHoraFin = reserva.getHoraFin();
-
-            // Verifica si hay traslape en los horarios
             boolean traslape = (horaInicio.isBefore(reservaHoraFin) && horaFin.isAfter(reservaHoraInicio));
 
-            // Si hay traslape, verifica si el empleado es diferente
-            if (traslape) {
-                // Aseguramos que el recurso ya está ocupado por otro empleado
-                if (!reserva.getEmpleado().equals(empleado)) {
-                    return true; // Hay conflicto, ya que hay un traslape de horario con otro empleado
-                }
+            if (traslape && reserva.getActiva()) {
+                return true; // Hay conflicto con otra reserva en el mismo horario
             }
         }
 
-        // Busca reservas que coincidan solo con el empleado y la fecha
-        List<Reserva> reservasEmpleado = reservaRepository
-                .findByEmpleadoAndFecha(empleado, fecha);
+        return false; // No hay conflicto con reservas del recurso
+    }
 
+    private boolean hayConflictoConReservasDelEmpleado(Usuario empleado, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
+        List<Reserva> reservasEmpleado = reservaRepository.findByEmpleadoAndFecha(empleado, fecha);
+
+        // Verifica si hay traslape en los horarios
         for (Reserva reserva : reservasEmpleado) {
             LocalTime reservaHoraInicio = reserva.getHoraInicio();
             LocalTime reservaHoraFin = reserva.getHoraFin();
-
-            // Verifica si hay traslape en los horarios
             boolean traslapeEmpleado = (horaInicio.isBefore(reservaHoraFin) && horaFin.isAfter(reservaHoraInicio));
 
             if (traslapeEmpleado) {
@@ -279,8 +325,10 @@ public class CitaServiceImpl implements CitaService {
             }
         }
 
-        return false; // No hay conflicto
+        return false; // No hay conflicto con reservas del empleado
     }
+
+
 
 
 

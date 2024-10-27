@@ -25,6 +25,8 @@ public class Negocio {
     private String descripcion;
     private String telefono;
     private String fotoPerfil;
+    private String email;
+    private String slogan;
 
     /*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "negocio")
     @JsonIgnore
@@ -59,14 +61,15 @@ public class Negocio {
     public Negocio() {
     }
 
-    public Negocio(Long negocioId, String direccion, String nombre, String descripcion, String telefono, String fotoPerfil) {
+    public Negocio(Long negocioId, String direccion, String nombre, String descripcion, String fotoPerfil, String telefono, String email, String slogan) {
         this.negocioId = negocioId;
         this.direccion = direccion;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.telefono = telefono;
         this.fotoPerfil = fotoPerfil;
-
+        this.telefono = telefono;
+        this.email = email;
+        this.slogan = slogan;
     }
 
     public Long getNegocioId() {
@@ -116,5 +119,21 @@ public class Negocio {
 
     public void setFotoPerfil(String fotoPerfil) {
         this.fotoPerfil = fotoPerfil;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSlogan() {
+        return slogan;
+    }
+
+    public void setSlogan(String slogan) {
+        this.slogan = slogan;
     }
 }

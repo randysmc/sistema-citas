@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/citas")
+@CrossOrigin(origins = "http://localhost:4200")
 public class CitaController {
 
     @Autowired
@@ -49,6 +50,11 @@ public class CitaController {
     public ResponseEntity<Cita> cancelarCita(@PathVariable Long id) {
         Cita citaCancelada = citaService.cancelarCita(id);
         return ResponseEntity.ok(citaCancelada); // 200 OK
+    }
+    @PutMapping("/{id}/confirmar")
+    public ResponseEntity<Cita> confirmarCita(@PathVariable Long id) {
+        Cita citaConfirmada = citaService.confirmarCita(id);
+        return ResponseEntity.ok(citaConfirmada); // 200 OK
     }
 
 

@@ -67,6 +67,8 @@ public class NegocioController {
             @RequestPart("direccion") String direccion,
             @RequestPart("descripcion") String descripcion,
             @RequestPart("telefono") String telefono,
+            @RequestPart("email") String email,
+            @RequestPart("slogan") String slogan,
             @RequestPart("fotoPerfil") MultipartFile fotoPerfil) {
 
         try {
@@ -81,6 +83,8 @@ public class NegocioController {
             nuevoNegocio.setDireccion(direccion);
             nuevoNegocio.setDescripcion(descripcion);
             nuevoNegocio.setTelefono(telefono);
+            nuevoNegocio.setEmail(email);
+            nuevoNegocio.setSlogan(slogan);
 
             // Guardar la imagen y asignar la ruta al negocio
             String rutaImagen = guardarImagen(fotoPerfil, nombre);  // Llama a la nueva función mejorada
@@ -110,6 +114,8 @@ public class NegocioController {
             @RequestPart(required = false) String direccion,
             @RequestPart(required = false) String descripcion,
             @RequestPart(required = false) String telefono,
+            @RequestPart(required = false) String email,
+            @RequestPart(required = false) String slogan,
             @RequestPart(required = false) MultipartFile fotoPerfil) {
 
         try {
@@ -129,6 +135,12 @@ public class NegocioController {
             }
             if (telefono != null && !telefono.isEmpty()) {
                 negocioExistente.setTelefono(telefono);
+            }
+            if (email != null && !email.isEmpty()) {
+                negocioExistente.setEmail(email);
+            }
+            if (slogan != null && !slogan.isEmpty()) {
+                negocioExistente.setSlogan(slogan);
             }
 
             // Manejo de la imagen
@@ -208,10 +220,6 @@ public class NegocioController {
             System.err.println("No se pudo eliminar la imagen: " + e.getMessage());
         }
     }
-
-
-
-
 
 
 
