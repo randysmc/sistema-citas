@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -11,7 +12,7 @@ export class ProfileComponent {
   imageUrl: string = ''; // Para almacenar la URL de la imagen
   isLoading: boolean = true; // Estado de carga
 
-  constructor(private loginService: LoginService) {}
+  constructor(private loginService: LoginService, private router: Router) {}
 
   ngOnInit(): void {
     // Obtenemos el usuario actual
@@ -30,6 +31,8 @@ export class ProfileComponent {
     );
   }
 
+
+
   private buildImageUrl(user: any): string {
     const folder = 'usuario'; // Todos los usuarios en la carpeta 'usuarios'
 
@@ -38,6 +41,17 @@ export class ProfileComponent {
 
     // Construir la URL usando solo el nombre del archivo
     return `http://localhost:8080/uploads/${folder}/${filename}`; 
+  }
+
+
+  actualizarPerfil(): void {
+    const role = this.user.authorities[0].authority;
+
+    if (role === 'ADMINISTRADOR') {
+      this.router.navigate([`/admin/update-admin`, this.user.id]);
+    } else if (role === 'CLIENTE') {
+      this.router.navigate([`/cliente/update-cliente`, this.user.id]);
+    }
   }
 
 }

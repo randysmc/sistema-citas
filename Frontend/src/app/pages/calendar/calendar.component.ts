@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DiasFestivosService } from 'src/app/services/dias-festivos.service';
 import { DiaFestivo } from 'src/app/models/dia-festivo.model';
 import { HorarioLaboral } from 'src/app/models/horario-laboral.model';
-import { CalendarOptions, EventInput } from '@fullcalendar/core'; // Asegúrate de importar EventInput
+import { CalendarOptions, EventInput } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import { HorariosLaboralesService } from 'src/app/services/horarios-laborales.service';
@@ -32,26 +32,33 @@ export class CalendarComponent implements OnInit {
     this.cargarHorariosLaborales();
   }
 
+
   cargarDiasFestivos() {
     this.diasFestivosService.obtenerDiasFestivos().subscribe(
-      (diasFestivos: DiaFestivo[]) => {
-        this.diasFestivos = diasFestivos; // Guardamos los días festivos
-        const eventosFestivos: EventInput[] = diasFestivos.map(dia => ({
-          title: dia.descripcion,
-          date: `${dia.fecha[0]}-${dia.fecha[1]}-${dia.fecha[2]}`,
-          color: 'red', // Color rojo para días festivos
-        }));
+        (diasFestivos: any[]) => { // Cambia `DiaFestivo[]` por `any[]` si no tienes el tipo definido
+            this.diasFestivos = diasFestivos.map(dia => ({
+                ...dia,
+                fecha: new Date(dia.fecha[0], dia.fecha[1] - 1, dia.fecha[2]) // Convierte el arreglo a un objeto Date
+            }));
 
-        // Asegúrate de que calendarOptions.events sea un array
-        this.calendarOptions.events = Array.isArray(this.calendarOptions.events) 
-          ? this.calendarOptions.events.concat(eventosFestivos) 
-          : eventosFestivos;
-      },
-      error => {
-        console.log('Error al cargar los días festivos', error);
-      }
+            const eventosFestivos: EventInput[] = this.diasFestivos.map(dia => ({
+                title: dia.descripcion,
+                date: dia.fecha.toISOString().split('T')[0], // Convierte a formato YYYY-MM-DD
+                color: 'red', // Color rojo para días festivos
+            }));
+
+            // Asegúrate de que calendarOptions.events sea un array
+            this.calendarOptions.events = Array.isArray(this.calendarOptions.events) 
+                ? this.calendarOptions.events.concat(eventosFestivos) 
+                : eventosFestivos;
+        },
+        error => {
+            console.log('Error al cargar los días festivos', error);
+        }
     );
-  }
+}
+
+
 
   cargarHorariosLaborales() {
     this.horarioLaboralService.obtenerHorariosLaborales().subscribe(
@@ -85,8 +92,7 @@ export class CalendarComponent implements OnInit {
 
                     // Verificamos si hay un día festivo en esta fecha
                     const esDiaFestivo = this.diasFestivos.some(dia => {
-                        const fechaFestiva = new Date(`${dia.fecha[0]}-${dia.fecha[1]}-${dia.fecha[2]}`);
-                        return fechaFestiva.toDateString() === start.toDateString();
+                        return dia.fecha.toDateString() === start.toDateString(); // Comparación de fechas
                     });
 
                     if (!esDiaFestivo) {
@@ -110,7 +116,5 @@ export class CalendarComponent implements OnInit {
             console.log('Error al cargar los horarios laborales', error);
         }
     );
-}
-
-
+  }
 }

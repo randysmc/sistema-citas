@@ -1,0 +1,58 @@
+.servicios-card {
+    max-width: 900px; /* Ajusta el ancho máximo de la tarjeta principal */
+    margin: 20px auto; /* Centra la tarjeta y añade márgenes superior e inferior */
+    padding: 20px;
+  }
+  
+  .servicios-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Añade separación entre cada tarjeta de servicio */
+  }
+  
+  .mat-card {
+    padding: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.12); /* Añade borde alrededor de cada tarjeta */
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .mat-card:hover {
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2); /* Efecto de sombra al pasar el mouse */
+  }
+  
+  .item-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Espaciado entre los elementos dentro de la tarjeta */
+  }
+  
+  .item-title,
+  .item-description,
+  .item-status {
+    margin-bottom: 5px;
+    line-height: 1.5;
+    word-wrap: break-word;
+  }
+  
+  .disponible {
+    color: green;
+  }
+  
+  .no-disponible {
+    color: red;
+  }
+  
+  .filter-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .mat-toolbar {
+    margin-bottom: 20px;
+  }
+  
+  button {
+    width: 100%;
+  }
+  

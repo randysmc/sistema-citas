@@ -1,0 +1,60 @@
+<mat-card class="mat-elevation-z8">
+    <mat-card-header>
+      <mat-card-title class="text-center">Agregar Día Festivo</mat-card-title>
+      <mat-card-subtitle class="text-center">Complete el formulario para agregar un día festivo</mat-card-subtitle>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-wrapper">
+          <div class="form-group">
+            <!-- Selector para la fecha -->
+            <mat-form-field appearance="fill" class="full-width mb-3">
+              <mat-label>Fecha</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker"
+                [(ngModel)]="diaFestivo.fecha"
+                name="fecha"
+                required
+                placeholder="Seleccione la fecha"
+                (dateChange)="diaFestivo.anyo = $event.value.getFullYear()"
+              />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-icon matSuffix>date_range</mat-icon>
+            </mat-form-field>
+  
+            <!-- Campo para la descripción -->
+            <mat-form-field appearance="fill" class="full-width mb-3">
+              <mat-label>Descripción</mat-label>
+              <input
+                matInput
+                [(ngModel)]="diaFestivo.descripcion"
+                name="descripcion"
+                required
+                placeholder="Digite la descripción"
+              />
+              <mat-icon matSuffix>description</mat-icon>
+            </mat-form-field>
+  
+            <!-- Checkbox para recurrencia -->
+            <div class="mb-3">
+              <mat-checkbox [(ngModel)]="diaFestivo.recurrente" name="recurrente">
+                ¿Es recurrente?
+              </mat-checkbox>
+            </div>
+  
+            <!-- Botón para agregar -->
+            <div class="text-center mt-4">
+              <button mat-raised-button color="primary" class="px-5" type="submit">
+                <mat-icon>save</mat-icon>
+                Agregar Día Festivo
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  

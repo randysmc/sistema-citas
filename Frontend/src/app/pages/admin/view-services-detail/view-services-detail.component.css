@@ -1,0 +1,28 @@
+.detalle-servicio-card {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+  }
+  
+  .servicio-info p {
+    margin-bottom: 10px;
+  }
+  
+  .disponible {
+    color: green;
+  }
+  
+  .no-disponible {
+    color: red;
+  }
+  
+  .botones-accion {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  button {
+    width: 45%; /* Ajusta el ancho para que los botones no ocupen todo el ancho */
+  }
+  

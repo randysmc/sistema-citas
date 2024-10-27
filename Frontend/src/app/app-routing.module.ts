@@ -16,9 +16,16 @@ import { ViewRecursoDetailComponent } from './pages/admin/view-recurso-detail/vi
 import { UpdateRecursoComponent } from './pages/admin/update-recurso/update-recurso.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { ViewUserDetailComponent } from './pages/admin/view-user-detail/view-user-detail.component';
-import { UpdateUserComponent } from './pages/admin/update-user/update-user.component';
 import { ViewUsersComponent } from './pages/admin/view-users/view-users.component';
 import { AddUsersComponent } from './pages/admin/add-users/add-users.component';
+import { ClienteDashboardComponent } from './pages/cliente/cliente-dashboard/cliente-dashboard.component';
+import { UpdateAdminUserComponent } from './pages/admin/update-admin-user/update-admin-user.component';
+import { UpdateClienteUserComponent } from './pages/cliente/update-cliente-user/update-cliente-user.component';
+import { ViewServicesComponent } from './pages/admin/view-services/view-services.component';
+import { AddServiceComponent } from './pages/admin/add-service/add-service.component';
+import { ViewServicesDetailComponent } from './pages/admin/view-services-detail/view-services-detail.component';
+import { UpdateServiceComponent } from './pages/admin/update-service/update-service.component';
+import { AddDiaFestivoComponent } from './pages/admin/add-dia-festivo/add-dia-festivo.component';
 
 const routes: Routes = [
   {
@@ -36,6 +43,10 @@ const routes: Routes = [
     component:LoginComponent,
     pathMatch: 'full'
   },
+
+
+
+
 
   {
     path: 'admin',
@@ -64,9 +75,10 @@ const routes: Routes = [
         component:ViewUserDetailComponent
       },
       {
-        path: 'update-user/:id',
-        component: UpdateUserComponent
+        path: 'update-admin/:id',
+        component: UpdateAdminUserComponent
       },
+
       {
         path: '',
         component:WelcomeComponent
@@ -86,9 +98,76 @@ const routes: Routes = [
       {
         path: 'update-recurso/:id',
         component:UpdateRecursoComponent
-      }
+      },
+      
+      
+      
+      {
+        path: 'servicios',
+        component:ViewServicesComponent
+      },
+      {
+        path: 'add-servicio',
+        component:AddServiceComponent
+      },
+      {
+        path: 'servicio/:id',
+        component:ViewServicesDetailComponent
+      },
+      {
+        path: 'update-servicio/:id',
+        component:UpdateServiceComponent
+      },
+      {
+        path: 'add-dia-festivo',
+        component: AddDiaFestivoComponent
+      },
+
+
+
+      {
+        path: 'empleados',
+        component:ViewRecursosComponent
+      },
+      {
+        path: 'add-empleado',
+        component:AddRecursosComponent
+      },
+      {
+        path: 'empleado/:id',
+        component:ViewRecursoDetailComponent
+      },
     ]
   },
+  {
+    path: 'cliente',
+    component:ClienteDashboardComponent,
+    //canActivate:[AdminGuard],
+    children:[
+      {
+        path:'profile',
+        component:ProfileComponent
+      },
+      {
+        path: 'update-cliente/:id',
+        component:UpdateClienteUserComponent
+      },
+      {
+        path: 'calendario',
+        component: CalendarComponent,
+        //canActivate: [normalGuard, AdminGuard, superusuarioGuard], // Si quieres que sea accesible solo si están logueados, usando tus guards
+      },
+      
+      {
+        path: '',
+        component:WelcomeComponent
+      },
+    ]
+  },
+
+
+
+
   {
     path: 'user-dashboard',
     component: UserDashboardComponent,

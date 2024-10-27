@@ -18,6 +18,11 @@ import {MatListModule} from '@angular/material/list';
 import { ReactiveFormsModule } from '@angular/forms';
 import {MatSelectModule} from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatTableModule } from '@angular/material/table';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+
+
 
 
 
@@ -43,8 +48,17 @@ import { CalendarComponent } from './pages/calendar/calendar.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { AddUsersComponent } from './pages/admin/add-users/add-users.component';
 import { ViewUserDetailComponent } from './pages/admin/view-user-detail/view-user-detail.component';
-import { UpdateUserComponent } from './pages/admin/update-user/update-user.component';
 import { ViewUsersComponent } from './pages/admin/view-users/view-users.component';
+import { AddEmpleadoComponent } from './pages/admin/add-empleado/add-empleado.component';
+import { ClienteDashboardComponent } from './pages/cliente/cliente-dashboard/cliente-dashboard.component';
+import { SidebarClienteComponent } from './pages/cliente/sidebar-cliente/sidebar-cliente.component';
+import { UpdateAdminUserComponent } from './pages/admin/update-admin-user/update-admin-user.component';
+import { UpdateClienteUserComponent } from './pages/cliente/update-cliente-user/update-cliente-user.component';
+import { ViewServicesComponent } from './pages/admin/view-services/view-services.component';
+import { ViewServicesDetailComponent } from './pages/admin/view-services-detail/view-services-detail.component';
+import { AddServiceComponent } from './pages/admin/add-service/add-service.component';
+import { UpdateServiceComponent } from './pages/admin/update-service/update-service.component';
+import { AddDiaFestivoComponent } from './pages/admin/add-dia-festivo/add-dia-festivo.component';
 
 
 
@@ -69,9 +83,19 @@ import { ViewUsersComponent } from './pages/admin/view-users/view-users.componen
     UpdateRecursoComponent,
     CalendarComponent,
     ViewUserDetailComponent,
-    UpdateUserComponent,
     AddUsersComponent,
-    ViewUsersComponent
+    ViewUsersComponent,
+    AddEmpleadoComponent,
+    ClienteDashboardComponent,
+    SidebarClienteComponent,
+    UpdateAdminUserComponent,
+    UpdateClienteUserComponent,
+    ViewServicesComponent,
+    ViewServicesDetailComponent,
+    AddServiceComponent,
+    UpdateServiceComponent,
+    AddDiaFestivoComponent,
+
 
   ],
   imports: [
@@ -92,7 +116,10 @@ import { ViewUsersComponent } from './pages/admin/view-users/view-users.componen
     ReactiveFormsModule,
     MatSelectModule,
     MatCheckboxModule,
-    FullCalendarModule
+    FullCalendarModule,
+    MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   providers: [authInterceptorProviders],
   bootstrap: [AppComponent]

@@ -1,1 +1,34 @@
 <p>view-services-detail works!</p>
+
+<mat-card *ngIf="servicio" class="detalle-servicio-card">
+    <!-- Título del servicio -->
+    <mat-toolbar color="primary">
+      <h2 class="mat-headline">{{ servicio.nombre }}</h2>
+    </mat-toolbar>
+  
+    <!-- Descripción del servicio -->
+    <div class="servicio-info">
+      <p><strong>Descripción:</strong> {{ servicio.descripcion }}</p>
+      <p><strong>Disponible:</strong>
+        <span [ngClass]="{'disponible': servicio.disponible, 'no-disponible': !servicio.disponible}">
+          {{ servicio.disponible ? 'Sí' : 'No' }}
+        </span>
+      </p>
+      <p><strong>Duración:</strong> {{ servicio.duracionServicio }} minutos</p>
+      <p><strong>Precio:</strong> Q{{ servicio.precio }}</p>
+
+    </div>
+  
+    <!-- Botones para actualizar y cambiar estado -->
+    <div class="botones-accion">
+      <button mat-raised-button color="accent" (click)="actualizarServicio()">
+        Actualizar
+      </button>
+      <button mat-raised-button *ngIf="servicio.disponible" color="warn" (click)="inactivarServicio()">
+        Inactivar
+      </button>
+      <button mat-raised-button *ngIf="!servicio.disponible" color="primary" (click)="activarServicio()">
+        Activar
+      </button>
+    </div>
+</mat-card>

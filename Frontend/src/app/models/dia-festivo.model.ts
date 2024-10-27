@@ -1,7 +1,7 @@
 // dia-festivo.model.ts
 export interface DiaFestivo {
     idDiaFestivo: number;
-    fecha: number[]; // [año, mes, día]
+    fecha: Date; // Cambiado a Date
     descripcion: string;
     recurrente: boolean;
     anyo: number;

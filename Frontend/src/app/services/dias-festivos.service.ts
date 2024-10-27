@@ -12,7 +12,18 @@ export class DiasFestivosService {
 
   constructor(private http: HttpClient) { }
 
-  obtenerDiasFestivos(): Observable<DiaFestivo[]> {
+  public obtenerDiasFestivos(): Observable<DiaFestivo[]> {
     return this.http.get<DiaFestivo[]>(`${baserUrl}/dias-festivos`);
   }
+
+
+  public agregarDiaFestivo(servicio:any){
+    return this.http.post(`${baserUrl}/dias-festivos/`, servicio)
+  }
+
+  public actualizarDiaFestivo(id: number, servicio: any) {
+    return this.http.put(`${baserUrl}/dias-festivos/${id}`, servicio);
+  }
+
+
 }
