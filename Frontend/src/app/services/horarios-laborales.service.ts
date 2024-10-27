@@ -14,4 +14,15 @@ export class HorariosLaboralesService {
   obtenerHorariosLaborales():Observable<HorarioLaboral[]>{
     return this.http.get<HorarioLaboral[]>(`${baserUrl}/horarios-laborales`)
   }
+
+
+  public agregarHorarioLaboral(servicio:any){
+    return this.http.post(`${baserUrl}/horarios-laborales/`, servicio)
+  }
+
+  public actualizarHorarioLaboral(id: number, servicio: any) {
+    return this.http.put(`${baserUrl}/horarios-laborales/${id}`, servicio);
+  }
+
+
 }
