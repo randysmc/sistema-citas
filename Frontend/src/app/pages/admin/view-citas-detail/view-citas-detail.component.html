@@ -1,0 +1,36 @@
+<mat-card *ngIf="cita" class="detalle-cita-card">
+  <mat-toolbar color="primary">
+    <h2 class="mat-headline">Detalles de la Cita</h2>
+  </mat-toolbar>
+
+  <div class="cita-info">
+    <p><strong>ID de Cita:</strong> {{ cita.idCita }}</p>
+    <p><strong>Fecha:</strong> {{ cita.fecha[0] }}-{{ cita.fecha[1] }}-{{ cita.fecha[2] }}</p>
+    <p><strong>Hora Inicio:</strong> {{ cita.horaInicio[0] }}:{{ cita.horaInicio[1] | number: '2.0-0' }}</p>
+    <p><strong>Hora Fin:</strong> {{ cita.horaFin[0] }}:{{ cita.horaFin[1] | number: '2.0-0' }}</p>
+    <p><strong>Recurso:</strong> {{ cita.recurso.nombre }}</p>
+    <p><strong>Servicio:</strong> {{ cita.servicio.nombre }} (Duración: {{ cita.servicio.duracionServicio }} minutos, Precio: Q{{ cita.servicio.precio }})</p>
+    <p><strong>Cliente:</strong> {{ cita.cliente.nombre }} {{ cita.cliente.apellido }}</p>
+    <p><strong>Empleado:</strong> {{ cita.empleado ? (cita.empleado.nombre + ' ' + cita.empleado.apellido) : 'No asignado' }}</p>
+    <p><strong>Estado:</strong> 
+      <span [ngClass]="{'agendada': cita.estado === 'AGENDADA', 'realizada': cita.estado === 'REALIZADA', 'cancelada': cita.estado === 'CANCELADA'}">
+        {{ cita.estado }}
+      </span>
+    </p>
+  </div>
+
+  <div class="botones-accion">
+    <button mat-raised-button color="warn" 
+            (click)="cancelarCita()" 
+            class="accion-boton" 
+            [disabled]="cita.estado !== 'AGENDADA'">
+      Cancelar
+    </button>
+    <button mat-raised-button color="primary" 
+            (click)="realizarCita()" 
+            class="accion-boton" 
+            [disabled]="cita.estado === 'REALIZADA' || cita.estado === 'CANCELADA'">
+      Realizar
+    </button>
+  </div>
+</mat-card>

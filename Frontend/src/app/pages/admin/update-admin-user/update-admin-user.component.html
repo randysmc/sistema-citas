@@ -1,0 +1,122 @@
+<mat-card class="mat-elevation-z8">
+    <mat-card-header>
+      <mat-card-title class="text-center">Actualizar Empleado</mat-card-title>
+      <mat-card-subtitle class="text-center">Modifique los campos para actualizar el empleado</mat-card-subtitle>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <form (ngSubmit)="formSubmit()">
+        <div class="form-container">
+  
+          <div class="form-group">
+            <mat-form-field appearance="fill" class="w100 mb-3">
+              <mat-label>Nombre</mat-label>
+              <input
+                required
+                type="text"
+                name="nombre"
+                matInput
+                placeholder="Digite el nombre"
+                [(ngModel)]="empleado.nombre"
+              />
+              <mat-icon matSuffix>edit</mat-icon>
+            </mat-form-field>
+          </div>
+  
+          <div class="form-group">
+            <mat-form-field appearance="fill" class="w100 mb-3">
+              <mat-label>Apellido</mat-label>
+              <input
+                required
+                type="text"
+                name="apellido"
+                matInput
+                placeholder="Digite el apellido"
+                [(ngModel)]="empleado.apellido"
+              />
+              <mat-icon matSuffix>edit</mat-icon>
+            </mat-form-field>
+          </div>
+  
+          <div class="form-group">
+            <mat-form-field appearance="fill" class="w100 mb-3">
+              <mat-label>Email</mat-label>
+              <input
+                required
+                type="email"
+                name="email"
+                matInput
+                placeholder="Digite el email"
+                [(ngModel)]="empleado.email"
+              />
+              <mat-icon matSuffix>email</mat-icon>
+            </mat-form-field>
+          </div>
+  
+          <div class="form-group">
+            <mat-form-field appearance="fill" class="w100 mb-3">
+              <mat-label>Teléfono</mat-label>
+              <input
+                type="text"
+                name="telefono"
+                matInput
+                placeholder="Digite el teléfono"
+                [(ngModel)]="empleado.telefono"
+              />
+              <mat-icon matSuffix>phone</mat-icon>
+            </mat-form-field>
+          </div>
+  
+          <div class="form-group">
+            <mat-form-field appearance="fill" class="w100 mb-3">
+              <mat-label>NIT</mat-label>
+              <input
+                required
+                type="text"
+                name="nit"
+                matInput
+                placeholder="Digite el NIT"
+                [(ngModel)]="empleado.nit"
+              />
+              <mat-icon matSuffix>business</mat-icon>
+            </mat-form-field>
+          </div>
+  
+          <div class="form-group">
+            <mat-form-field appearance="fill" class="w100 mb-3">
+              <mat-label>CUI</mat-label>
+              <input
+                required
+                type="text"
+                name="cui"
+                matInput
+                placeholder="Digite el CUI"
+                [(ngModel)]="empleado.cui"
+              />
+              <mat-icon matSuffix>assignment</mat-icon>
+            </mat-form-field>
+          </div>
+  
+          <!-- Campo para subir la foto de perfil -->
+          <div class="form-group mb-3">
+            <mat-label>Subir Foto de Perfil</mat-label>
+            <input
+              type="file"
+              (change)="onFileSelected($event)"
+              accept="image/*"
+              class="file-input"
+            />
+          </div>
+  
+          <!-- Botón para actualizar -->
+          <div class="text-center mt-4">
+            <button mat-raised-button color="primary" class="px-5">
+              <mat-icon>save</mat-icon>
+              Actualizar Empleado
+            </button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  

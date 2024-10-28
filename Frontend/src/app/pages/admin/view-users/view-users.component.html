@@ -1,0 +1,82 @@
+<mat-card class="recursos-card">
+  <!-- Encabezado del card -->
+  <mat-toolbar color="primary">
+    <span>Gestión de Usuarios</span>
+  </mat-toolbar>
+
+  <!-- Selector de filtro -->
+  <mat-form-field appearance="outline" class="filter-form-field">
+    <mat-label>Filtrar usuarios</mat-label>
+    <mat-select [(value)]="filtroSeleccionado">
+      <mat-option value="todos">Todos</mat-option>
+      <mat-option value="activados">Activados</mat-option>
+      <mat-option value="noActivados">No Activados</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Lista de usuarios -->
+  <div class="recursos-list">
+    <div mat-subheader>Usuarios {{ filtroSeleccionado | titlecase }}</div>
+
+    <ng-container *ngIf="filtroSeleccionado === 'todos'">
+      <mat-card *ngFor="let user of usuarios" (click)="verDetalle(user.id)" class="list-item" matRipple>
+        <mat-icon mat-list-icon>person</mat-icon>
+        
+        <!-- Título y descripción con mayor separación -->
+        <div class="item-content">
+          <div class="item-title">
+            <strong>Nombre:</strong> {{ user.nombre }}
+          </div>
+          <div class="item-description">
+            <strong>Usuario:</strong> {{ user.username }}
+          </div>
+          <div class="item-status" [ngClass]="{'disponible': user.enabled, 'no-disponible': !user.enabled}">
+            <strong>Estado:</strong> {{ user.enabled ? 'Activado' : 'Desactivado' }}
+          </div>
+        </div>
+        <button mat-button (click)="verDetalle(user?.id)">Ver Detalle</button> <!-- Botón para ver detalle -->
+      </mat-card>
+    </ng-container>
+
+    <ng-container *ngIf="filtroSeleccionado === 'activados'">
+      <mat-card *ngFor="let user of usuariosActivados" (click)="verDetalle(user.id)" class="list-item" matRipple>
+        <mat-icon mat-list-icon>person</mat-icon>
+        <div class="item-content">
+          <div class="item-title">
+            <strong>Nombre:</strong> {{ user.nombre }}
+          </div>
+          <div class="item-description">
+            <strong>Usuario:</strong> {{ user.username }}
+          </div>
+          <div class="item-status disponible">
+            <strong>Estado:</strong> Activado
+          </div>
+        </div>
+        <button mat-button (click)="verDetalle(user.id)">Ver Detalle</button>
+      </mat-card>
+    </ng-container>
+
+    <ng-container *ngIf="filtroSeleccionado === 'noActivados'">
+      <mat-card *ngFor="let user of usuariosDesactivados" (click)="verDetalle(user.id)" class="list-item" matRipple>
+        <mat-icon mat-list-icon>person</mat-icon>
+        <div class="item-content">
+          <div class="item-title">
+            <strong>Nombre:</strong> {{ user.nombre }}
+          </div>
+          <div class="item-description">
+            <strong>Usuario:</strong> {{ user.username }}
+          </div>
+          <div class="item-status no-disponible">
+            <strong>Estado:</strong> Desactivado
+          </div>
+        </div>
+        <button mat-button (click)="verDetalle(user.id)">Ver Detalle</button>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  <!-- Botón para agregar usuario -->
+  <div class="container text-center mt20">
+    <button routerLink="/admin/add-usuario" mat-raised-button color="primary">Agregar Usuario</button>
+  </div>
+</mat-card>

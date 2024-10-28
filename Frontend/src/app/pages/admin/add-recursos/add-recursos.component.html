@@ -1,0 +1,67 @@
+<mat-card class="mat-elevation-z8">
+  <mat-card-header>
+    <mat-card-title class="text-center">Agregar nuevo Recurso</mat-card-title>
+    <mat-card-subtitle class="text-center">Complete el formulario para crear un nuevo recurso</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form (ngSubmit)="formSubmit()">
+      <div class="bootstrap-wrapper">
+        <div class="row">
+          <div class="col-md-8 offset-md-2">
+
+            <!-- Campo para el título del recurso -->
+            <mat-form-field class="w100 mb-3" appearance="fill">
+              <mat-label>Nombre del Recurso</mat-label>
+              <input
+                required
+                type="text"
+                name="nombre"
+                matInput
+                placeholder="Digite el nombre del recurso"
+                [(ngModel)]="recurso.nombre"
+              />
+              <mat-icon matSuffix>edit</mat-icon>
+            </mat-form-field>
+
+            <!-- Campo para la descripción del recurso -->
+            <mat-form-field class="w100 mb-3" appearance="fill">
+              <mat-label>Descripción</mat-label>
+              <textarea
+                required
+                name="descripcion"
+                matInput
+                placeholder="Digite la descripción del recurso"
+                rows="6"
+                [(ngModel)]="recurso.descripcion"
+              ></textarea>
+              <mat-icon matSuffix>description</mat-icon>
+            </mat-form-field>
+
+            <!-- Selector de tipo de recurso -->
+            <mat-form-field class="w100 mb-3" appearance="fill">
+              <mat-label>Tipo de Recurso</mat-label>
+              <mat-select [(ngModel)]="recurso.tipo" name="tipo">
+                <mat-option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <!-- Checkbox para disponibilidad -->
+            <mat-checkbox [(ngModel)]="recurso.disponible" name="disponible">
+              ¿Está disponible?
+            </mat-checkbox>
+
+            <!-- Botón para guardar -->
+            <div class="text-center mt-4">
+              <button mat-raised-button color="primary" class="px-5">
+                <mat-icon>save</mat-icon>
+                Guardar Recurso
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

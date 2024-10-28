@@ -1,0 +1,31 @@
+<mat-card *ngIf="recurso" class="detalle-recurso-card">
+    <!-- Título del recurso -->
+    <mat-toolbar color="primary">
+      <h2 class="mat-headline">{{ recurso.nombre }}</h2>
+    </mat-toolbar>
+  
+    <!-- Descripción del recurso -->
+    <div class="recurso-info">
+      <p><strong>Descripción:</strong> {{ recurso.descripcion }}</p>
+      <p><strong>Disponible:</strong>
+        <span [ngClass]="{'disponible': recurso.disponible, 'no-disponible': !recurso.disponible}">
+          {{ recurso.disponible ? 'Sí' : 'No' }}
+        </span>
+      </p>
+      <p><strong>Tipo:</strong> {{ recurso.tipo }}</p>
+    </div>
+  
+    <!-- Botones para actualizar y cambiar estado -->
+    <div class="botones-accion">
+      <button mat-raised-button color="accent" (click)="actualizarRecurso()">
+        Actualizar
+      </button>
+      <button mat-raised-button *ngIf="recurso.disponible" color="warn" (click)="inactivarRecurso()">
+        Inactivar
+      </button>
+      <button mat-raised-button *ngIf="!recurso.disponible" color="primary" (click)="activarRecurso()">
+        Activar
+      </button>
+    </div>
+  </mat-card>
+  

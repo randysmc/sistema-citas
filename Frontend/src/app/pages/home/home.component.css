@@ -1,0 +1,46 @@
+.home-page-container {
+  background-color: #f9f9f9;
+  padding: 40px 0;
+}
+
+.welcome-title {
+  font-size: 2.5em;
+  color: #2d3e50;
+  margin-bottom: 15px;
+}
+
+.welcome-text {
+  font-size: 1.2em;
+  color: #555;
+  margin-bottom: 30px;
+  padding: 0 20px;
+}
+
+.start-button {
+  font-size: 1.1em;
+  padding: 10px 25px;
+}
+
+.service-card {
+  background: #ffffff; /* Color de fondo blanco */
+  border-radius: 8px; /* Bordes redondeados */
+  padding: 20px; /* Espaciado interno */
+  margin-bottom: 20px; /* Espaciado entre tarjetas */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  transition: transform 0.3s; /* Efecto al pasar el mouse */
+}
+
+.service-card:hover {
+  transform: translateY(-5px); /* Efecto de elevación al pasar el mouse */
+}
+
+.service-card h3 {
+  font-size: 1.5em; /* Tamaño del título */
+  color: #333; /* Color del texto */
+  margin: 10px 0; /* Espaciado */
+}
+
+.service-card p {
+  font-size: 1em; /* Tamaño del texto de descripción */
+  color: #666; /* Color del texto */
+}

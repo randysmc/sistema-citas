@@ -1,0 +1,57 @@
+
+
+<div *ngIf="usuarioAutenticado">
+  <p>Usuario que hará la cita: {{ usuarioAutenticado.nombre }}</p>
+</div>
+
+<form [formGroup]="citaForm" (ngSubmit)="onSubmit()">
+  <!-- Campo de Fecha -->
+  <div class="form-group">
+    <label for="fecha">Fecha</label>
+    <input type="date" formControlName="fecha" id="fecha" required>
+  </div>
+
+  <!-- Campo de Hora de Inicio -->
+  <div class="form-group">
+    <label for="horaInicio">Hora de Inicio</label>
+    <input type="time" formControlName="horaInicio" id="horaInicio" required>
+  </div>
+
+  <!-- Select de Recursos -->
+  <div class="form-group">
+    <label for="recurso">Selecciona un Recurso</label>
+    <select formControlName="recurso" id="recurso" (change)="onRecursoChange($event)">
+      <option *ngFor="let recurso of recursosDisponibles" [value]="recurso.recursoId">
+        {{ recurso.nombre }} ({{ recurso.tipo }})
+      </option>
+    </select>
+  </div>
+
+  <!-- Select de Empleados (solo se muestra si el recurso es de tipo PERSONAL) -->
+  <div *ngIf="esTipoPersonal" class="form-group">
+    <label for="empleado">Selecciona un Empleado</label>
+    <select formControlName="empleado" id="empleado" required>
+      <option *ngFor="let empleado of empleadosDisponibles" [value]="empleado.id">
+        {{ empleado.nombre }}
+      </option>
+    </select>
+  </div>
+
+
+  <!-- Select de Servicios -->
+<div class="form-group">
+  <label for="servicio">Selecciona un Servicio</label>
+  <select formControlName="servicio" id="servicio">
+    <option *ngFor="let servicio of serviciosDisponibles" [value]="servicio.servicioId">
+      {{ servicio.nombre }} <!-- Asegúrate de que 'nombre' sea la propiedad correcta -->
+    </option>
+  </select>
+</div>
+
+
+
+  <!-- Botón para enviar -->
+  <button type="submit" [disabled]="citaForm.invalid">Crear Cita</button>
+</form>
+
+

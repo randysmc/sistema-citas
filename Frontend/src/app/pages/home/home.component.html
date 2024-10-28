@@ -1,0 +1,23 @@
+<div class="bootstrap-wrapper home-page-container">
+  <div class="container">
+    <div class="row mt-20">
+      <div class="col-md-6 offset-md-3 text-center">
+        <h1 class="welcome-title">{{ negocio?.nombre }}</h1>
+        <p class="welcome-text">{{ negocio?.descripcion }}</p>
+        <button mat-raised-button color="primary" class="start-button">Reserva tu Cita</button>
+      </div>
+    </div>
+    
+    <h2 class="text-center">Nuestros Servicios</h2>
+    <div class="row mt-40">
+      
+      <hr>
+      <div class="col-md-4" *ngFor="let servicio of serviciosDisponibles | slice:0:3"> <!-- Muestra solo 3 servicios -->
+        <div class="service-card">
+          <h3>{{ servicio.nombre }}</h3>
+          <p>{{ servicio.descripcion }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

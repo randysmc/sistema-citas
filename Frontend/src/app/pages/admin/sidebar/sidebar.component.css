@@ -1,0 +1,10 @@
+@media (max-width: 768px) {
+    #sidebar {
+      display: none; /* Ocultar por defecto en pantallas pequeñas */
+    }
+  
+    #sidebar.active {
+      display: block; /* Mostrar cuando está activo */
+    }
+  }
+  

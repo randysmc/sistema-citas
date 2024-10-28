@@ -1,0 +1,80 @@
+<mat-card class="servicios-card">
+    <!-- Encabezado del card -->
+    <mat-toolbar color="primary">
+      <span>Gestión de Servicios</span>
+    </mat-toolbar>
+  
+    <!-- Selector de filtro -->
+    <mat-form-field appearance="outline" class="filter-form-field">
+      <mat-label>Filtrar servicios</mat-label>
+      <mat-select [(value)]="filtroSeleccionado">
+        <mat-option value="todos">Todos</mat-option>
+        <mat-option value="disponibles">Disponibles</mat-option>
+        <mat-option value="noDisponibles">No Disponibles</mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <!-- Lista de servicios -->
+    <div class="servicios-list">
+      <div mat-subheader>Servicios {{ filtroSeleccionado | titlecase }}</div>
+  
+      <ng-container *ngIf="filtroSeleccionado === 'todos'">
+        <mat-card *ngFor="let s of servicios" (click)="verDetalle(s.servicioId)" class="list-item" matRipple>
+          <mat-icon mat-list-icon>folder</mat-icon>
+          
+          <!-- Título y descripción con mayor separación -->
+          <div class="item-content">
+            <div class="item-title">
+              <strong>Nombre:</strong> {{ s.nombre }}
+            </div>
+            <div class="item-description">
+              <strong>Descripción:</strong> {{ s.descripcion }}
+            </div>
+            <div class="item-status" [ngClass]="{'disponible': s.disponible, 'no-disponible': !s.disponible}">
+              <strong>Estado:</strong> {{ s.disponible ? 'Disponible' : 'No disponible' }}
+            </div>
+          </div>
+        </mat-card>
+      </ng-container>
+  
+      <ng-container *ngIf="filtroSeleccionado === 'disponibles'">
+        <mat-card *ngFor="let s of serviciosDisponibles" (click)="verDetalle(s.servicioId)" class="list-item" matRipple>
+          <mat-icon mat-list-icon>folder</mat-icon>
+          <div class="item-content">
+            <div class="item-title">
+              <strong>Nombre:</strong> {{ s.nombre }}
+            </div>
+            <div class="item-description">
+              <strong>Descripción:</strong> {{ s.descripcion }}
+            </div>
+            <div class="item-status disponible">
+              <strong>Estado:</strong> Disponible
+            </div>
+          </div>
+        </mat-card>
+      </ng-container>
+  
+      <ng-container *ngIf="filtroSeleccionado === 'noDisponibles'">
+        <mat-card *ngFor="let s of serviciosNoDisponibles" (click)="verDetalle(s.servicioId)" class="list-item" matRipple>
+          <mat-icon mat-list-icon>folder</mat-icon>
+          <div class="item-content">
+            <div class="item-title">
+              <strong>Nombre:</strong> {{ s.nombre }}
+            </div>
+            <div class="item-description">
+              <strong>Descripción:</strong> {{ s.descripcion }}
+            </div>
+            <div class="item-status no-disponible">
+              <strong>Estado:</strong> No disponible
+            </div>
+          </div>
+        </mat-card>
+      </ng-container>
+    </div>
+  
+    <!-- Botón para agregar servicio -->
+    <div class="container text-center mt20">
+      <button routerLink="/admin/add-servicio" mat-raised-button color="primary">Agregar servicio</button>
+    </div>
+  </mat-card>
+  

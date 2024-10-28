@@ -1,0 +1,27 @@
+<div class="bootstrap-wrapper">
+    <div class="container">
+        <div class="row mt-20">
+            <div class="col-md-6 offset-md-3">
+                <mat-card>
+                    <div class="container text-center">
+                        <h1 class="text-center">Verificación en Dos Pasos</h1>
+                    </div>
+                    <form (ngSubmit)="validateTwoFactorCode()">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Nombre de Usuario</mat-label>
+                            <input [(ngModel)]="username" name="username" matInput disabled>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Código de Verificación</mat-label>
+                            <input [(ngModel)]="twoFactorCode" name="twoFactorCode" required matInput placeholder="Ingrese el código de verificación">
+                        </mat-form-field>
+                        <div class="container text-center">
+                            <button mat-raised-button color="primary">Verificar</button>
+                            <button type="reset" style="margin-left: 20px;" mat-raised-button color="accent">Limpiar</button>
+                        </div>
+                    </form>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

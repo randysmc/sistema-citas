@@ -1,0 +1,50 @@
+<mat-card class="mat-elevation-z8">
+  <mat-card-header>
+    <mat-card-title class="text-center">Actualizar Usuario</mat-card-title>
+    <mat-card-subtitle class="text-center">Modifique los campos para actualizar la información del usuario</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form (ngSubmit)="formSubmit()">
+      <div class="form-container">
+        <div class="row">
+          <div class="col-md-8 offset-md-2">
+
+            <!-- Campo para el nombre -->
+            <mat-form-field appearance="fill" class="form-field">
+              <mat-label>Nombre</mat-label>
+              <input required type="text" name="nombre" matInput [(ngModel)]="usuario.nombre" placeholder="Digite su nombre" />
+            </mat-form-field>
+
+            <!-- Campo para el apellido -->
+            <mat-form-field appearance="fill" class="form-field">
+              <mat-label>Apellido</mat-label>
+              <input required type="text" name="apellido" matInput [(ngModel)]="usuario.apellido" placeholder="Digite su apellido" />
+            </mat-form-field>
+
+            <!-- Campo para el email -->
+            <mat-form-field appearance="fill" class="form-field">
+              <mat-label>Email</mat-label>
+              <input required type="email" name="email" matInput [(ngModel)]="usuario.email" placeholder="Digite su email" />
+            </mat-form-field>
+
+            <!-- Campo para agregar foto -->
+            <div class="form-field">
+              <mat-label>Subir Foto</mat-label>
+              <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+            </div>
+
+            <!-- Botón para actualizar -->
+            <div class="text-center mt-4">
+              <button mat-raised-button color="primary" class="btn-submit">
+                <mat-icon>save</mat-icon>
+                Actualizar Usuario
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

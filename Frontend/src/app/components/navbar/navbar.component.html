@@ -1,0 +1,40 @@
+<mat-toolbar color="primary">
+  <a [routerLink]="'/'" mat-icon-button class="example-icon" aria-label="Home">
+    <mat-icon>home</mat-icon>
+  </a>
+  
+  <span>Negocio</span>
+  
+  <span class="example-spacer"></span>
+
+  <a
+    *ngIf="!isLoggedIn" 
+    [routerLink]="'/login'" mat-icon-button class="example-icon mr20 ml70" aria-label="Login">
+    <mat-icon>login</mat-icon>
+  </a>
+
+  <a
+    *ngIf="!isLoggedIn" 
+    [routerLink]="'/signup'" mat-icon-button class="example-icon mr20 ml70" aria-label="Signup">
+    <mat-icon>person_add</mat-icon>
+  </a>
+
+  <a
+  *ngIf="isLoggedIn" 
+  (click) = "logout()"
+  mat-icon-button class="example-icon favorite-icon mr20 ml70" aria-label="Logout">
+  <mat-icon>logout</mat-icon>
+  </a>
+
+  <button
+  *ngIf="isLoggedIn && user" 
+  mat-button
+  style="margin-right: 10px;"
+  class="example-icon favorite-icon" 
+  routerLink="/admin/profile"
+  aria-label="example-icon with hear icon">
+  {{ user?.username }} <!-- Usar user en lugar de login.getUser() -->
+</button>
+
+
+</mat-toolbar>
