@@ -26,6 +26,10 @@ import { AddServiceComponent } from './pages/admin/add-service/add-service.compo
 import { ViewServicesDetailComponent } from './pages/admin/view-services-detail/view-services-detail.component';
 import { UpdateServiceComponent } from './pages/admin/update-service/update-service.component';
 import { AddDiaFestivoComponent } from './pages/admin/add-dia-festivo/add-dia-festivo.component';
+import { AddHorarioLaboralComponent } from './pages/admin/add-horario-laboral/add-horario-laboral.component';
+import { ViewCitasComponent } from './pages/admin/view-citas/view-citas.component';
+import { ViewCitasDetailComponent } from './pages/admin/view-citas-detail/view-citas-detail.component';
+import { AddClienteCitaComponent } from './pages/cliente/add-cliente-cita/add-cliente-cita.component';
 
 const routes: Routes = [
   {
@@ -122,6 +126,18 @@ const routes: Routes = [
         path: 'add-dia-festivo',
         component: AddDiaFestivoComponent
       },
+      {
+        path: 'add-horario-laboral',
+        component: AddHorarioLaboralComponent
+      },
+      {
+        path: 'citas',
+        component: ViewCitasComponent
+      },
+      {
+        path: 'citas/:id',
+        component: ViewCitasDetailComponent
+      },
 
 
 
@@ -153,9 +169,17 @@ const routes: Routes = [
         component:UpdateClienteUserComponent
       },
       {
+        path: 'add-cita',
+        component: AddClienteCitaComponent
+      },
+      {
         path: 'calendario',
         component: CalendarComponent,
         //canActivate: [normalGuard, AdminGuard, superusuarioGuard], // Si quieres que sea accesible solo si están logueados, usando tus guards
+      },
+      {
+        path: 'servicios',
+        component: ViewServicesComponent,
       },
       
       {

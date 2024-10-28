@@ -1,12 +1,14 @@
 <div class="bootstrap-wrapper">
   <div class="container-fluid">
     <div class="row">
+      
       <div class="col-12 col-md-3" *ngIf="sidebarVisible">  <!-- Usa *ngIf para mostrar/ocultar -->
         <app-sidebar></app-sidebar>
       </div>
 
       <div class="col-12 col-md-9">
         <button class="btn btn-primary d-md-none mb-3" (click)="toggleSidebar()">Menú</button>
+        <h1>aqui que muestro y donde?</h1>
         <router-outlet></router-outlet>
       </div>
     </div>

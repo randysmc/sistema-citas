@@ -1,0 +1,57 @@
+.citas-card {
+  margin: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.citas-list {
+  padding: 16px;
+}
+
+.citas-list div {
+  border-radius: 4px;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.citas-list div:hover {
+  background-color: #f5f5f5;
+  transform: scale(1.02);
+}
+
+.item-status {
+  margin-top: 8px;
+}
+
+.estado {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.agendada {
+  color: blue; /* Color para citas agendadas */
+}
+
+.confirmada {
+  color: green; /* Color para citas confirmadas */
+}
+
+.realizada {
+  color: gray; /* Color para citas realizadas */
+}
+
+.cancelada {
+  color: red; /* Color para citas canceladas */
+}
+
+.container {
+  margin-top: 20px;
+}
+
+button {
+  margin-top: 10px;
+}
+.citas-list-container {
+  max-height: 700px; /* Ajusta la altura según tus necesidades */
+  overflow-y: auto; /* Barra de desplazamiento vertical */
+  margin: 10px; /* Espacio alrededor */
+}

@@ -34,7 +34,7 @@
             <strong>Estado:</strong> {{ user.enabled ? 'Activado' : 'Desactivado' }}
           </div>
         </div>
-        <button mat-button (click)="verDetalle(user.id)">Ver Detalle</button> <!-- Botón para ver detalle -->
+        <button mat-button (click)="verDetalle(user?.id)">Ver Detalle</button> <!-- Botón para ver detalle -->
       </mat-card>
     </ng-container>
 

@@ -1,4 +1,9 @@
 <div class="calendar-container">
-    <full-calendar [options]="calendarOptions"></full-calendar>
-  </div>
-  
+  <select (change)="onChangeTipoCita($event)"> 
+    <option value="agendadas">Citas Agendadas</option>
+    <option value="realizadas">Citas Realizadas</option>
+    <option value="canceladas">Citas Canceladas</option>
+  </select>
+
+  <full-calendar [options]="calendarOptions"></full-calendar>
+</div>

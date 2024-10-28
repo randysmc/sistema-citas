@@ -59,6 +59,12 @@ import { ViewServicesDetailComponent } from './pages/admin/view-services-detail/
 import { AddServiceComponent } from './pages/admin/add-service/add-service.component';
 import { UpdateServiceComponent } from './pages/admin/update-service/update-service.component';
 import { AddDiaFestivoComponent } from './pages/admin/add-dia-festivo/add-dia-festivo.component';
+import { AddHorarioLaboralComponent } from './pages/admin/add-horario-laboral/add-horario-laboral.component';
+import { UpdateNegocioComponent } from './pages/admin/update-negocio/update-negocio.component';
+import { ViewCitasComponent } from './pages/admin/view-citas/view-citas.component';
+import { ViewCitasDetailComponent } from './pages/admin/view-citas-detail/view-citas-detail.component';
+import { AddClienteCitaComponent } from './pages/cliente/add-cliente-cita/add-cliente-cita.component';
+import { MyChartComponent } from './pages/admin/my-chart/my-chart.component';
 
 
 
@@ -95,6 +101,13 @@ import { AddDiaFestivoComponent } from './pages/admin/add-dia-festivo/add-dia-fe
     AddServiceComponent,
     UpdateServiceComponent,
     AddDiaFestivoComponent,
+    AddHorarioLaboralComponent,
+    UpdateNegocioComponent,
+    ViewCitasComponent,
+    ViewCitasDetailComponent,
+    AddClienteCitaComponent,
+    MyChartComponent,
+
 
 
   ],

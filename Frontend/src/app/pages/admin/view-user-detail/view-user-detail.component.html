@@ -4,36 +4,36 @@
     <table class="min-w-full text-center">
       <tr>
         <td class="py-2">Nombre Completo</td>
-        <td class="py-2">{{ user.nombre }}</td>
+        <td class="py-2">{{ user?.nombre }}</td>
       </tr>
       <tr>
         <td class="py-2">Username</td>
-        <td class="py-2">{{ user.username }}</td>
+        <td class="py-2">{{ user?.username }}</td>
       </tr>
       <tr>
         <td class="py-2">Teléfono</td>
-        <td class="py-2">{{ user.telefono }}</td>
+        <td class="py-2">{{ user?.telefono }}</td>
       </tr>
       <tr>
         <td class="py-2">Email</td>
-        <td class="py-2">{{ user.email }}</td>
+        <td class="py-2">{{ user?.email }}</td>
       </tr>
       <tr>
         <td class="py-2">Número de NIT</td>
-        <td class="py-2">{{ user.nit }}</td>
+        <td class="py-2">{{ user?.nit }}</td>
       </tr>
       <tr>
         <td class="py-2">Número de DPI</td>
-        <td class="py-2">{{ user.cui }}</td>
+        <td class="py-2">{{ user?.cui }}</td>
       </tr>
       <tr>
         <td class="py-2">Estado</td>
-        <td class="py-2">{{ user.enabled ? "Activo" : "No activo" }}</td>
+        <td class="py-2">{{ user?.enabled ? "Activo" : "No activo" }}</td>
       </tr>
     </table>
   </mat-card-content>
   <mat-card-actions class="text-center">
-    <button mat-raised-button color="primary" class="w-1/2">{{ user.enabled ? 'Deshabilitar' : 'Habilitar' }}</button>
+    <button mat-raised-button color="primary" class="w-1/2">{{ user?.enabled ? 'Deshabilitar' : 'Habilitar' }}</button>
     <button mat-raised-button color="accent" class="w-1/2">Reservas</button>
   </mat-card-actions>
 </mat-card>

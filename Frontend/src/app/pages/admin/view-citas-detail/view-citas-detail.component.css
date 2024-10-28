@@ -1,0 +1,26 @@
+.detalle-cita-card {
+    margin: 20px;
+  }
+  
+  .cita-info {
+    margin: 20px;
+  }
+  
+  .botones-accion {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .agendada {
+    color: blue;
+  }
+  
+  .realizada {
+    color: green;
+  }
+  
+  .cancelada {
+    color: red;
+  }
+  
