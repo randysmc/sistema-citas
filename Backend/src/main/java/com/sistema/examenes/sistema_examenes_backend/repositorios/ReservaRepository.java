@@ -1,9 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.repositorios;
 
-import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
-import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
-import com.sistema.examenes.sistema_examenes_backend.entidades.Reserva;
-import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
+import com.sistema.examenes.sistema_examenes_backend.entidades.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
@@ -21,5 +18,7 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     public List<Reserva> findByEmpleadoId(Long empleadoId);
 
     List<Reserva> findByActivaTrue();
+
+    public Reserva findByCitaIdCita(Long idCita);
 
 }

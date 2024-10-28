@@ -20,5 +20,13 @@ public interface CitaService {
 
     public Cita confirmarCita(Long id);
 
+    public Cita completarCita(Long id);
+
     public List<Cita> obtenerCitaPorEmpleado(Long empleadoId);
+
+    public List<Cita> obtenerCitasAgendadas();
+
+    public List<Cita> obtenerCitasCanceladas();
+
+    public List<Cita> obtenerCitasRealizadas();
 }

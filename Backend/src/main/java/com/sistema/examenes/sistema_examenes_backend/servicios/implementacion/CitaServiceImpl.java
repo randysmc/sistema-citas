@@ -2,6 +2,7 @@ package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
 import com.sistema.examenes.sistema_examenes_backend.Enums.DiaSemana;
 import com.sistema.examenes.sistema_examenes_backend.Enums.EstadoCita;
+import com.sistema.examenes.sistema_examenes_backend.Enums.EstadoComprobante;
 import com.sistema.examenes.sistema_examenes_backend.Enums.TipoRecurso;
 import com.sistema.examenes.sistema_examenes_backend.configuraciones.DiaSemanaConverter;
 import com.sistema.examenes.sistema_examenes_backend.entidades.*;
@@ -39,6 +40,12 @@ public class CitaServiceImpl implements CitaService {
 
     @Autowired
     private EmpleadoRepository empleadoRepository;
+
+    @Autowired
+    private ComprobanteRepository comprobanteRepository;
+
+    @Autowired
+    private  FacturaRepository facturaRepository;
 
 
 
@@ -134,16 +141,28 @@ public class CitaServiceImpl implements CitaService {
 
     @Override
     public Cita cancelarCita(Long id) {
+        // Obtener la cita por su ID
         Cita cita = citaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cita no encontrada con id: " + id));
 
-        // Eliminar la reserva relacionada si existe
-        // eliminarReserva(cita);
-
         // Cambiar el estado de la cita a CANCELADA
         cita.setEstado(EstadoCita.CANCELADA);
+
+        // Obtener la reserva asociada a la cita
+        Reserva reserva = reservaRepository.findByCitaIdCita(cita.getIdCita());
+
+        // Verificar si la reserva existe y actualizar su estado
+        if (reserva != null) {
+            reserva.setActiva(false); // Cambiar el estado de activa a false
+            reservaRepository.save(reserva); // Guardar la reserva actualizada
+
+            crearComprobanteParaReserva(reserva, EstadoComprobante.CANCELADA);
+        }
+
+        // Guardar la cita actualizada
         return citaRepository.save(cita);
     }
+
 
     @Override
     public Cita confirmarCita(Long id) {
@@ -158,10 +177,45 @@ public class CitaServiceImpl implements CitaService {
         return citaRepository.save(cita);
     }
 
+    @Override
+    public Cita completarCita(Long id) {
+        // Buscar la cita por su ID
+        Cita cita = citaRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Cita no encontrada con id: " + id));
+
+        // Cambiar el estado de la cita a REALIZADA
+        cita.setEstado(EstadoCita.REALIZADA);
+
+        // Generar la factura a partir de la cita
+        Factura factura = crearFacturaDeCita(cita);
+
+        // Guardar la cita actualizada y la factura generada
+        citaRepository.save(cita);
+        facturaRepository.save(factura);
+
+        return cita; // Retornar la cita actualizada
+    }
+
+
 
     @Override
     public List<Cita> obtenerCitaPorEmpleado(Long empleadoId) {
         return citaRepository.findByEmpleadoId(empleadoId);
+    }
+
+    @Override
+    public List<Cita> obtenerCitasAgendadas() {
+        return citaRepository.findByEstado(EstadoCita.AGENDADA);
+    }
+
+    @Override
+    public List<Cita> obtenerCitasCanceladas() {
+        return citaRepository.findByEstado(EstadoCita.CANCELADA);
+    }
+
+    @Override
+    public List<Cita> obtenerCitasRealizadas() {
+        return citaRepository.findByEstado(EstadoCita.REALIZADA);
     }
 
     private boolean esDiaFestivo(LocalDate fecha) {
@@ -268,6 +322,12 @@ public class CitaServiceImpl implements CitaService {
 
         reserva.setCliente(cita.getCliente());
 
+        // Guardar la reserva en el repositorio
+        Reserva nuevaReserva = reservaRepository.save(reserva);
+
+        // Crear el comprobante para la reserva
+        crearComprobanteParaReserva(nuevaReserva, EstadoComprobante.AGENDADA);
+
         return reservaRepository.save(reserva);
     }
 
@@ -327,6 +387,65 @@ public class CitaServiceImpl implements CitaService {
 
         return false; // No hay conflicto con reservas del empleado
     }
+
+    private void crearComprobanteParaReserva(Reserva reserva, EstadoComprobante estadoComprobante) {
+        Comprobante comprobante = new Comprobante();
+        comprobante.setFecha(LocalDate.now());
+        comprobante.setHoraInicio(LocalTime.now());
+        comprobante.setEstadoComprobante(estadoComprobante); // Usa el estado pasado como parámetro
+        comprobante.setCliente(reserva.getCliente());
+        comprobante.setCita(reserva.getCita());
+
+        // Construir la descripción usando el nombre del recurso desde la reserva
+        String recursoNombre = (reserva.getRecurso() != null && reserva.getRecurso().getNombre() != null)
+                ? reserva.getRecurso().getNombre() : "Recurso no especificado";
+
+        String descripcion = String.format("Se ha realizado su reservación para el día %s de %s a %s, recurso: %s, empleado: %s.",
+                reserva.getFecha(),
+                reserva.getHoraInicio(),
+                reserva.getHoraFin(),
+                recursoNombre,
+                (reserva.getEmpleado() != null ? reserva.getEmpleado().getNombre() : "N/A"));
+
+        comprobante.setDescripcion(descripcion);
+
+        // Guardar el comprobante en el repositorio
+        comprobanteRepository.save(comprobante);
+    }
+
+
+    public Factura crearFacturaDeCita(Cita cita) {
+        // Crear una nueva factura
+        Factura factura = new Factura();
+
+        // Obtener el cliente de la cita
+        Usuario cliente = cita.getCliente();
+        if (cliente == null) {
+            throw new RuntimeException("Cliente no encontrado en la cita");
+        }
+
+        // Verificar que la cita contiene un recurso y un servicio
+        Recurso recurso = cita.getRecurso();
+        Servicio servicio = cita.getServicio();
+        if (recurso == null || servicio == null) {
+            throw new RuntimeException("Recurso o servicio no encontrado en la cita");
+        }
+
+        // Establecer los detalles de la factura
+        factura.setFecha(LocalDate.now()); // Fecha de generación de la factura
+        factura.setDetalleServicio(String.format("Factura por utilizar el servicio de %s en %s.",
+                servicio.getNombre(), recurso.getNombre()));
+        factura.setMonto(servicio.getPrecio()); // Monto igual al precio del servicio
+        factura.setCliente(cliente);
+        factura.setCita(cita);
+
+        // Guardar la factura en el repositorio
+        return facturaRepository.save(factura);
+    }
+
+
+
+
 
 
 

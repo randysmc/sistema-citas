@@ -40,6 +40,12 @@ public class Cita {
     @JsonIgnore
     private Set<Reserva> reservas = new HashSet<>();*/
 
+    /*@OneToMany( mappedBy = "cita", fetch = FetchType.EAGER)
+    private Set<Comprobante> comprobante = new HashSet<>();
+
+    @OneToOne(mappedBy = "cita", fetch = FetchType.EAGER)
+    private Factura factura;*/
+
 
     public Cita() {
     }
@@ -135,5 +141,21 @@ public class Cita {
 
     public void setReservas(Set<Reserva> reservas) {
         this.reservas = reservas;
+    }*/
+
+    /*public Set<Comprobante> getComprobante() {
+        return comprobante;
+    }
+
+    public void setComprobante(Set<Comprobante> comprobante) {
+        this.comprobante = comprobante;
+    }
+
+    public Factura getFactura() {
+        return factura;
+    }
+
+    public void setFactura(Factura factura) {
+        this.factura = factura;
     }*/
 }

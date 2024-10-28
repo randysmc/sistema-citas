@@ -71,7 +71,15 @@ public class Usuario implements UserDetails {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cliente")
     @JsonIgnore
-    private Set<Reserva> reservasComoCliente = new HashSet<>();*/
+    private Set<Reserva> reservasComoCliente = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cliente")
+    @JsonIgnore
+    private Set<Comprobante> comprobanteCliente = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "cliente")
+    @JsonIgnore
+    private Set<Factura> facturaCliente = new HashSet<>();*/
 
     public Usuario() {
     }

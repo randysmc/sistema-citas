@@ -1,6 +1,7 @@
 package com.sistema.examenes.sistema_examenes_backend.controladores;
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.Cita;
+import com.sistema.examenes.sistema_examenes_backend.entidades.CitaResponse;
 import com.sistema.examenes.sistema_examenes_backend.servicios.CitaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,24 @@ public class CitaController {
         return ResponseEntity.ok(citas); // 200 OK
     }
 
+    @GetMapping("/agendadas")
+    public ResponseEntity<List<Cita>> obtenerCitasAgendadas() {
+        List<Cita> citasAgendadas = citaService.obtenerCitasAgendadas();
+        return ResponseEntity.ok(citasAgendadas); // 200 OK
+    }
+
+    @GetMapping("/canceladas")
+    public ResponseEntity<List<Cita>> obtenerCitasCanceladas() {
+        List<Cita> citasCanceladas = citaService.obtenerCitasCanceladas();
+        return ResponseEntity.ok(citasCanceladas); // 200 OK
+    }
+
+    @GetMapping("/realizadas")
+    public ResponseEntity<List<Cita>> obtenerCitasRealizadas() {
+        List<Cita> citasRealizadas = citaService.obtenerCitasRealizadas();
+        return ResponseEntity.ok(citasRealizadas); // 200 OK
+    }
+
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<Cita>> obtenerCitaPorUsuario(@PathVariable Long usuarioId) {
         List<Cita> citas = citaService.obtenerCitaPorUsuario(usuarioId);
@@ -46,16 +65,28 @@ public class CitaController {
         return ResponseEntity.ok(citaActualizada); // 200 OK
     }
 
+
     @PutMapping("/{id}/cancelar")
-    public ResponseEntity<Cita> cancelarCita(@PathVariable Long id) {
+    public ResponseEntity<CitaResponse> cancelarCita(@PathVariable Long id) {
         Cita citaCancelada = citaService.cancelarCita(id);
-        return ResponseEntity.ok(citaCancelada); // 200 OK
+        CitaResponse response = new CitaResponse("La cita fue cancelada.", citaCancelada);
+        return ResponseEntity.ok(response); // 200 OK
     }
+
     @PutMapping("/{id}/confirmar")
-    public ResponseEntity<Cita> confirmarCita(@PathVariable Long id) {
+    public ResponseEntity<CitaResponse> confirmarCita(@PathVariable Long id) {
         Cita citaConfirmada = citaService.confirmarCita(id);
-        return ResponseEntity.ok(citaConfirmada); // 200 OK
+        CitaResponse response = new CitaResponse("La cita fue confirmada.", citaConfirmada);
+        return ResponseEntity.ok(response); // 200 OK
     }
+
+    @PutMapping("/{id}/completar")
+    public ResponseEntity<CitaResponse> realizarCita(@PathVariable Long id) {
+        Cita citaCompletada = citaService.completarCita(id);
+        CitaResponse response = new CitaResponse("La cita fue realizada.", citaCompletada);
+        return ResponseEntity.ok(response); // 200 OK
+    }
+
 
 
     @GetMapping("/empleado/{empleadoId}")
@@ -63,4 +94,6 @@ public class CitaController {
         List<Cita> citas = citaService.obtenerCitaPorEmpleado(empleadoId);
         return ResponseEntity.ok(citas); // 200 OK
     }
+
+
 }

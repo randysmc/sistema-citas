@@ -70,6 +70,9 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                         "/dias-festivos/**",
                         "/citas/**",
                         "/reservas/**",
+                        "/comprobantes/**",
+                        "/facturas/**",
+                        "/reportes/**",
                         "/uploads/**",
                         "/negocios/**").permitAll() // Permitir acceso sin autenticación
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
