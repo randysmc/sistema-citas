@@ -1,7 +1,7 @@
 package com.sistema.examenes.sistema_examenes_backend.controladores;
 
-import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
-import com.sistema.examenes.sistema_examenes_backend.DTO.RecursoDTO;
+//import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
+//import com.sistema.examenes.sistema_examenes_backend.DTO.RecursoDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.ErrorResponse;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;

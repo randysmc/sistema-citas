@@ -1,9 +1,9 @@
 package com.sistema.examenes.sistema_examenes_backend.controladores;
 
 import com.sistema.examenes.sistema_examenes_backend.DTO.EmpleadoDTO;
-import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
-import com.sistema.examenes.sistema_examenes_backend.DTO.RolDTO;
-import com.sistema.examenes.sistema_examenes_backend.DTO.UsuarioDTO;
+//import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
+//import com.sistema.examenes.sistema_examenes_backend.DTO.RolDTO;
+//import com.sistema.examenes.sistema_examenes_backend.DTO.UsuarioDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.*;
 import com.sistema.examenes.sistema_examenes_backend.excepciones.UsuarioExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.servicios.EmpleadoService;

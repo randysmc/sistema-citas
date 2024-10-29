@@ -7,12 +7,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ActiveProfiles("test") // Usa el archivo application-test.properties
@@ -21,6 +24,11 @@ public class UsuarioRepositoryTest {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+
 
     private Usuario usuarioGlobal; // Usuario que será reutilizado en todas las pruebas
 
@@ -120,6 +128,143 @@ public class UsuarioRepositoryTest {
         assertThat(usuariosDeshabilitados).isNotEmpty();
         assertThat(usuariosDeshabilitados.get(0).isEnabled()).isFalse();
     }
+
+
+    @Test
+    public void testGuardarUsuarioConNitDuplicado() {
+        // Guardar un primer usuario
+        usuarioRepository.save(usuarioGlobal);
+
+        // Intentar guardar un segundo usuario con el mismo NIT
+        Usuario usuarioDuplicado = new Usuario();
+        usuarioDuplicado.setNombre("Jane");
+        usuarioDuplicado.setApellido("Doe");
+        usuarioDuplicado.setUsername("janeDoe");
+        usuarioDuplicado.setPassword("password");
+        usuarioDuplicado.setEmail("janedoe@gmail.com");
+        usuarioDuplicado.setTelefono("987654321");
+        usuarioDuplicado.setNit("465654"); // Mismo NIT que el usuarioGlobal
+        usuarioDuplicado.setCui("123456");
+        usuarioDuplicado.setPerfil("profile2.png");
+
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            usuarioRepository.save(usuarioDuplicado);
+        });
+    }
+
+    @Test
+    public void testActualizarUsuario() {
+        // Actualizar el nombre del usuarioGlobal
+        usuarioGlobal.setNombre("Ringo Starr");
+        Usuario usuarioActualizado = usuarioRepository.save(usuarioGlobal);
+
+        assertThat(usuarioActualizado.getNombre()).isEqualTo("Ringo Starr");
+    }
+
+    @Test
+    public void testEliminarUsuario() {
+        // Eliminar el usuario guardado
+        usuarioRepository.delete(usuarioGlobal);
+
+        Optional<Usuario> encontrado = usuarioRepository.findById(usuarioGlobal.getId());
+        assertThat(encontrado).isNotPresent(); // Verificar que ya no existe
+    }
+
+    @Test
+    public void testGuardarUsuarioConUsernameDuplicado() {
+        // Guardar un primer usuario
+        usuarioRepository.save(usuarioGlobal);
+
+        // Intentar guardar un segundo usuario con el mismo username
+        Usuario usuarioDuplicado = new Usuario();
+        usuarioDuplicado.setNombre("Jane");
+        usuarioDuplicado.setApellido("Doe");
+        usuarioDuplicado.setUsername(usuarioGlobal.getUsername()); // Mismo username
+        usuarioDuplicado.setPassword("password");
+        usuarioDuplicado.setEmail("janedoe@gmail.com");
+        usuarioDuplicado.setTelefono("987654321");
+        usuarioDuplicado.setNit("987654");
+        usuarioDuplicado.setCui("123456");
+        usuarioDuplicado.setPerfil("profile2.png");
+
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            usuarioRepository.save(usuarioDuplicado);
+        });
+    }
+
+
+    @Test
+    public void testGuardarUsuarioConEmailDuplicado() {
+        // Guardar un primer usuario
+        usuarioRepository.save(usuarioGlobal);
+
+        // Intentar guardar un segundo usuario con el mismo email
+        Usuario usuarioDuplicado = new Usuario();
+        usuarioDuplicado.setNombre("Jane");
+        usuarioDuplicado.setApellido("Doe");
+        usuarioDuplicado.setUsername("janeDoe");
+        usuarioDuplicado.setPassword("password");
+        usuarioDuplicado.setEmail(usuarioGlobal.getEmail()); // Mismo email
+        usuarioDuplicado.setTelefono("987654321");
+        usuarioDuplicado.setNit("987654");
+        usuarioDuplicado.setCui("123456");
+        usuarioDuplicado.setPerfil("profile2.png");
+
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            usuarioRepository.save(usuarioDuplicado);
+        });
+    }
+
+    @Test
+    public void testGuardarUsuarioConCuiDuplicado() {
+        // Guardar un primer usuario
+        usuarioRepository.save(usuarioGlobal);
+
+        // Intentar guardar un segundo usuario con el mismo CUI
+        Usuario usuarioDuplicado = new Usuario();
+        usuarioDuplicado.setNombre("Jane");
+        usuarioDuplicado.setApellido("Doe");
+        usuarioDuplicado.setUsername("janeDoe");
+        usuarioDuplicado.setPassword("password");
+        usuarioDuplicado.setEmail("janedoe@gmail.com");
+        usuarioDuplicado.setTelefono("987654321");
+        usuarioDuplicado.setNit("987654");
+        usuarioDuplicado.setCui(usuarioGlobal.getCui()); // Mismo CUI
+        usuarioDuplicado.setPerfil("profile2.png");
+
+        assertThrows(DataIntegrityViolationException.class, () -> {
+            usuarioRepository.save(usuarioDuplicado);
+        });
+    }
+
+    @Test
+    public void testGuardarUsuarioConContraseñaEncriptada() {
+        // Crear un nuevo usuario
+        Usuario usuarioParaGuardar = new Usuario();
+        usuarioParaGuardar.setNombre("Jane");
+        usuarioParaGuardar.setApellido("Doe");
+        usuarioParaGuardar.setUsername("janeDoe");
+        usuarioParaGuardar.setPassword("password"); // Contraseña en texto plano
+        usuarioParaGuardar.setEmail("janedoe@gmail.com");
+        usuarioParaGuardar.setTelefono("987654321");
+        usuarioParaGuardar.setNit("123456");
+        usuarioParaGuardar.setCui("78910");
+        usuarioParaGuardar.setPerfil("profile2.png");
+
+        // Encriptar la contraseña antes de guardar
+        String contrasenaEncriptada = passwordEncoder.encode(usuarioParaGuardar.getPassword());
+        usuarioParaGuardar.setPassword(contrasenaEncriptada);
+
+        // Guardar el usuario en la base de datos
+        usuarioRepository.save(usuarioParaGuardar);
+
+        // Obtener el usuario y verificar que la contraseña esté encriptada
+        Usuario usuarioGuardado = usuarioRepository.findByUsername(usuarioParaGuardar.getUsername());
+        assertThat(usuarioGuardado).isNotNull(); // Verificar que el usuario ha sido guardado
+        assertThat(passwordEncoder.matches("password", usuarioGuardado.getPassword())).isTrue(); // Verificar la contraseña
+    }
+
+
 
 
 }

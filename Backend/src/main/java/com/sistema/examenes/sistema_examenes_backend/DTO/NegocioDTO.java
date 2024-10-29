@@ -1,4 +1,4 @@
-package com.sistema.examenes.sistema_examenes_backend.DTO;
+/*package com.sistema.examenes.sistema_examenes_backend.DTO;
 
 public class NegocioDTO {
     private Long negocioId;
@@ -57,4 +57,4 @@ public class NegocioDTO {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
-}
+}*/
