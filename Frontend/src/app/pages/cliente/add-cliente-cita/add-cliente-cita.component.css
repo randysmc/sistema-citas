@@ -1,13 +1,115 @@
-.form-calendar-container {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .formulario-cita {
-    width: 45%;
-  }
-  
-  .calendar-container {
-    width: 50%;
-  }
-  
+/* Estilo general del contenedor */
+.container {
+  max-width: 600px; /* Ajustar el ancho máximo */
+  margin: 20px auto; /* Centrar el contenedor */
+  padding: 20px; /* Espaciado interno */
+  border: 1px solid #ccc; /* Borde suave */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+  background-color: #f9f9f9; /* Fondo claro */
+}
+
+/* Título del formulario */
+h2 {
+  text-align: center; /* Centrar el texto */
+  color: #333; /* Color del texto */
+}
+
+/* Estilo para grupos de formulario */
+.form-group {
+  margin-bottom: 15px; /* Espaciado entre campos */
+}
+
+/* Estilo para las etiquetas */
+label {
+  display: block; /* Hacer que las etiquetas ocupen toda la línea */
+  margin-bottom: 5px; /* Espaciado inferior */
+  font-weight: bold; /* Negrita */
+  color: #555; /* Color más oscuro */
+}
+
+/* Estilo para los campos de entrada */
+input[type="date"],
+input[type="time"],
+select {
+  width: 100%; /* Ancho completo */
+  padding: 10px; /* Espaciado interno */
+  border: 1px solid #ccc; /* Borde suave */
+  border-radius: 4px; /* Bordes redondeados */
+  transition: border-color 0.3s; /* Transición suave en el borde */
+}
+
+/* Estilo para el enfoque de campos de entrada */
+input[type="date"]:focus,
+input[type="time"]:focus,
+select:focus {
+  border-color: #007BFF; /* Color de borde al enfocar */
+  outline: none; /* Eliminar contorno predeterminado */
+}
+
+/* Estilo para los mensajes de error */
+.text-danger {
+  color: red; /* Color rojo para mensajes de error */
+  font-size: 0.9em; /* Tamaño de fuente más pequeño */
+}
+
+/* Estilo para el botón de enviar */
+button {
+  background-color: #007BFF; /* Color de fondo */
+  color: white; /* Color del texto */
+  border: none; /* Sin borde */
+  padding: 10px 15px; /* Espaciado interno */
+  border-radius: 4px; /* Bordes redondeados */
+  cursor: pointer; /* Cambiar cursor al pasar sobre el botón */
+  font-size: 16px; /* Tamaño de fuente */
+  width: 100%; /* Ancho completo */
+  transition: background-color 0.3s; /* Transición suave en el fondo */
+}
+
+/* Efecto de enfoque del botón */
+button:hover {
+  background-color: #0056b3; /* Color más oscuro al pasar el mouse */
+}
+
+
+/* calendar.component.css */
+.fc {
+  background-color: #f5f5f5;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.fc-daygrid-event {
+  border-radius: 3px;
+  padding: 5px;
+  color: white;
+}
+
+/* add-cita.component.css */
+.formulario-agregar-cita {
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-cita {
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.boton-agregar {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.boton-agregar:hover {
+  background-color: #45a049;
+}

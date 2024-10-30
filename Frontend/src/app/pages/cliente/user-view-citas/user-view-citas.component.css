@@ -1,0 +1,32 @@
+.cita-item {
+  cursor: pointer;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.cita-item:hover {
+  background-color: #f0f8ff; /* Color de fondo al pasar el mouse */
+}
+
+.item-status .estado {
+  font-weight: bold;
+}
+
+.agendada {
+  color: orange;
+}
+
+.confirmada {
+  color: blue;
+}
+
+.realizada {
+  color: green;
+}
+
+.cancelada {
+  color: red;
+}

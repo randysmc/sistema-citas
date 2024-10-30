@@ -9,15 +9,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
-
 @Component({
   selector: 'app-add-cliente-cita',
   templateUrl: './add-cliente-cita.component.html',
   styleUrls: ['./add-cliente-cita.component.css']
 })
 export class AddClienteCitaComponent implements OnInit {
-
-
 
   citaForm: FormGroup;
   usuarioAutenticado: any;
@@ -43,11 +40,7 @@ export class AddClienteCitaComponent implements OnInit {
       empleado: [''],
       servicio: ['', Validators.required] // Asegúrate de incluir el servicio aquí
     });
-
-
-    
   }
-  
 
   ngOnInit(): void {
     this.usuarioAutenticado = this.loginService.getUser();
@@ -110,7 +103,7 @@ export class AddClienteCitaComponent implements OnInit {
       this.snack.open('Por favor completa todos los campos requeridos', '', { duration: 3000 });
       return;
     }
-  
+
     const citaData = {
       fecha: this.citaForm.value.fecha,
       horaInicio: this.citaForm.value.horaInicio,
@@ -119,7 +112,7 @@ export class AddClienteCitaComponent implements OnInit {
       recurso: { recursoId: this.citaForm.value.recurso },
       servicio: { servicioId: this.citaForm.value.servicio }
     };
-  
+
     this.citasService.crearCita(citaData).subscribe(
       response => {
         Swal.fire('Cita creada', 'La cita se ha creado con éxito', 'success');
@@ -129,18 +122,14 @@ export class AddClienteCitaComponent implements OnInit {
       error => {
         console.error('Error al crear la cita:', error);
         let errorMessage = 'Error al crear la cita'; // Mensaje por defecto
-  
+
         // Comprobar si el error tiene un mensaje específico
         if (error.error && error.error.details) {
           errorMessage = error.error.details; // Mostrar el mensaje de detalle del error
         }
-        
+
         Swal.fire('Error !!', errorMessage, 'error');
       }
     );
   }
-
-  
-  
-  
 }

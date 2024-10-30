@@ -1,1 +1,55 @@
-<p>user-view-citas works!</p>
+<div class="d-flex flex-row">
+  <!-- Contenedor para el Calendario -->
+  <div class="calendar-container" style="flex: 1; margin-right: 10px;">
+    <app-calendar 
+      [mostrarDiasFestivos]="false" 
+      [mostrarHorarioLaboral]="false" 
+      [modoAgregarCita]="false"
+      [modoVerMisCitas]="true">
+    </app-calendar>
+  </div>
+
+  <!-- Contenedor para la Lista de Citas -->
+  <mat-card class="citas-card" style="flex: 1;">
+    <!-- Encabezado del card -->
+    <mat-toolbar color="primary">
+      <span>Gestión de Citas</span>
+    </mat-toolbar>
+
+    <!-- Contenedor con altura fija y scroll -->
+    <div class="citas-list-container" style="max-height: 400px; overflow-y: auto;">
+      <ng-container *ngIf="citas && citas.length > 0; else noCitas">
+        <div *ngFor="let cita of citas" (click)="verDetalle(cita.idCita)" class="cita-item">
+          <h3>Número de Cita: {{ cita.idCita }}</h3>
+          <p><strong>Fecha:</strong> {{ cita.fecha[0] }}/{{ cita.fecha[1] }}/{{ cita.fecha[2] }}</p>
+          <p><strong>Hora Inicio:</strong> {{ cita.horaInicio[0] }}:{{ cita.horaInicio[1] | number: '2.0-0' }}</p>
+          <p><strong>Hora Fin:</strong> {{ cita.horaFin[0] }}:{{ cita.horaFin[1] | number: '2.0-0' }}</p>
+          <div class="item-status" [ngClass]="{
+              'agendada': cita.estado === 'AGENDADA',
+              'confirmada': cita.estado === 'CONFIRMADA',
+              'realizada': cita.estado === 'REALIZADA',
+              'cancelada': cita.estado === 'CANCELADA'
+            }">
+            <strong>Estado:</strong>
+            <span *ngIf="cita.estado === 'AGENDADA'" class="estado agendada">Agendada</span>
+            <span *ngIf="cita.estado === 'CONFIRMADA'" class="estado confirmada">Confirmada</span>
+            <span *ngIf="cita.estado === 'REALIZADA'" class="estado realizada">Realizada</span>
+            <span *ngIf="cita.estado === 'CANCELADA'" class="estado cancelada">Cancelada</span>
+          </div>
+          <p><strong>Cliente:</strong> {{ cita.cliente.nombre }} {{ cita.cliente.apellido }}</p>
+          <p><strong>Servicio:</strong> {{ cita.servicio.nombre }}</p>
+          <p><strong>Recurso:</strong> {{ cita.recurso.nombre }}</p>
+        </div>
+      </ng-container>
+
+      <ng-template #noCitas>
+        <p>No hay citas disponibles.</p>
+      </ng-template>
+    </div>
+
+    <!-- Botón para agregar cita -->
+    <div class="text-center mt-3">
+      <button routerLink="/cliente/add-cita" mat-raised-button color="primary">Agregar cita</button>
+    </div>
+  </mat-card>
+</div>

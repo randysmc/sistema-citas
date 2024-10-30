@@ -8,3 +8,12 @@
     }
   }
   
+
+  .mat-list-item {
+    transition: background-color 0.3s;
+  }
+  
+  .mat-list-item:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Color de fondo al pasar el ratón */
+  }
+  

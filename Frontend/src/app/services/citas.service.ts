@@ -36,9 +36,10 @@ export class CitasService {
   }
 
   // Obtener citas por usuario
-  public obtenerCitasPorUsuario(usuarioId: number) {
-    return this.http.get(`${baserUrl}/citas/usuario/${usuarioId}`);
+  public obtenerCitasPorUsuario(usuarioId: number): Observable<Cita[]> {
+    return this.http.get<Cita[]>(`${baserUrl}/citas/usuario/${usuarioId}`);
   }
+  
 
   // Obtener cita por ID
   public obtenerCitaPorId(id: number) {

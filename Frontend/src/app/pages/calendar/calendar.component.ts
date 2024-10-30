@@ -8,6 +8,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import { HorariosLaboralesService } from 'src/app/services/horarios-laborales.service';
 import { CitasService } from 'src/app/services/citas.service';
 import { Cita } from 'src/app/models/cita.model';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-calendar',
@@ -19,33 +20,66 @@ export class CalendarComponent implements OnInit {
   @Input() mostrarDiasFestivos: boolean = false;
   @Input() mostrarHorarioLaboral: boolean = false;
   @Input() tipoCitas: string | null = null; 
+  @Input() modoAgregarCita: boolean = false; 
+  @Input() modoVerMisCitas: boolean = false; 
+
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, interactionPlugin],
-    events: [], // Inicializa events como un arreglo vacío
-    
+    events: [], 
   };
 
-  diasFestivos: DiaFestivo[] = []; // Array para almacenar días festivos
+  diasFestivos: DiaFestivo[] = [];
 
   constructor(
     private diasFestivosService: DiasFestivosService,
     private horarioLaboralService: HorariosLaboralesService,
-    private citasService: CitasService
+    private citasService: CitasService,
+    private loginService: LoginService 
   ) {}
 
   ngOnInit(): void {
     this.cargarDiasFestivos();
     this.cargarHorariosLaborales();
-    this.cargarCitas();
-    this.cargarCitasAgendadas();
-    this.cargarCitasCanceladas();
-    this.cargarCitasRealizadas();
 
+    if (this.modoAgregarCita) {
+      this.cargarCitas();
+    } else if (this.modoVerMisCitas) {
+      const userId = this.loginService.getUser().id; // Obtener ID del usuario autenticado
+      this.cargarCitasPorUsuario(userId);
+    } else {
+      this.cargarCitasAgendadas();
+
+    }
   }
 
+  cargarCitasPorUsuario(usuarioId: number) {
+    this.citasService.obtenerCitasPorUsuario(usuarioId).subscribe(
+        (citas: Cita[]) => {
+            const eventosCitas: EventInput[] = citas.map(cita => {
+                const start = new Date(cita.fecha[0], cita.fecha[1] - 1, cita.fecha[2], cita.horaInicio[0], cita.horaInicio[1]);
+                const end = new Date(cita.fecha[0], cita.fecha[1] - 1, cita.fecha[2], cita.horaFin[0], cita.horaFin[1]);
 
+                return {
+                    title: `Cita con: ${cita.cliente.nombre} ${cita.cliente.apellido} - ${cita.servicio.nombre}`,
+                    start: start,
+                    end: end,
+                    color: 'green', // Puedes cambiar el color según lo que desees
+                    allDay: false
+                };
+            });
+
+            // Agrega los eventos de citas a calendarOptions.events
+            this.calendarOptions.events = Array.isArray(this.calendarOptions.events)
+                ? this.calendarOptions.events.concat(eventosCitas)
+                : eventosCitas;
+        },
+        error => {
+            console.log('Error al cargar las citas por usuario', error);
+        }
+    );
+}
 
 
 
@@ -101,58 +135,33 @@ cargarCitas() {
     );
 }
 
+
 cargarCitasAgendadas() {
-    this.citasService.obtenerCitasAgendadas().subscribe(
+  this.citasService.obtenerCitasAgendadas().subscribe(
       (citas: Cita[]) => {
-        this.agregarEventosCitas(citas, 'green'); // Color verde para citas agendadas
+          const eventosCitas: EventInput[] = citas.map(cita => {
+              const start = new Date(cita.fecha[0], cita.fecha[1] - 1, cita.fecha[2], cita.horaInicio[0], cita.horaInicio[1]);
+              const end = new Date(cita.fecha[0], cita.fecha[1] - 1, cita.fecha[2], cita.horaFin[0], cita.horaFin[1]);
+
+              return {
+                  title: `Cita con: ${cita.cliente.nombre} ${cita.cliente.apellido} - ${cita.servicio.nombre}`,
+                  start: start,
+                  end: end,
+                  color: 'green', // Puedes cambiar el color según lo que desees
+                  allDay: false
+              };
+          });
+
+          // Agrega los eventos de citas a calendarOptions.events
+          this.calendarOptions.events = Array.isArray(this.calendarOptions.events)
+              ? this.calendarOptions.events.concat(eventosCitas)
+              : eventosCitas;
       },
       error => {
-        console.log('Error al cargar las citas agendadas', error);
+          console.log('Error al cargar las citas agendadas', error);
       }
-    );
-  }
-
-  cargarCitasCanceladas() {
-    this.citasService.obtenerCitasCanceladas().subscribe(
-      (citas: Cita[]) => {
-        this.agregarEventosCitas(citas, 'red'); // Color rojo para citas canceladas
-      },
-      error => {
-        console.log('Error al cargar las citas canceladas', error);
-      }
-    );
-  }
-
-  cargarCitasRealizadas() {
-    this.citasService.obtenerCitasRealizadas().subscribe(
-      (citas: Cita[]) => {
-        this.agregarEventosCitas(citas, 'blue'); // Color azul para citas realizadas
-      },
-      error => {
-        console.log('Error al cargar las citas realizadas', error);
-      }
-    );
-  }
-
-  onChangeTipoCita(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    
-    if (target) {
-        const selectedValue = target.value;
-
-        this.calendarOptions.events = []; // Limpia los eventos actuales
-
-        if (selectedValue === 'agendadas') {
-            this.cargarCitasAgendadas();
-        } else if (selectedValue === 'realizadas') {
-            this.cargarCitasRealizadas();
-        } else if (selectedValue === 'canceladas') {
-            this.cargarCitasCanceladas();
-        }
-    }
+  );
 }
-
-
 
 
 
@@ -235,4 +244,5 @@ cargarCitasAgendadas() {
       ? this.calendarOptions.events.concat(eventosCitas)
       : eventosCitas;
   }
+
 }

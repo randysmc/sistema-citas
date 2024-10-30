@@ -1,0 +1,12 @@
+<div class="reportes-container">
+    <h2>Citas por Cliente</h2>
+    <mat-card *ngFor="let reporte of reportes">
+      <mat-card-header>
+        <mat-card-title>{{ reporte.detalles.nombre }} {{ reporte.detalles.apellido }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Número de Citas: {{ reporte.detalles.numeroCitas }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+  
