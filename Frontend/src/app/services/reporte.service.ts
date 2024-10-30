@@ -13,46 +13,46 @@ export class ReporteService {
 
   // Contar citas por cliente
   getCitasPorCliente(): Observable<ReporteDTO[]> {
-    return this.http.get<ReporteDTO[]>(`${baserUrl}/citas/por-cliente`);
+    return this.http.get<ReporteDTO[]>(`${baserUrl}/reportes/citas/por-cliente`);
   }
 
   // Obtener usuario con más citas agendadas
   getUsuarioConMasCitasAgendadas(): Observable<ReporteDTO[]> {
-    return this.http.get<ReporteDTO[]>(`${baserUrl}/citas/usuario-mas-agendadas`);
+    return this.http.get<ReporteDTO[]>(`${baserUrl}/reportes/citas/usuario-mas-agendadas`);
   }
 
   // Obtener usuario con más citas canceladas
   getUsuarioConMasCitasCanceladas(): Observable<ReporteDTO[]> {
-    return this.http.get<ReporteDTO[]>(`${baserUrl}/citas/usuario-mas-canceladas`);
+    return this.http.get<ReporteDTO[]>(`${baserUrl}/reportes/citas/usuario-mas-canceladas`);
   }
 
   // Obtener horarios más solicitados
   obtenerHorariosMasSolicitados(): Observable<ReporteDTO> {
-    return this.http.get<ReporteDTO>(`${baserUrl}/horarios-mas-solicitados`);
+    return this.http.get<ReporteDTO>(`${baserUrl}/reportes/horarios-mas-solicitados`);
   }
 
   // Obtener frecuencia de uso por día de la semana
   obtenerFrecuenciaUsoPorDiaSemana(): Observable<ReporteDTO> {
-    return this.http.get<ReporteDTO>(`${baserUrl}/frecuencia-uso-dia-semana`);
+    return this.http.get<ReporteDTO>(`${baserUrl}/reportes/frecuencia-uso-dia-semana`);
   }
 
   // Obtener recursos más y menos utilizados
   obtenerRecursosMasYMenosUtilizados(): Observable<ReporteDTO> {
-    return this.http.get<ReporteDTO>(`${baserUrl}/recursos-mas-menos-utilizados`);
+    return this.http.get<ReporteDTO>(`${baserUrl}/reportes/recursos-mas-menos-utilizados`);
   }
 
   // Obtener tasa de cancelación por servicio
   obtenerTasaCancelacionPorServicio(): Observable<ReporteDTO> {
-    return this.http.get<ReporteDTO>(`${baserUrl}/tasa-cancelacion-servicio`);
+    return this.http.get<ReporteDTO>(`${baserUrl}/reportes/tasa-cancelacion-servicio`);
   }
 
   // Obtener lista de recursos utilizados
   obtenerListaRecursosUtilizados(): Observable<ReporteDTO> {
-    return this.http.get<ReporteDTO>(`${baserUrl}/lista-recursos-utilizados`);
+    return this.http.get<ReporteDTO>(`${baserUrl}/reportes/lista-recursos-utilizados`);
   }
 
   // Obtener lista de servicios utilizados
   obtenerListaServiciosUtilizados(): Observable<ReporteDTO> {
-    return this.http.get<ReporteDTO>(`${baserUrl}/lista-servicios-utilizados`);
+    return this.http.get<ReporteDTO>(`${baserUrl}/reportes/lista-servicios-utilizados`);
   }
 }

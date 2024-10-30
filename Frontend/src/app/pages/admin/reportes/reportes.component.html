@@ -1,12 +1,109 @@
-<div class="reportes-container">
-    <h2>Citas por Cliente</h2>
-    <mat-card *ngFor="let reporte of reportes">
-      <mat-card-header>
-        <mat-card-title>{{ reporte.detalles.nombre }} {{ reporte.detalles.apellido }}</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p>Número de Citas: {{ reporte.detalles.numeroCitas }}</p>
-      </mat-card-content>
-    </mat-card>
+<div class="reporte-container">
+  <!-- Selector de reportes fuera del contenedor a imprimir -->
+  <div class="selector">
+    <label for="reportes">Seleccionar reporte:</label>
+    <select id="reportes" (change)="onReporteChange($event)">
+      <option value="citasPorCliente">Citas por Cliente</option>
+      <option value="usuariosMasAgendados">Usuarios con Más Citas Agendadas</option>
+      <option value="usuariosMasCanceladas">Usuarios con Más Citas Canceladas</option>
+      <option value="horariosMasSolicitados">Horarios Más Solicitados</option>
+      <option value="frecuenciaUsoDiaSemana">Frecuencia de Uso por Día de la Semana</option>
+    </select>
   </div>
-  
+
+  <!-- Contenedor del reporte con header -->
+  <div class="reporte-content" id="reporte">
+    <header class="factura-header">
+      <img [src]="negocio.fotoPerfilUrl" alt="Logo" class="logo">
+      <h1>{{ negocio.nombre }}</h1>
+      <p>{{ negocio.direccion }}</p>
+      <p>Teléfono: {{ negocio.telefono }}</p>
+      <p>Email: {{ negocio.email }}</p>
+    </header>
+
+    <h2 class="header">Reportes</h2>
+
+    <!-- Div para Citas por Cliente -->
+    <div *ngIf="selectedReporte === 'citasPorCliente'">
+      <h3>Citas por Cliente</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Número de Citas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reporte of reportes">
+            <td>{{ reporte.detalles['nombre'] }}</td>
+            <td>{{ reporte.detalles['apellido'] }}</td>
+            <td>{{ reporte.detalles['numeroCitas'] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Div para Usuarios con Más Citas Agendadas -->
+    <div *ngIf="selectedReporte === 'usuariosMasAgendados'">
+      <h3>Usuarios con Más Citas Agendadas</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Número de Citas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reporte of reportes">
+            <td>{{ reporte.detalles['nombre'] }}</td>
+            <td>{{ reporte.detalles['apellido'] }}</td>
+            <td>{{ reporte.detalles['numeroCitas'] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Div para Usuarios con Más Citas Canceladas -->
+    <div *ngIf="selectedReporte === 'usuariosMasCanceladas'">
+      <h3>Usuarios con Más Citas Canceladas</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Número de Citas Canceladas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reporte of reportes">
+            <td>{{ reporte.detalles['nombre'] }}</td>
+            <td>{{ reporte.detalles['apellido'] }}</td>
+            <td>{{ reporte.detalles['numeroCitas'] }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Div para mostrar horarios más solicitados -->
+    <div *ngIf="selectedReporte === 'horariosMasSolicitados'">
+      <h3>Horarios Más Solicitados</h3>
+      <div *ngFor="let hora of reportesHorarios | keyvalue">
+        <p>{{ hora.key }}: {{ hora.value }} citas</p>
+      </div>
+    </div>
+
+    <!-- Div para mostrar frecuencia de uso por día de la semana -->
+    <div *ngIf="selectedReporte === 'frecuenciaUsoDiaSemana'">
+      <h3>Frecuencia de Uso por Día de la Semana</h3>
+      <div *ngFor="let dia of reportesFrecuencia | keyvalue">
+        <p>{{ dia.key }}: {{ dia.value }} usos</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón para exportar a PDF -->
+  <button (click)="exportarAPDF()">Exportar a PDF</button>
+  <button (click)="descargarImagen()">Descargar como imagen</button>
+</div>
