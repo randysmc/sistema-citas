@@ -1,4 +1,4 @@
-package com.sistema.examenes.sistema_examenes_backend.DTO;
+/*package com.sistema.examenes.sistema_examenes_backend.DTO;
 
 import java.math.BigDecimal;
 

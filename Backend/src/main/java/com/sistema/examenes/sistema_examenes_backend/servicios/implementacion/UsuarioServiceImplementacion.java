@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -155,4 +157,6 @@ public class UsuarioServiceImplementacion implements UsuarioService {
         }
         return null; // O lanzar una excepción si no se encuentra
     }
+
+
 }

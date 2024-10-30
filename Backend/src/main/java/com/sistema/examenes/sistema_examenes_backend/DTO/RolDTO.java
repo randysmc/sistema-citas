@@ -1,4 +1,4 @@
-package com.sistema.examenes.sistema_examenes_backend.DTO;
+/*package com.sistema.examenes.sistema_examenes_backend.DTO;
 
 public class RolDTO {
     private Long id;
@@ -28,3 +28,4 @@ public class RolDTO {
         this.rolNombre = rolNombre;
     }
 }
+*/

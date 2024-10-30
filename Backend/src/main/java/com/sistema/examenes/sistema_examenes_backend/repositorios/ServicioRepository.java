@@ -16,4 +16,6 @@ public interface ServicioRepository extends JpaRepository<Servicio, Long> {
     // Obtener los servicios no disponibles (disponible = false)
     public List<Servicio> findByDisponibleFalse();
 
+
+
 }

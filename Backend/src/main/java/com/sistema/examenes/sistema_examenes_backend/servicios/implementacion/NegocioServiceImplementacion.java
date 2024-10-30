@@ -1,7 +1,7 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
-import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
-import com.sistema.examenes.sistema_examenes_backend.DTO.ServicioDTO;
+//import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
+//import com.sistema.examenes.sistema_examenes_backend.DTO.ServicioDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
 import com.sistema.examenes.sistema_examenes_backend.excepciones.NegocioExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
@@ -70,10 +70,10 @@ public class NegocioServiceImplementacion implements NegocioService {
             existingNegocio.setTelefono(negocio.getTelefono());
         }
         if (negocio.getEmail() != null) {
-            existingNegocio.setTelefono(negocio.getTelefono());
+            existingNegocio.setEmail(negocio.getEmail());
         }
         if (negocio.getSlogan() != null) {
-            existingNegocio.setTelefono(negocio.getTelefono());
+            existingNegocio.setSlogan(negocio.getSlogan());
         }
 
         return negocioRepository.save(existingNegocio);
@@ -82,8 +82,13 @@ public class NegocioServiceImplementacion implements NegocioService {
 
     @Override
     public void eliminarNegocio(Long id) {
+        if (!negocioRepository.existsById(id)) {
+            throw new RuntimeException("Negocio no encontrado con ID: " + id);
+        }
         negocioRepository.deleteById(id);
     }
+
+
 
 
 }

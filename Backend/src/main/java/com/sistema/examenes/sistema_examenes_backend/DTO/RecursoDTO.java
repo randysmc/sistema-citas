@@ -1,4 +1,4 @@
-package com.sistema.examenes.sistema_examenes_backend.DTO;
+/*package com.sistema.examenes.sistema_examenes_backend.DTO;
 
 public class RecursoDTO {
     private Long recursoId;
@@ -58,4 +58,4 @@ public class RecursoDTO {
     public void setNegocioId(Long negocioId) {
         this.negocioId = negocioId;
     }
-}
+}*/

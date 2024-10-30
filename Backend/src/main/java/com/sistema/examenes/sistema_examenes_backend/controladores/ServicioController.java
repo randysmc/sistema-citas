@@ -1,9 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.controladores;
 
-
-import com.sistema.examenes.sistema_examenes_backend.DTO.ServicioDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Servicio;
-import com.sistema.examenes.sistema_examenes_backend.servicios.NegocioService;
 import com.sistema.examenes.sistema_examenes_backend.servicios.ServicioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,8 +18,7 @@ public class ServicioController {
     @Autowired
     private ServicioService servicioService;
 
-    @Autowired
-    private NegocioService negocioService;
+
 
     @GetMapping
     public List<Servicio> obtenerServicios() {

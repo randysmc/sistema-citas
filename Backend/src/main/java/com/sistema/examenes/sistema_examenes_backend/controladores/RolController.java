@@ -1,6 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.controladores;
 
-import com.sistema.examenes.sistema_examenes_backend.DTO.RolDTO;
+//import com.sistema.examenes.sistema_examenes_backend.DTO.RolDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
 import com.sistema.examenes.sistema_examenes_backend.servicios.RolService;
 import org.springframework.beans.factory.annotation.Autowired;

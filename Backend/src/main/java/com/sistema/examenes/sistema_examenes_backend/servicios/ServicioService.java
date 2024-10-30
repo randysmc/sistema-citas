@@ -1,6 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios;
 
-import com.sistema.examenes.sistema_examenes_backend.DTO.ServicioDTO;
+//import com.sistema.examenes.sistema_examenes_backend.DTO.ServicioDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Servicio;
 
 import java.util.List;
