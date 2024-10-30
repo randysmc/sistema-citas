@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { DiasFestivosService } from 'src/app/services/dias-festivos.service';
 import { DiaFestivo } from 'src/app/models/dia-festivo.model';
 import { HorarioLaboral } from 'src/app/models/horario-laboral.model';
@@ -16,6 +16,10 @@ import { Cita } from 'src/app/models/cita.model';
 })
 export class CalendarComponent implements OnInit {
 
+  @Input() mostrarDiasFestivos: boolean = false;
+  @Input() mostrarHorarioLaboral: boolean = false;
+  @Input() tipoCitas: string | null = null; 
+
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
     plugins: [dayGridPlugin, interactionPlugin],
@@ -32,12 +36,13 @@ export class CalendarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    //this.cargarDiasFestivos();
-    //this.cargarHorariosLaborales();
-    //this.cargarCitas();
+    this.cargarDiasFestivos();
+    this.cargarHorariosLaborales();
+    this.cargarCitas();
     this.cargarCitasAgendadas();
     this.cargarCitasCanceladas();
     this.cargarCitasRealizadas();
+
   }
 
 

@@ -1,0 +1,40 @@
+<mat-card class="facturas-card">
+    <!-- Encabezado del card -->
+    <mat-toolbar color="primary">
+      <span>Gestión de Facturas</span>
+    </mat-toolbar>
+  
+    <!-- Lista de facturas -->
+    <div class="facturas-list">
+      <div mat-subheader>Facturas</div>
+  
+      <ng-container *ngIf="facturas && facturas.length > 0">
+        <mat-card *ngFor="let factura of facturas" class="list-item" matRipple (click)="verDetalle(factura.facturaId)">
+          <mat-icon mat-list-icon>receipt</mat-icon>
+          <div class="item-content">
+            <div class="item-title">
+              <strong>Factura Número:</strong> {{ factura.facturaId }}
+            </div>
+            <div class="item-description">
+              <strong>Monto:</strong> ${{ factura.monto }}
+            </div>
+            <div class="item-status" [ngClass]="{'pagada': factura.estado === 'Pagada', 'no-pagada': factura.estado !== 'Pagada'}">
+              <strong>Estado:</strong> {{ factura.estado }}
+            </div>
+            <div class="item-cliente">
+              <strong>Cliente:</strong> {{ factura.cliente.nombre }} {{ factura.cliente.apellido }}
+            </div>
+            <div class="item-fecha">
+              <strong>Fecha:</strong> {{ factura.fecha[0] }}/{{ factura.fecha[1] }}/{{ factura.fecha[2] }}
+            </div>
+          </div>
+        </mat-card>
+      </ng-container>
+  
+      <ng-container *ngIf="facturas.length === 0">
+        <p>No hay facturas disponibles.</p>
+      </ng-container>
+    </div>
+  
+  </mat-card>
+  

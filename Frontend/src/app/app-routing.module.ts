@@ -30,36 +30,40 @@ import { AddHorarioLaboralComponent } from './pages/admin/add-horario-laboral/ad
 import { ViewCitasComponent } from './pages/admin/view-citas/view-citas.component';
 import { ViewCitasDetailComponent } from './pages/admin/view-citas-detail/view-citas-detail.component';
 import { AddClienteCitaComponent } from './pages/cliente/add-cliente-cita/add-cliente-cita.component';
+import { UserViewServicesComponent } from './pages/cliente/user-view-services/user-view-services.component';
+import { UserViewServicesDetailComponent } from './pages/cliente/user-view-services-detail/user-view-services-detail.component';
+import { FacturasComponent } from './pages/admin/facturas/facturas.component';
+import { ViewFacturaDetailComponent } from './pages/admin/view-factura-detail/view-factura-detail.component';
+import { UserViewFacturasComponent } from './pages/cliente/user-view-facturas/user-view-facturas.component';
+import { UserViewFacturasDetailComponent } from './pages/cliente/user-view-facturas-detail/user-view-facturas-detail.component';
+import { UserViewCitasComponent } from './pages/cliente/user-view-citas/user-view-citas.component';
+import { UserViewCitasDetailComponent } from './pages/cliente/user-view-citas-detail/user-view-citas-detail.component';
 
 const routes: Routes = [
   {
-    path:'',
-    component:HomeComponent,
-    pathMatch: 'full'
+    path: '',
+    component: HomeComponent,
+    pathMatch: 'full',
   },
   {
-    path:'signup',
-    component:SignupComponent,
-    pathMatch: 'full'
+    path: 'signup',
+    component: SignupComponent,
+    pathMatch: 'full',
   },
   {
-    path:'login',
-    component:LoginComponent,
-    pathMatch: 'full'
+    path: 'login',
+    component: LoginComponent,
+    pathMatch: 'full',
   },
-
-
-
-
 
   {
     path: 'admin',
-    component:DashboardComponent,
+    component: DashboardComponent,
     //canActivate:[AdminGuard],
-    children:[
+    children: [
       {
-        path:'profile',
-        component:ProfileComponent
+        path: 'profile',
+        component: ProfileComponent,
       },
       {
         path: 'calendario',
@@ -67,130 +71,150 @@ const routes: Routes = [
         //canActivate: [normalGuard, AdminGuard, superusuarioGuard], // Si quieres que sea accesible solo si están logueados, usando tus guards
       },
       {
+        path: 'facturas',
+        component: FacturasComponent,
+      },
+      {
+        path: 'facturas/:id',
+        component: ViewFacturaDetailComponent,
+      },
+      {
         path: 'users',
-        component: ViewUsersComponent
+        component: ViewUsersComponent,
       },
       {
         path: 'add-user',
-        component:AddUsersComponent
+        component: AddUsersComponent,
       },
       {
         path: 'users/:id',
-        component:ViewUserDetailComponent
+        component: ViewUserDetailComponent,
       },
       {
         path: 'update-admin/:id',
-        component: UpdateAdminUserComponent
+        component: UpdateAdminUserComponent,
       },
 
       {
         path: '',
-        component:WelcomeComponent
+        component: WelcomeComponent,
       },
       {
         path: 'recursos',
-        component:ViewRecursosComponent
+        component: ViewRecursosComponent,
       },
       {
         path: 'add-recurso',
-        component:AddRecursosComponent
+        component: AddRecursosComponent,
       },
       {
         path: 'recursos/:id',
-        component:ViewRecursoDetailComponent
+        component: ViewRecursoDetailComponent,
       },
       {
         path: 'update-recurso/:id',
-        component:UpdateRecursoComponent
+        component: UpdateRecursoComponent,
       },
-      
-      
-      
+
       {
         path: 'servicios',
-        component:ViewServicesComponent
+        component: ViewServicesComponent,
       },
       {
         path: 'add-servicio',
-        component:AddServiceComponent
+        component: AddServiceComponent,
       },
       {
         path: 'servicio/:id',
-        component:ViewServicesDetailComponent
+        component: ViewServicesDetailComponent,
       },
       {
         path: 'update-servicio/:id',
-        component:UpdateServiceComponent
+        component: UpdateServiceComponent,
       },
       {
         path: 'add-dia-festivo',
-        component: AddDiaFestivoComponent
+        component: AddDiaFestivoComponent,
       },
       {
         path: 'add-horario-laboral',
-        component: AddHorarioLaboralComponent
+        component: AddHorarioLaboralComponent,
       },
       {
         path: 'citas',
-        component: ViewCitasComponent
+        component: ViewCitasComponent,
       },
       {
         path: 'citas/:id',
-        component: ViewCitasDetailComponent
+        component: ViewCitasDetailComponent,
       },
-
-
 
       {
         path: 'empleados',
-        component:ViewRecursosComponent
+        component: ViewRecursosComponent,
       },
       {
         path: 'add-empleado',
-        component:AddRecursosComponent
+        component: AddRecursosComponent,
       },
       {
         path: 'empleado/:id',
-        component:ViewRecursoDetailComponent
+        component: ViewRecursoDetailComponent,
       },
-    ]
+    ],
   },
   {
     path: 'cliente',
-    component:ClienteDashboardComponent,
-    //canActivate:[AdminGuard],
-    children:[
+    component: ClienteDashboardComponent,
+    canActivate: [normalGuard],
+    children: [
       {
-        path:'profile',
-        component:ProfileComponent
+        path: 'profile',
+        component: ProfileComponent,
       },
       {
         path: 'update-cliente/:id',
-        component:UpdateClienteUserComponent
+        component: UpdateClienteUserComponent,
       },
       {
         path: 'add-cita',
-        component: AddClienteCitaComponent
+        component: AddClienteCitaComponent,
       },
       {
-        path: 'calendario',
-        component: CalendarComponent,
-        //canActivate: [normalGuard, AdminGuard, superusuarioGuard], // Si quieres que sea accesible solo si están logueados, usando tus guards
+        path: 'servicios',
+        component: UserViewServicesComponent,
+      },
+      {
+        path: 'servicio/:id',
+        component: UserViewServicesDetailComponent,
       },
       {
         path: 'servicios',
         component: ViewServicesComponent,
       },
-      
+      {
+        path: 'facturas',
+        component: UserViewFacturasComponent,
+      },
+      {
+        path: 'facturas/:id',
+        component: UserViewFacturasDetailComponent,
+      },
+      {
+        path: 'citas',
+        component: UserViewCitasComponent,
+      },
+      {
+        path: 'citas/:id',
+        component: UserViewCitasDetailComponent,
+      },
+
       {
         path: '',
-        component:WelcomeComponent
+        component: WelcomeComponent,
       },
-    ]
+    ],
   },
-
-
-
 
   {
     path: 'user-dashboard',
@@ -201,13 +225,12 @@ const routes: Routes = [
   {
     path: 'two-fa',
     component: TwoFaComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
-
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
