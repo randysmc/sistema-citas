@@ -18,13 +18,14 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/comprobantes")
+@CrossOrigin("*")
 public class ComprobanteController {
     @Autowired
     private ComprobanteService comprobanteService;
 
 
     @GetMapping
-    public ResponseEntity<List<Comprobante>> obtenerReservas() {
+    public ResponseEntity<List<Comprobante>> obtenerComprobantes() {
         List<Comprobante> comprobantes  = comprobanteService.obtenerComprobantes();
         return ResponseEntity.ok(comprobantes); // 200 OK
     }
@@ -44,5 +45,32 @@ public class ComprobanteController {
             return new ResponseEntity<>(Map.of("error", "Error inesperado: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @GetMapping("/cliente/{clienteId}")
+    public ResponseEntity<List<Comprobante>> obtenerComprobantesPorCliente(@PathVariable Long clienteId) {
+        List<Comprobante> comprobantes = comprobanteService.obtenerComprobantesPorCliente(clienteId);
+        if (comprobantes.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(comprobantes);
+    }
+
+    @GetMapping("/estado/{estado}")
+    public ResponseEntity<List<Comprobante>> obtenerComprobantesPorEstado(@PathVariable EstadoComprobante estado) {
+        List<Comprobante> comprobantes = comprobanteService.obtenerComprobantesPorEstado(estado);
+        if (comprobantes.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(comprobantes);
+    }
+
+    @PostMapping("/cita/{citaId}")
+    public ResponseEntity<Comprobante> crearComprobantePorCita(@PathVariable Long citaId, @RequestBody Comprobante comprobante) {
+        Comprobante nuevoComprobante = comprobanteService.crearComprobantePorCita(citaId, comprobante);
+        return new ResponseEntity<>(nuevoComprobante, HttpStatus.CREATED);
+    }
+
+
+
 
 }

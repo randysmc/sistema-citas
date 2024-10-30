@@ -17,4 +17,14 @@ public interface FacturaService {
     public Factura actualizarFactura(Factura factura);
 
     public Factura eliminarFactura(Long id);
+
+    public List<Factura> obtenerFacturasPorUsuario(Long usuarioId);
+
+    public Factura crearFacturaDesdeCita(Long citaId);
+
+    public Factura obtenerFacturaPorCita(Long citaId);
+
+
+
+
 }

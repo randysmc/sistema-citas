@@ -60,20 +60,17 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-ui/**",           // Ruta para Swagger UI
                         "/swagger-resources/**",    // Ruta para los recursos de Swagger
                         "/generate-token",
-                        "/usuarios/**",
+                        "/uploads/**",
                         "/validate-token",
+                        "/usuarios/**",
                         "/empleados/**",
                         "/recursos/**",
                         "/servicios/**",
-                        "/roles/**",
                         "/horarios-laborales/**",
                         "/dias-festivos/**",
                         "/citas/**",
                         "/reservas/**",
                         "/comprobantes/**",
-                        "/facturas/**",
-                        "/reportes/**",
-                        "/uploads/**",
                         "/negocios/**").permitAll() // Permitir acceso sin autenticación
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated() // Otras rutas requieren autenticación

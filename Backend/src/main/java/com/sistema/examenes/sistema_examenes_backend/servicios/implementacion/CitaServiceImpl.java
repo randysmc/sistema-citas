@@ -189,7 +189,7 @@ public class CitaServiceImpl implements CitaService {
         // Generar la factura a partir de la cita
         Factura factura = crearFacturaDeCita(cita);
 
-        // Guardar la cita actualizada y la factura generada
+        //Guardar la cita actualizada y la factura generada
         citaRepository.save(cita);
         facturaRepository.save(factura);
 

@@ -64,4 +64,29 @@ public class ComprobanteServiceImpl implements ComprobanteService {
     public Comprobante eliminarComprobante(Long id) {
         return null;
     }
+
+    @Override
+    public List<Comprobante> obtenerComprobantesPorCliente(Long clienteId) {
+        return comprobanteRepository.findByCliente_Id(clienteId);
+    }
+
+    @Override
+    public List<Comprobante> obtenerComprobantesPorEstado(EstadoComprobante estadoComprobante) {
+        return comprobanteRepository.findByEstadoComprobante(estadoComprobante);
+    }
+
+    @Override
+    public Comprobante crearComprobantePorCita(Long citaId, Comprobante comprobante) {
+        Cita cita = citaRepository.findById(citaId)
+                .orElseThrow(() -> new RuntimeException("Cita no encontrada"));
+
+        comprobante.setCita(cita);
+        return comprobanteRepository.save(comprobante);
+    }
+
+
+
+
+
+
 }
