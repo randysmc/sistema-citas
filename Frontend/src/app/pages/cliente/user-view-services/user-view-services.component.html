@@ -1,0 +1,33 @@
+<mat-card class="servicios-card">
+  <!-- Encabezado del card -->
+  <mat-toolbar color="primary">
+    <span>Gestión de Servicios</span>
+  </mat-toolbar>
+
+  <!-- Lista de servicios disponibles -->
+  <div class="servicios-list">
+    <div mat-subheader>Servicios Disponibles</div>
+
+    <ng-container>
+      <mat-card *ngFor="let s of serviciosDisponibles" (click)="verDetalle(s.servicioId)" class="list-item" matRipple>
+        <mat-icon mat-list-icon>folder</mat-icon>
+        
+        <!-- Título y descripción con mayor separación -->
+        <div class="item-content">
+          <div class="item-title">
+            <strong>Nombre:</strong> {{ s.nombre }}
+          </div>
+          <div class="item-description">
+            <strong>Descripción:</strong> {{ s.descripcion }}
+          </div>
+          <div class="item-status disponible">
+            <strong>Estado:</strong> Disponible
+          </div>
+        </div>
+      </mat-card>
+    </ng-container>
+  </div>
+
+  <!-- Botón para agregar servicio -->
+
+</mat-card>

@@ -1,0 +1,25 @@
+
+<mat-card *ngIf="servicio" class="detalle-servicio-card">
+    <!-- Título del servicio -->
+    <mat-toolbar color="primary">
+      <h2 class="mat-headline">{{ servicio.nombre }}</h2>
+    </mat-toolbar>
+  
+    <!-- Descripción del servicio -->
+    <div class="servicio-info">
+      <p><strong>Descripción:</strong> {{ servicio.descripcion }}</p>
+      <p><strong>Disponible:</strong>
+        <span [ngClass]="{'disponible': servicio.disponible, 'no-disponible': !servicio.disponible}">
+          {{ servicio.disponible ? 'Sí' : 'No' }}
+        </span>
+      </p>
+      <p><strong>Duración:</strong> {{ servicio.duracionServicio }} minutos</p>
+      <p><strong>Precio:</strong> Q{{ servicio.precio }}</p>
+
+    </div>
+  
+    <!-- Botones para actualizar y cambiar estado -->
+    <div class="container text-center mt20">
+      <button routerLink="/cliente/servicios" mat-raised-button color="primary">Regresar</button>
+    </div>
+</mat-card>

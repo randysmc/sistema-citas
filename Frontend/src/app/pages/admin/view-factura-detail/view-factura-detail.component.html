@@ -1,0 +1,53 @@
+<div id="factura-element" class="factura-container">
+    <header class="factura-header">
+      <img [src]="negocio.fotoPerfilUrl" alt="Logo" class="logo">
+      <h1>{{ negocio.nombre }}</h1>
+      <p>{{ negocio.direccion }}</p>
+      <p>Teléfono: {{ negocio.telefono }}</p>
+      <p>Email: {{ negocio.email }}</p>
+    </header>
+  
+    <section class="factura-details">
+      <h2>Detalles de la Factura</h2>
+  
+      <div class="card">
+        <h3>Datos del Cliente</h3>
+        <p><strong>Nombre:</strong> {{ factura.cliente.nombre }} {{ factura.cliente.apellido }}</p>
+        <p><strong>Email:</strong> {{ factura.cliente.email }}</p>
+        <p><strong>Teléfono:</strong> {{ factura.cliente.telefono }}</p>
+        <p><strong>NIT:</strong> {{ factura.cliente.nit }}</p>
+      </div>
+  
+      <div class="card">
+        <h3>Servicio Contratado</h3>
+        <p><strong>Nombre:</strong> {{ factura.cita.servicio.nombre }}</p>
+        <p><strong>Descripción:</strong> {{ factura.cita.servicio.descripcion }}</p>
+        <p><strong>Duración:</strong> {{ factura.cita.servicio.duracionServicio }} minutos</p>
+        <p><strong>Precio:</strong> Q{{ factura.cita.servicio.precio.toFixed(2) }}</p>
+      </div>
+  
+      <div class="card">
+        <h3>Detalles de la Cita</h3>
+        <p><strong>Fecha:</strong> {{ factura.cita.fecha[0] }}-{{ factura.cita.fecha[1] }}-{{ factura.cita.fecha[2] }}</p>
+        <p><strong>Hora de Inicio:</strong> {{ factura.cita.horaInicio[0] }}:{{ factura.cita.horaInicio[1] | number: '2.0' }} horas</p>
+        <p><strong>Hora de Fin:</strong> {{ factura.cita.horaFin[0] }}:{{ factura.cita.horaFin[1] | number: '2.0' }} horas</p>
+        <p><strong>Estado:</strong> {{ factura.cita.estado }}</p>
+        <p><strong>Recurso:</strong> {{ factura.cita.recurso.nombre }}</p>
+      </div>
+  
+      <div class="card">
+        <h3>Total a Pagar</h3>
+        <p>Q{{ factura.monto.toFixed(2) }}</p>
+      </div>
+    </section>
+  
+    <footer class="factura-footer">
+      <p>Gracias por utilizar los servicios de {{ negocio.nombre }}</p>
+      <p>Esperamos que vuelva pronto.</p>
+    </footer>
+  </div>
+  
+  <!-- Botón de descarga -->
+  <button (click)="descargarPDF()">Descargar como PDF</button>
+  <button (click)="descargarImagen()">Descargar Imagen</button>
+  

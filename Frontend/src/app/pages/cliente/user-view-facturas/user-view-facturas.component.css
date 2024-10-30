@@ -1,0 +1,69 @@
+.facturas-card {
+    margin: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .facturas-list {
+    padding: 16px;
+  }
+  
+  .list-item {
+    margin: 10px 0;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: #f9f9f9;
+  }
+  
+  .list-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .item-content {
+    padding: 16px;
+    color: #333;
+  }
+  
+  .item-title,
+  .item-description,
+  .item-status,
+  .item-cliente,
+  .item-fecha {
+    margin: 5px 0;
+  }
+  
+  .item-title {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  
+  .item-description {
+    font-size: 1em;
+  }
+  
+  .item-status {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  .pagada {
+    color: green;
+  }
+  
+  .no-pagada {
+    color: red;
+  }
+  
+  .container {
+    margin-top: 20px;
+  }
+  
+  .container button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+  }
+  

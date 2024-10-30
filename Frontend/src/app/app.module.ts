@@ -65,6 +65,15 @@ import { ViewCitasComponent } from './pages/admin/view-citas/view-citas.componen
 import { ViewCitasDetailComponent } from './pages/admin/view-citas-detail/view-citas-detail.component';
 import { AddClienteCitaComponent } from './pages/cliente/add-cliente-cita/add-cliente-cita.component';
 import { MyChartComponent } from './pages/admin/my-chart/my-chart.component';
+import { UserViewServicesComponent } from './pages/cliente/user-view-services/user-view-services.component';
+import { UserViewServicesDetailComponent } from './pages/cliente/user-view-services-detail/user-view-services-detail.component';
+import { FacturasComponent } from './pages/admin/facturas/facturas.component';
+import { ViewFacturaDetailComponent } from './pages/admin/view-factura-detail/view-factura-detail.component';
+import { UserViewFacturasComponent } from './pages/cliente/user-view-facturas/user-view-facturas.component';
+import { UserViewCitasComponent } from './pages/cliente/user-view-citas/user-view-citas.component';
+import { UserViewCitasDetailComponent } from './pages/cliente/user-view-citas-detail/user-view-citas-detail.component';
+import { UserViewFacturasDetailComponent } from './pages/cliente/user-view-facturas-detail/user-view-facturas-detail.component';
+
 
 
 
@@ -107,6 +116,15 @@ import { MyChartComponent } from './pages/admin/my-chart/my-chart.component';
     ViewCitasDetailComponent,
     AddClienteCitaComponent,
     MyChartComponent,
+    UserViewServicesComponent,
+    UserViewServicesDetailComponent,
+    FacturasComponent,
+    ViewFacturaDetailComponent,
+    UserViewFacturasComponent,
+    UserViewCitasComponent,
+    UserViewCitasDetailComponent,
+    UserViewFacturasDetailComponent,
+
 
 
 
