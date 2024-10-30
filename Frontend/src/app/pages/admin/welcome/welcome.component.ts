@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NegocioService } from 'src/app/services/negocio.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { NegocioService } from 'src/app/services/negocio.service';
 export class WelcomeComponent implements OnInit {
   negocio: any;
 
-  constructor(private negocioService: NegocioService) {}
+  constructor(private negocioService: NegocioService, private router: Router) {}
 
 
   ngOnInit(): void {
@@ -33,6 +34,10 @@ export class WelcomeComponent implements OnInit {
     const folder = 'negocio';
     const filename = negocio.fotoPerfil.split('/').pop();
     return `http://localhost:8080/uploads/${folder}/${filename}`;
+  }
+
+  irAActualizarNegocio() {
+    this.router.navigate(['admin/update-negocio', 1]); // Asegúrate de que el id de negocio esté disponible
   }
 
 
