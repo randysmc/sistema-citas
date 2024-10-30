@@ -73,6 +73,7 @@ import { UserViewFacturasComponent } from './pages/cliente/user-view-facturas/us
 import { UserViewCitasComponent } from './pages/cliente/user-view-citas/user-view-citas.component';
 import { UserViewCitasDetailComponent } from './pages/cliente/user-view-citas-detail/user-view-citas-detail.component';
 import { UserViewFacturasDetailComponent } from './pages/cliente/user-view-facturas-detail/user-view-facturas-detail.component';
+import { ReportesComponent } from './pages/admin/reportes/reportes.component';
 
 
 
@@ -124,6 +125,7 @@ import { UserViewFacturasDetailComponent } from './pages/cliente/user-view-factu
     UserViewCitasComponent,
     UserViewCitasDetailComponent,
     UserViewFacturasDetailComponent,
+    ReportesComponent,
 
 
 

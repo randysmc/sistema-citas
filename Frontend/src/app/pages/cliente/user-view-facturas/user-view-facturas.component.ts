@@ -50,6 +50,6 @@ export class UserViewFacturasComponent {
 
   // Método para redirigir a la vista de detalle
   verDetalle(facturaId: number) {
-    //this.router.navigate(['/admin/facturas', facturaId]); // Navegar a la vista de detalle de la factura
+    this.router.navigate(['/cliente/facturas', facturaId]); // Navegar a la vista de detalle de la cita
   }
 }

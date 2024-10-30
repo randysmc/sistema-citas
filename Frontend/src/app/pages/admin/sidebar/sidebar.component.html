@@ -1,45 +1,45 @@
 <mat-card>
-    <mat-action-list>
-      <div mat-subheader>Menu</div>
-      <button routerLink = "/admin" mat-list-item>
-        <mat-icon mat-list-icon>home</mat-icon> Inicio
-      </button>
-      <button mat-list-item routerLink = "/admin/profile">
-        <mat-icon mat-list-icon>account_circle</mat-icon>Perfil
-      </button>
-
-      <button mat-list-item routerLink = "/admin/recursos">
-        <mat-icon mat-list-icon>list</mat-icon>Recurso
-      </button>
-      <button mat-list-item routerLink = "/admin/add-recurso">
-        <mat-icon mat-list-icon>add_circle_online</mat-icon>Agregar Recurso
-      </button>
-
-      <button mat-list-item routerLink = "/admin/servicios">
-        <mat-icon mat-list-icon>list</mat-icon>Servicios
-      </button>
-      <button mat-list-item routerLink = "/admin/add-servicio">
-        <mat-icon mat-list-icon>add_circle_online</mat-icon>Agregar Servicio
-      </button>
-
-      <button mat-list-item routerLink = "/admin/add-dia-festivo">
-        <mat-icon mat-list-icon>list</mat-icon>Días no laborales
-      </button>
-      <button mat-list-item routerLink = "/admin/calendario">
-        <mat-icon mat-list-icon>list</mat-icon> Calendario
-      </button>
-      <button mat-list-item routerLink = "/admin/users">
-        <mat-icon mat-list-icon>list</mat-icon>Usuarios Registrados
-      </button>
-      <button mat-list-item routerLink = "/admin/add-user">
-        <mat-icon mat-list-icon>add_circle_online</mat-icon>Agregar Trabajador
-      </button>
-      <button mat-list-item routerLink = "/admin/add-horario-laboral">
-        <mat-icon mat-list-icon>list</mat-icon>Agregar Horario Atencion
-      </button>
-      <button mat-list-item routerLink = "/admin/citas">
-        <mat-icon mat-list-icon>list</mat-icon>Listado de citas
-      </button>
-
-    </mat-action-list>
-  </mat-card>
+  <mat-action-list>
+    <div mat-subheader style="font-weight: bold; font-size: 1.2rem; padding: 8px;">Menu</div>
+    
+    <button routerLink="/admin" mat-list-item>
+      <mat-icon mat-list-icon>home</mat-icon> Inicio
+    </button>
+    <button mat-list-item routerLink="/admin/profile">
+      <mat-icon mat-list-icon>person</mat-icon> Perfil
+    </button>
+    <button mat-list-item routerLink="/admin/recursos">
+      <mat-icon mat-list-icon>storage</mat-icon> Recursos
+    </button>
+    <button mat-list-item routerLink="/admin/add-recurso">
+      <mat-icon mat-list-icon>add</mat-icon> Agregar Recurso
+    </button>
+    <button mat-list-item routerLink="/admin/servicios">
+      <mat-icon mat-list-icon>work</mat-icon> Servicios
+    </button>
+    <button mat-list-item routerLink="/admin/add-servicio">
+      <mat-icon mat-list-icon>add</mat-icon> Agregar Servicio
+    </button>
+    <button mat-list-item routerLink="/admin/add-dia-festivo">
+      <mat-icon mat-list-icon>event_busy</mat-icon> Días no Laborales
+    </button>
+    <button mat-list-item routerLink="/admin/calendario">
+      <mat-icon mat-list-icon>calendar_today</mat-icon> Calendario
+    </button>
+    <button mat-list-item routerLink="/admin/users">
+      <mat-icon mat-list-icon>people</mat-icon> Usuarios Registrados
+    </button>
+    <button mat-list-item routerLink="/admin/add-user">
+      <mat-icon mat-list-icon>person_add</mat-icon> Agregar Trabajador
+    </button>
+    <button mat-list-item routerLink="/admin/add-horario-laboral">
+      <mat-icon mat-list-icon>schedule</mat-icon> Agregar Horario Atención
+    </button>
+    <button mat-list-item routerLink="/admin/citas">
+      <mat-icon mat-list-icon>list_alt</mat-icon> Listado de Citas
+    </button>
+    <button mat-list-item routerLink="/admin/reportes">
+      <mat-icon mat-list-icon>assessment</mat-icon> Reportes
+    </button>
+  </mat-action-list>
+</mat-card>

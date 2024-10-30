@@ -38,6 +38,7 @@ import { UserViewFacturasComponent } from './pages/cliente/user-view-facturas/us
 import { UserViewFacturasDetailComponent } from './pages/cliente/user-view-facturas-detail/user-view-facturas-detail.component';
 import { UserViewCitasComponent } from './pages/cliente/user-view-citas/user-view-citas.component';
 import { UserViewCitasDetailComponent } from './pages/cliente/user-view-citas-detail/user-view-citas-detail.component';
+import { ReportesComponent } from './pages/admin/reportes/reportes.component';
 
 const routes: Routes = [
   {
@@ -59,7 +60,7 @@ const routes: Routes = [
   {
     path: 'admin',
     component: DashboardComponent,
-    //canActivate:[AdminGuard],
+    canActivate:[AdminGuard],
     children: [
       {
         path: 'profile',
@@ -161,6 +162,10 @@ const routes: Routes = [
         path: 'empleado/:id',
         component: ViewRecursoDetailComponent,
       },
+      {
+        path: 'reportes',
+        component: ReportesComponent
+      }
     ],
   },
   {
