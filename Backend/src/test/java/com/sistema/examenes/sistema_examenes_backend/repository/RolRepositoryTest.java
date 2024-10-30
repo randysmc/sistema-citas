@@ -9,6 +9,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,6 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test") // Usa el archivo application-test.properties
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // No reemplazar H2 por otra base de datos
+@Transactional
 public class RolRepositoryTest {
 
     @Autowired
@@ -27,6 +29,7 @@ public class RolRepositoryTest {
     @BeforeEach
     public void setUp() {
         // Inicializar el rol global antes de cada prueba
+        rolRepository.deleteAll();
         rolGlobal = new Rol();
         rolGlobal.setRolId(1L);
         rolGlobal.setRolNombre("ROLE_ADMIN");

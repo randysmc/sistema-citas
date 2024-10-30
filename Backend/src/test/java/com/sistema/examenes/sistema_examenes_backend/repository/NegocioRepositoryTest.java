@@ -30,6 +30,7 @@ public class NegocioRepositoryTest {
 
     @BeforeEach
     public void setUp() {
+        negocioRepository.deleteAll();
         negocioGlobal = new Negocio();
         negocioGlobal.setNombre("Negocio Test");
         negocioGlobal.setDireccion("Calle 123");

@@ -21,6 +21,7 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
 
 
 
+
     // Método para contar citas por cliente
     @Query("SELECT new map(c.cliente.nombre as nombre, c.cliente.apellido as apellido, COUNT(c) as numeroCitas) " +
             "FROM Cita c GROUP BY c.cliente.id")

@@ -1,7 +1,11 @@
 package com.sistema.examenes.sistema_examenes_backend.repository;
 
+import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
+import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioRol;
+import com.sistema.examenes.sistema_examenes_backend.repositorios.RolRepository;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.UsuarioRepository;
+import com.sistema.examenes.sistema_examenes_backend.servicios.UsuarioService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +15,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -20,10 +27,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @ActiveProfiles("test") // Usa el archivo application-test.properties
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // No reemplazar H2 por otra base de datos
+@Transactional
 public class UsuarioRepositoryTest {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private RolRepository rolRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
@@ -263,6 +274,92 @@ public class UsuarioRepositoryTest {
         assertThat(usuarioGuardado).isNotNull(); // Verificar que el usuario ha sido guardado
         assertThat(passwordEncoder.matches("password", usuarioGuardado.getPassword())).isTrue(); // Verificar la contraseña
     }
+
+
+
+    @Test
+    public void testGuardarUsuarioConRol() {
+        // Crear y guardar el rol
+        Rol rolAdmin = new Rol();
+        rolAdmin.setRolId(1L);
+        rolAdmin.setRolNombre("ADMIN");
+        rolRepository.save(rolAdmin); // Asegurarse de guardar el rol primero
+
+        // Crear una relación Usuario-Rol
+        UsuarioRol usuarioRol = new UsuarioRol();
+        usuarioRol.setRol(rolAdmin); // Asignar el rol ya guardado
+
+        // Crear un usuario y asignarle la relación Usuario-Rol
+        Usuario usuario = new Usuario();
+        usuario.setNombre("Carlos");
+        usuario.setApellido("Santana");
+        usuario.setUsername("csantana");
+        usuario.setPassword(passwordEncoder.encode("password"));
+        usuario.setEmail("carlos.santana@example.com");
+        usuario.setTelefono("123456789");
+        usuario.setNit("11111111");
+        usuario.setCui("22222222");
+        usuario.setPerfil("profile.jpg");
+
+        // Asignar roles al usuario
+        usuarioRol.setUsuario(usuario);
+        usuario.getUsuarioRoles().add(usuarioRol);
+
+        // Guardar el usuario en el repositorio
+        usuarioRepository.save(usuario);
+
+        // Verificar que el usuario se ha guardado correctamente
+        Usuario usuarioGuardado = usuarioRepository.findByUsername("csantana");
+        assertThat(usuarioGuardado).isNotNull();
+        assertThat(usuarioGuardado.getUsername()).isEqualTo("csantana");
+        assertThat(usuarioGuardado.getUsuarioRoles()).isNotEmpty();
+        assertThat(usuarioGuardado.getUsuarioRoles().iterator().next().getRol().getRolNombre()).isEqualTo("ADMIN");
+    }
+
+    @Test
+    public void testGuardarUsuarioConMultiplesRoles() {
+        // Crear roles y guardarlos
+        Rol rolAdmin = new Rol();
+        rolAdmin.setRolId(1L);
+        rolAdmin.setRolNombre("ADMIN");
+        rolRepository.save(rolAdmin);
+
+        Rol rolUser = new Rol();
+        rolUser.setRolId(2L);
+        rolUser.setRolNombre("USER");
+        rolRepository.save(rolUser);
+
+        // Crear un usuario y asignarle múltiples relaciones Usuario-Rol
+        Usuario usuario = new Usuario();
+        usuario.setNombre("Luis");
+        usuario.setApellido("Pérez");
+        usuario.setUsername("lperez");
+        usuario.setNit("11111111");
+        usuario.setCui("22222222");
+        usuario.setPassword(passwordEncoder.encode("password123"));
+        usuario.setEmail("luis.perez@example.com");
+
+        // Relacionar los roles con el usuario
+        UsuarioRol usuarioRolAdmin = new UsuarioRol();
+        usuarioRolAdmin.setUsuario(usuario);
+        usuarioRolAdmin.setRol(rolAdmin);
+
+        UsuarioRol usuarioRolUser = new UsuarioRol();
+        usuarioRolUser.setUsuario(usuario);
+        usuarioRolUser.setRol(rolUser);
+
+        usuario.getUsuarioRoles().add(usuarioRolAdmin);
+        usuario.getUsuarioRoles().add(usuarioRolUser);
+
+        // Guardar el usuario con múltiples roles
+        usuarioRepository.save(usuario);
+
+        // Verificar que el usuario tiene ambos roles
+        Usuario usuarioGuardado = usuarioRepository.findByUsername("lperez");
+        assertThat(usuarioGuardado.getUsuarioRoles()).hasSize(2);
+    }
+
+
 
 
 

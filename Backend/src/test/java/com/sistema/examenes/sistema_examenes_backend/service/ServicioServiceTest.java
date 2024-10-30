@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatNoException;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -63,7 +64,7 @@ public class ServicioServiceTest {
 
     @DisplayName("Test para guardar un nuevo servicio")
     @Test
-    void testGuardarRecurso() {
+    void testGuardarServicio() {
         // given: configura el comportamiento del mock
         given(servicioRepository.save(servicio)).willReturn(servicio);
 

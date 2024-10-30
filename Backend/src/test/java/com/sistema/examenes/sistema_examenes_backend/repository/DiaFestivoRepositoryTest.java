@@ -32,6 +32,7 @@ public class DiaFestivoRepositoryTest {
 
     @BeforeEach
     public void setUp() {
+        diaFestivoRepository.deleteAll();
         diaFestivoGlobal = new DiaFestivo();
         diaFestivoGlobal.setFecha(LocalDate.of(2024, 12, 25));
         diaFestivoGlobal.setDescripcion("Navidad");

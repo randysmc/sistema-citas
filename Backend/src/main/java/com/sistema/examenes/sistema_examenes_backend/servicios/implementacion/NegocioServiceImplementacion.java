@@ -70,10 +70,10 @@ public class NegocioServiceImplementacion implements NegocioService {
             existingNegocio.setTelefono(negocio.getTelefono());
         }
         if (negocio.getEmail() != null) {
-            existingNegocio.setTelefono(negocio.getTelefono());
+            existingNegocio.setEmail(negocio.getEmail());
         }
         if (negocio.getSlogan() != null) {
-            existingNegocio.setTelefono(negocio.getTelefono());
+            existingNegocio.setSlogan(negocio.getSlogan());
         }
 
         return negocioRepository.save(existingNegocio);
@@ -82,8 +82,13 @@ public class NegocioServiceImplementacion implements NegocioService {
 
     @Override
     public void eliminarNegocio(Long id) {
+        if (!negocioRepository.existsById(id)) {
+            throw new RuntimeException("Negocio no encontrado con ID: " + id);
+        }
         negocioRepository.deleteById(id);
     }
+
+
 
 
 }
