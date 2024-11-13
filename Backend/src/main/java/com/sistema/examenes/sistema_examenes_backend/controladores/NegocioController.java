@@ -2,30 +2,22 @@ package com.sistema.examenes.sistema_examenes_backend.controladores;
 
 //import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
 //import com.sistema.examenes.sistema_examenes_backend.DTO.RecursoDTO;
-import com.sistema.examenes.sistema_examenes_backend.entidades.ErrorResponse;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
-import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
-import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
 import com.sistema.examenes.sistema_examenes_backend.excepciones.NegocioExistenteException;
+import com.sistema.examenes.sistema_examenes_backend.responses.ErrorResponse;
 import com.sistema.examenes.sistema_examenes_backend.servicios.NegocioService;
 import com.sistema.examenes.sistema_examenes_backend.servicios.RecursoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -36,7 +28,7 @@ import java.util.UUID;
 
 public class NegocioController {
 
-    @Autowired
+    /*@Autowired
     private NegocioService negocioService;
 
     @Autowired
@@ -220,7 +212,7 @@ public class NegocioController {
             System.err.println("No se pudo eliminar la imagen: " + e.getMessage());
         }
     }
-
+*/
 
 
 

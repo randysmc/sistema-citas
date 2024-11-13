@@ -18,9 +18,7 @@ public class EmpleadoDTO {
 
     // Para manejar los roles asociados
     private Set<Long> roles; // IDs de roles
-    // Para manejar los negocios asociados (obligatorio para empleados)
 
-    private Set<Long> negocios; // IDs de negocios
 
     public Long getId() {
         return id;
@@ -126,11 +124,4 @@ public class EmpleadoDTO {
         this.roles = roles;
     }
 
-    public Set<Long> getNegocios() {
-        return negocios;
-    }
-
-    public void setNegocios(Set<Long> negocios) {
-        this.negocios = negocios;
-    }
 }

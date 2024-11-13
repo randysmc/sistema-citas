@@ -7,6 +7,8 @@ import com.sistema.examenes.sistema_examenes_backend.entidades.JwtRequest; // As
 import com.sistema.examenes.sistema_examenes_backend.entidades.JwtResponse; // Asegúrate de importar JwtResponse
 import com.sistema.examenes.sistema_examenes_backend.entidades.TwoFactorRequest; // Importa la clase TwoFactorRequest
 import com.sistema.examenes.sistema_examenes_backend.configuraciones.JwtUtils;
+import com.sistema.examenes.sistema_examenes_backend.repositorios.UsuarioRepository;
+import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.CorreoServiceImpl;
 import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.UserDetailsServiceImplementacion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +39,15 @@ public class AuthenticationController {
     @Autowired
     private JwtUtils jwtUtils;
 
+    @Autowired
+    private CorreoServiceImpl correoService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     // Mapa para almacenar códigos 2FA temporales (usar base de datos en producción)
     private final Map<String, String> twoFactorCodes = new HashMap<>();
+
 
     @PostMapping("/generate-token")
     public ResponseEntity<?> generarToken(@RequestBody JwtRequest jwtRequest) throws Exception {
@@ -49,15 +58,24 @@ public class AuthenticationController {
             throw new Exception("Usuario no encontrado");
         }
 
+        // Obtener el correo del usuario
+        Usuario usuario = usuarioRepository.findByUsername(jwtRequest.getUsername());
+        if (usuario == null || usuario.getEmail() == null) {
+            throw new Exception("El usuario no tiene un correo registrado.");
+        }
+        String email = usuario.getEmail();
+
         // Generar y enviar el código 2FA
         String twoFactorCode = generateTwoFactorCode();
-        sendTwoFactorCode(jwtRequest.getUsername(), twoFactorCode);
+        sendTwoFactorCode(email, twoFactorCode); // Cambiar para enviar al correo
 
         // Almacenar el código en el mapa (temporal)
         twoFactorCodes.put(jwtRequest.getUsername(), twoFactorCode);
 
         return ResponseEntity.ok(Collections.singletonMap("message", "Código de autenticación enviado"));
     }
+
+
 
     @PostMapping("/validate-token")
     public ResponseEntity<?> validateToken(@RequestBody TwoFactorRequest twoFactorRequest) throws Exception {
@@ -82,10 +100,21 @@ public class AuthenticationController {
         return String.valueOf((int) (Math.random() * 900000) + 100000);
     }
 
-    private void sendTwoFactorCode(String username, String twoFactorCode) {
-        // Lógica para enviar el código, puedes usar un servicio de correo
-        System.out.println("Código 2FA para " + username + ": " + twoFactorCode);
+    private void sendTwoFactorCode(String email, String twoFactorCode) {
+        try {
+            // Lógica para enviar el correo
+            correoService.enviarCorreo(email, "Código de autenticación",
+                    "Tu código de autenticación es: " + twoFactorCode);
+            System.out.println("Código 2FA enviado al correo: " + email);
+        } catch (javax.mail.MessagingException e) {
+            System.err.println("Error al enviar el correo: " + e.getMessage());
+            e.printStackTrace();
+            // Opcional: puedes lanzar una excepción personalizada si quieres manejarlo a un nivel superior
+            throw new RuntimeException("No se pudo enviar el código de autenticación por correo.", e);
+        }
     }
+
+
 
     private void autenticar(String username, String password) throws Exception {
         try {
@@ -96,6 +125,7 @@ public class AuthenticationController {
             throw new Exception("Credenciales invalidas " + e.getMessage());
         }
     }
+
 
 
     @GetMapping("/actual-usuario")
