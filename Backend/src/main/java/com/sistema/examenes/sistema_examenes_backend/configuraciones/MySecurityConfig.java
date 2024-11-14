@@ -61,6 +61,8 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                         "/swagger-resources/**",    // Ruta para los recursos de Swagger
                         "/generate-token",
                         "/usuarios/**",
+                        "/forgot-password",
+                        "/reset-password",
                         "/validate-token",
                         "/empleados/**",
                         "/recursos/**",
