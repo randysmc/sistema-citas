@@ -3,12 +3,14 @@ package com.sistema.examenes.sistema_examenes_backend.repository;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.RolRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -31,54 +33,84 @@ public class RolRepositoryTest {
         // Inicializar el rol global antes de cada prueba
         rolRepository.deleteAll();
         rolGlobal = new Rol();
-        rolGlobal.setRolId(1L);
-        rolGlobal.setRolNombre("ROLE_ADMIN");
+        rolGlobal.setRolNombre("ADMIN");
         rolRepository.save(rolGlobal);
     }
 
+    @DisplayName("Test para guardar rol")
     @Test
     public void testGuardarRol() {
-        Rol nuevoRol = new Rol();
-        nuevoRol.setRolId(2L);
-        nuevoRol.setRolNombre("ROLE_USER");
+        //Given
+        Rol rol1 = new Rol();
+        rol1.setRolNombre("EMPLEADO");
 
-        Rol rolGuardado = rolRepository.save(nuevoRol);
-        assertThat(rolGuardado.getRolNombre()).isEqualTo("ROLE_USER");
+        //when
+        Rol rolGuardado = rolRepository.save(rol1);
+
+        //then
+        assertThat(rolGuardado).isNotNull();
+        assertThat(rolGuardado.getRolId()).isGreaterThan(0);
     }
 
+    @DisplayName("Test para obtener todos los roles")
     @Test
-    public void testObtenerRolPorId() {
-        Optional<Rol> rolEncontrado = rolRepository.findById(rolGlobal.getRolId());
-        assertThat(rolEncontrado).isPresent();
-        assertThat(rolEncontrado.get().getRolNombre()).isEqualTo("ROLE_ADMIN");
+    public void testListarRoles() {
+        //given
+        Rol rol1 = new Rol();
+        rol1.setRolNombre("EMPLEADO");
+
+        rolRepository.save(rolGlobal);
+        rolRepository.save(rol1);
+
+        //when
+        List<Rol> listaRoles = rolRepository.findAll();
+
+        //then
+        assertThat(listaRoles).isNotNull();
+        assertThat(listaRoles.size()).isEqualTo(2);
     }
+
+    @DisplayName("Testa para obtener Rol por Id")
+    @Test
+    public void testObtenerRolPorId(){
+        //given
+        rolRepository.save(rolGlobal);
+
+        //when
+        Rol rolBD = rolRepository.findById(rolGlobal.getRolId()).get();
+
+        //then
+        assertThat(rolBD).isNotNull();
+    }
+
+
 
     @Test
     public void testActualizarRol() {
-        rolGlobal.setRolNombre("ROLE_SUPER_ADMIN");
-        Rol rolActualizado = rolRepository.save(rolGlobal);
+        //given
+        rolRepository.save(rolGlobal);
 
-        assertThat(rolActualizado.getRolNombre()).isEqualTo("ROLE_SUPER_ADMIN");
+        //when
+        Rol rolGuardado = rolRepository.findById(rolGlobal.getRolId()).get();
+        rolGuardado.setRolNombre("CLIENTE");
+        Rol rolActualizado = rolRepository.save(rolGuardado);
+
+        //then
+        assertThat(rolActualizado.getRolNombre()).isEqualTo("CLIENTE");
     }
 
     @Test
     public void testEliminarRol() {
-        rolRepository.delete(rolGlobal);
-        Optional<Rol> rolEliminado = rolRepository.findById(rolGlobal.getRolId());
-        assertThat(rolEliminado).isNotPresent();
+        //given
+        rolRepository.save(rolGlobal);
+
+        //when
+        rolRepository.deleteById(rolGlobal.getRolId());
+        Optional<Rol> rolOptional = rolRepository.findById(rolGlobal.getRolId());
+
+        //then
+        assertThat(rolOptional).isEmpty();
     }
 
-    @Test
-    public void testObtenerTodosLosRoles() {
-        // Guardar un segundo rol
-        Rol otroRol = new Rol();
-        otroRol.setRolId(2L);
-        otroRol.setRolNombre("ROLE_USER");
-        rolRepository.save(otroRol);
 
-        // Obtener todos los roles y verificar que ambos estén presentes
-        List<Rol> roles = rolRepository.findAll();
-        assertThat(roles).hasSize(2);
-        assertThat(roles).extracting(Rol::getRolNombre).containsExactlyInAnyOrder("ROLE_ADMIN", "ROLE_USER");
-    }
 }

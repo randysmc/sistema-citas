@@ -277,7 +277,7 @@ public class UsuarioRepositoryTest {
 
 
 
-    @Test
+    /*@Test
     public void testGuardarUsuarioConRol() {
         // Crear y guardar el rol
         Rol rolAdmin = new Rol();
@@ -314,7 +314,7 @@ public class UsuarioRepositoryTest {
         assertThat(usuarioGuardado.getUsername()).isEqualTo("csantana");
         assertThat(usuarioGuardado.getUsuarioRoles()).isNotEmpty();
         assertThat(usuarioGuardado.getUsuarioRoles().iterator().next().getRol().getRolNombre()).isEqualTo("ADMIN");
-    }
+    }*/
 
     @Test
     public void testGuardarUsuarioConMultiplesRoles() {

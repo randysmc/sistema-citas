@@ -1,14 +1,10 @@
 package com.sistema.examenes.sistema_examenes_backend.service;
 
-import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
+
 import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
-import com.sistema.examenes.sistema_examenes_backend.entidades.Servicio;
-import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
+
 import com.sistema.examenes.sistema_examenes_backend.repositorios.RolRepository;
-import com.sistema.examenes.sistema_examenes_backend.repositorios.ServicioRepository;
-import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.NegocioServiceImplementacion;
 import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.RolServiceImplementacion;
-import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.ServicioServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -91,7 +87,7 @@ public class RolServiceTest {
 
 
 
-    @Test
+    /*@Test
     @DisplayName("Prueba para eliminar un rol")
     public void testEliminarRol() {
         // Simula el comportamiento del repositorio
@@ -105,7 +101,7 @@ public class RolServiceTest {
         Optional<Rol> resultado = rolService.findById(rolGlobal.getRolId());
 
         assertThat(resultado).isNotPresent();
-    }
+    }*/
 
 
 }

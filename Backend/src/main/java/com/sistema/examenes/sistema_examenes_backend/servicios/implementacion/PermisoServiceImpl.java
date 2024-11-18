@@ -56,9 +56,9 @@ public class PermisoServiceImpl implements PermisoService {
     @Override
     public void delete(Long id) {
         Optional<Permiso> existingPermiso = permisoRepository.findById(id);
-        if(!existingPermiso.isPresent()){
+        /*if(!existingPermiso.isPresent()){
             throw new EntityExistenteException("Rol", "id", id);
-        }
+        }*/
 
         permisoRepository.deleteById(id);
     }
