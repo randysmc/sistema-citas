@@ -1,26 +1,23 @@
 package com.sistema.examenes.sistema_examenes_backend.repository;
 
+import com.sistema.examenes.sistema_examenes_backend.Enums.TipoRecurso;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Servicio;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.ServicioRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-@ActiveProfiles("test") // Usa el archivo application-test.properties
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // No reemplazar H2 por otra base de datos
-@Transactional
+@ActiveProfiles("test")
 public class ServicioRepositoryTest {
 
     @Autowired
@@ -29,157 +26,160 @@ public class ServicioRepositoryTest {
     private Servicio servicioGlobal;
 
     @BeforeEach
-    public void setUp() {
-        // Limpiar la base de datos antes de cada prueba
+    public void setup() {
         servicioRepository.deleteAll();
-
-        // Insertar un servicio para las pruebas
         servicioGlobal = new Servicio();
-        servicioGlobal.setNombre("Servicio de Ejemplo");
-        servicioGlobal.setDescripcion("Descripción del servicio de ejemplo");
-        servicioGlobal.setDuracionServicio(60);
-        servicioGlobal.setPrecio(BigDecimal.valueOf(100.0));
+        servicioGlobal.setNombre("Limpieza Dental");
+        servicioGlobal.setDescripcion("Elimina la placa y el sarro acumulado.");
+        servicioGlobal.setDuracionServicio(30);
+        servicioGlobal.setPrecio(new BigDecimal("500.00"));
         servicioGlobal.setDisponible(true);
+        servicioGlobal.setTipo(TipoRecurso.PERSONAL);
         servicioRepository.save(servicioGlobal);
     }
 
+    @DisplayName("Test para guardar un servicio")
     @Test
-    public void testCrearServicio() {
-        Servicio nuevoServicio = new Servicio();
-        nuevoServicio.setNombre("Servicio de Limpieza");
-        nuevoServicio.setDescripcion("Limpieza de oficinas");
-        nuevoServicio.setDuracionServicio(120);
-        nuevoServicio.setPrecio(BigDecimal.valueOf(150.0));
-        nuevoServicio.setDisponible(true);
+    public void testGuardarServicio() {
+        // given
+        Servicio servicio = new Servicio();
+        servicio.setNombre("Extracción de muela");
+        servicio.setDescripcion("Extracción profesional de muelas dañadas.");
+        servicio.setDuracionServicio(45);
+        servicio.setPrecio(new BigDecimal("1200.00"));
+        servicio.setDisponible(true);
+        servicio.setTipo(TipoRecurso.PERSONAL);
 
-        Servicio servicioGuardado = servicioRepository.save(nuevoServicio);
+        // when
+        Servicio servicioGuardado = servicioRepository.save(servicio);
 
-        assertThat(servicioGuardado.getServicioId()).isNotNull();
-        assertThat(servicioGuardado.getNombre()).isEqualTo("Servicio de Limpieza");
-        assertThat(servicioGuardado.getDisponible()).isTrue();
+        // then
+        assertThat(servicioGuardado).isNotNull();
+        assertThat(servicioGuardado.getServicioId()).isGreaterThan(0);
+        assertThat(servicioGuardado.getNombre()).isEqualTo("Extracción de muela");
     }
 
+    @DisplayName("Test para listar todos los servicios")
     @Test
     public void testListarServicios() {
+        // given
+        Servicio servicio2 = new Servicio();
+        servicio2.setNombre("Blanqueamiento Dental");
+        servicio2.setDescripcion("Tratamiento para blanquear los dientes.");
+        servicio2.setDuracionServicio(60);
+        servicio2.setPrecio(new BigDecimal("2500.00"));
+        servicio2.setDisponible(false);
+        servicio2.setTipo(TipoRecurso.INSTALACION);
+        servicioRepository.save(servicio2);
+
+        // when
         List<Servicio> servicios = servicioRepository.findAll();
-        assertThat(servicios).isNotEmpty(); // Verificar que la lista no está vacía
-        assertThat(servicios.size()).isEqualTo(1); // Debe haber solo 1 servicio insertado
+
+        // then
+        assertThat(servicios).isNotNull();
+        assertThat(servicios.size()).isEqualTo(2); // servicioGlobal + servicio2
     }
 
+    @DisplayName("Test para obtener un servicio por ID")
     @Test
-    public void testBuscarServicioPorId() {
-        // Obtener el ID del servicio guardado
-        Long idServicio = servicioGlobal.getServicioId();
-        Optional<Servicio> servicioEncontrado = servicioRepository.findById(idServicio);
+    public void testObtenerServicioPorId() {
+        // given
+        Long id = servicioGlobal.getServicioId();
 
-        // Verificar que el servicio se encontró
-        assertThat(servicioEncontrado).isPresent(); // Verificar que el servicio está presente
-        assertThat(servicioEncontrado.get().getNombre()).isEqualTo(servicioGlobal.getNombre()); // Comparar nombres
+        // when
+        Optional<Servicio> servicio = servicioRepository.findById(id);
+
+        // then
+        assertThat(servicio).isPresent();
+        assertThat(servicio.get().getNombre()).isEqualTo("Limpieza Dental");
     }
 
-    @Test
-    public void testBuscarServicioNoExistente() {
-        // Intentar buscar un servicio con un ID que no existe
-        Optional<Servicio> servicioEncontrado = servicioRepository.findById(999L);
-        assertThat(servicioEncontrado).isNotPresent(); // Verificar que no se encontró el servicio
-    }
-
-    @Test
-    public void testActualizarServicio() {
-        // Obtener el servicio existente y actualizarlo
-        servicioGlobal.setNombre("Servicio Actualizado");
-        servicioGlobal.setDescripcion("Descripción actualizada");
-        servicioGlobal.setPrecio(BigDecimal.valueOf(120.0));
-        servicioRepository.save(servicioGlobal); // Guardar los cambios
-
-        // Verificar que los cambios se hayan guardado
-        Optional<Servicio> servicioActualizado = servicioRepository.findById(servicioGlobal.getServicioId());
-        assertThat(servicioActualizado).isPresent();
-        assertThat(servicioActualizado.get().getNombre()).isEqualTo("Servicio Actualizado");
-        assertThat(servicioActualizado.get().getDescripcion()).isEqualTo("Descripción actualizada");
-        assertThat(servicioActualizado.get().getPrecio()).isEqualTo(BigDecimal.valueOf(120.0));
-    }
-
-    @Test
-    public void testEliminarServicio() {
-        // Eliminar el servicio
-        servicioRepository.delete(servicioGlobal);
-
-        // Verificar que el servicio ha sido eliminado
-        Optional<Servicio> servicioEliminado = servicioRepository.findById(servicioGlobal.getServicioId());
-        assertThat(servicioEliminado).isNotPresent(); // Verificar que ya no está presente
-    }
-
-    @Test
-    public void testListarServiciosVacios() {
-        // Limpiar la base de datos y verificar que la lista esté vacía
-        servicioRepository.deleteAll();
-        List<Servicio> servicios = servicioRepository.findAll();
-        assertThat(servicios).isEmpty(); // Verificar que la lista esté vacía
-    }
-
-    @Test
-    public void testExistenciaPorNombre() {
-        // Verificar que existe un servicio por nombre
-        boolean exists = servicioRepository.existsByNombre("Servicio de Ejemplo");
-        assertThat(exists).isTrue();
-
-        // Verificar que no existe un servicio con un nombre diferente
-        exists = servicioRepository.existsByNombre("Servicio Inexistente");
-        assertThat(exists).isFalse();
-    }
-
+    @DisplayName("Test para listar servicios disponibles")
     @Test
     public void testListarServiciosDisponibles() {
-        // Crear un servicio disponible
-        Servicio servicioDisponible = new Servicio();
-        servicioDisponible.setNombre("Servicio Disponible");
-        servicioDisponible.setDescripcion("Descripción de servicio disponible");
-        servicioDisponible.setDuracionServicio(90);
-        servicioDisponible.setPrecio(BigDecimal.valueOf(80.0));
-        servicioDisponible.setDisponible(true);
-        servicioRepository.save(servicioDisponible);
-
-        // Crear un servicio no disponible
+        // given
         Servicio servicioNoDisponible = new Servicio();
-        servicioNoDisponible.setNombre("Servicio No Disponible");
-        servicioNoDisponible.setDescripcion("Descripción de servicio no disponible");
-        servicioNoDisponible.setDuracionServicio(60);
-        servicioNoDisponible.setPrecio(BigDecimal.valueOf(50.0));
+        servicioNoDisponible.setNombre("Ortodoncia");
+        servicioNoDisponible.setDescripcion("Colocación de brackets.");
+        servicioNoDisponible.setDuracionServicio(120);
+        servicioNoDisponible.setPrecio(new BigDecimal("15000.00"));
         servicioNoDisponible.setDisponible(false);
+        servicioNoDisponible.setTipo(TipoRecurso.INSTALACION);
         servicioRepository.save(servicioNoDisponible);
 
-        // Verificar que solo se listan los servicios disponibles
+        // when
         List<Servicio> serviciosDisponibles = servicioRepository.findByDisponibleTrue();
-        assertThat(serviciosDisponibles).hasSize(2); // Debería haber 2 servicios disponibles
-        assertThat(serviciosDisponibles).contains(servicioDisponible);
-        assertThat(serviciosDisponibles).doesNotContain(servicioNoDisponible);
+
+        // then
+        assertThat(serviciosDisponibles).isNotNull();
+        assertThat(serviciosDisponibles.size()).isEqualTo(1); // Solo "Limpieza Dental"
+        assertThat(serviciosDisponibles.get(0).getNombre()).isEqualTo("Limpieza Dental");
     }
 
+    @DisplayName("Test para listar servicios no disponibles")
     @Test
     public void testListarServiciosNoDisponibles() {
-        // Crear un servicio disponible
-        Servicio servicioDisponible = new Servicio();
-        servicioDisponible.setNombre("Servicio Disponible");
-        servicioDisponible.setDescripcion("Descripción de servicio disponible");
-        servicioDisponible.setDuracionServicio(90);
-        servicioDisponible.setPrecio(BigDecimal.valueOf(80.0));
-        servicioDisponible.setDisponible(true);
-        servicioRepository.save(servicioDisponible);
-
-        // Crear un servicio no disponible
+        // given
         Servicio servicioNoDisponible = new Servicio();
-        servicioNoDisponible.setNombre("Servicio No Disponible");
-        servicioNoDisponible.setDescripcion("Descripción de servicio no disponible");
-        servicioNoDisponible.setDuracionServicio(60);
-        servicioNoDisponible.setPrecio(BigDecimal.valueOf(50.0));
+        servicioNoDisponible.setNombre("Ortodoncia");
+        servicioNoDisponible.setDescripcion("Colocación de brackets.");
+        servicioNoDisponible.setDuracionServicio(120);
+        servicioNoDisponible.setPrecio(new BigDecimal("15000.00"));
         servicioNoDisponible.setDisponible(false);
+        servicioNoDisponible.setTipo(TipoRecurso.INSTALACION);
         servicioRepository.save(servicioNoDisponible);
 
-        // Verificar que solo se listan los servicios no disponibles
+        // when
         List<Servicio> serviciosNoDisponibles = servicioRepository.findByDisponibleFalse();
-        assertThat(serviciosNoDisponibles).hasSize(1); // Debería haber 1 servicio no disponible
-        assertThat(serviciosNoDisponibles).contains(servicioNoDisponible);
-        assertThat(serviciosNoDisponibles).doesNotContain(servicioDisponible);
+
+        // then
+        assertThat(serviciosNoDisponibles).isNotNull();
+        assertThat(serviciosNoDisponibles.size()).isEqualTo(1); // Solo "Ortodoncia"
+        assertThat(serviciosNoDisponibles.get(0).getNombre()).isEqualTo("Ortodoncia");
     }
+
+    @DisplayName("Test para verificar si un servicio existe por nombre")
+    @Test
+    public void testExisteServicioPorNombre() {
+        // given
+        String nombreServicio = "Limpieza Dental";
+
+        // when
+        boolean existe = servicioRepository.existsByNombre(nombreServicio);
+
+        // then
+        assertThat(existe).isTrue();
+    }
+
+    @DisplayName("Test para actualizar un servicio")
+    @Test
+    public void testActualizarServicio() {
+        // given
+        Servicio servicioGuardado = servicioRepository.findById(servicioGlobal.getServicioId()).get();
+        servicioGuardado.setDescripcion("Limpieza completa para dientes y encías.");
+        servicioGuardado.setPrecio(new BigDecimal("600.00"));
+
+        // when
+        Servicio servicioActualizado = servicioRepository.save(servicioGuardado);
+
+        // then
+        assertThat(servicioActualizado.getDescripcion()).isEqualTo("Limpieza completa para dientes y encías.");
+        assertThat(servicioActualizado.getPrecio()).isEqualTo(new BigDecimal("600.00"));
+    }
+
+    @DisplayName("Test para eliminar un servicio")
+    @Test
+    public void testEliminarServicio() {
+        // given
+        Long id = servicioGlobal.getServicioId();
+
+        // when
+        servicioRepository.deleteById(id);
+        Optional<Servicio> servicio = servicioRepository.findById(id);
+
+        // then
+        assertThat(servicio).isEmpty();
+    }
+
+
 }

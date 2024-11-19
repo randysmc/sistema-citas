@@ -76,7 +76,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                         "/facturas/**",
                         "/reportes/**",
                         "/uploads/**",
-                        "/api/**",
+                        "/permisos/**",
                         "/negocios/**").permitAll() // Permitir acceso sin autenticación
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated() // Otras rutas requieren autenticación

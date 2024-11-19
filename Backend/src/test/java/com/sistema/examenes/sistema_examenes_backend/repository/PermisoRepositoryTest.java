@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 
 public class PermisoRepositoryTest {
 

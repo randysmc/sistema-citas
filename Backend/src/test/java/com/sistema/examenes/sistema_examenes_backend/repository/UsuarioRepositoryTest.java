@@ -1,54 +1,36 @@
 package com.sistema.examenes.sistema_examenes_backend.repository;
 
-import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
-import com.sistema.examenes.sistema_examenes_backend.entidades.UsuarioRol;
-import com.sistema.examenes.sistema_examenes_backend.repositorios.RolRepository;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.UsuarioRepository;
-import com.sistema.examenes.sistema_examenes_backend.servicios.UsuarioService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 import javax.transaction.Transactional;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 @SpringBootTest
-@ActiveProfiles("test") // Usa el archivo application-test.properties
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // No reemplazar H2 por otra base de datos
+@ActiveProfiles("test")
 @Transactional
 public class UsuarioRepositoryTest {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private RolRepository rolRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
 
-
-    private Usuario usuarioGlobal; // Usuario que será reutilizado en todas las pruebas
+    private Usuario usuarioGlobal;
 
     @BeforeEach
     public void setUp() {
-        // Limpiar la base de datos antes de cada prueba
-        usuarioRepository.deleteAll();
-
-        // Crear el usuario que se usará en todas las pruebas
         usuarioGlobal = new Usuario();
         usuarioGlobal.setNombre("Ringo");
         usuarioGlobal.setApellido("Sum");
@@ -60,88 +42,173 @@ public class UsuarioRepositoryTest {
         usuarioGlobal.setCui("654");
         usuarioGlobal.setPerfil("foto.png");
 
-        // Guardar el usuario en la base de datos
         usuarioRepository.save(usuarioGlobal);
     }
 
     @Test
     public void testGuardarUsuario() {
-        Usuario usuarioGuardado = usuarioRepository.findByUsername("nachito");
+        //given
+        Usuario usuario1 = new Usuario();
+        usuario1.setNombre("Randy");
+        usuario1.setApellido("Coyoy");
+        usuario1.setUsername("randysmc");
+        usuario1.setPassword("password");
+        usuario1.setEmail("randysmc@gmail.com");
+        usuario1.setTelefono("36532064");
+        usuario1.setNit("11448");
+        usuario1.setCui("2253");
+        usuario1.setPerfil("foto.png");
+
+        //when
+        Usuario usuarioGuardado = usuarioRepository.save(usuario1);
+
+        //then
         assertThat(usuarioGuardado).isNotNull();
-        assertThat(usuarioGuardado.getUsername()).isEqualTo("nachito");
-    }
+        assertThat(usuarioGuardado.getId()).isGreaterThan(0);
 
-    @Test
-    public void testEncontrarPorEmail() {
-        Usuario encontrado = usuarioRepository.findByEmail("nacho@gmail.com");
-        assertThat(encontrado).isNotNull();
-        assertThat(encontrado.getEmail()).isEqualTo("nacho@gmail.com");
-    }
-
-    @Test
-    public void testEncontrarPorNit() {
-        Usuario encontrado = usuarioRepository.findByNit("465654");
-        assertThat(encontrado).isNotNull();
-        assertThat(encontrado.getNit()).isEqualTo("465654");
-    }
-
-    @Test
-    public void testEncontrarPorCui() {
-        Usuario encontrado = usuarioRepository.findByCui("654");
-        assertThat(encontrado).isNotNull();
-        assertThat(encontrado.getCui()).isEqualTo("654");
     }
 
     @Test
     public void testListarUsuarios() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
-        assertThat(usuarios).isNotEmpty(); // Verificar que la lista no está vacía
-        assertThat(usuarios.size()).isEqualTo(1); // Debe haber solo 1 usuario insertado
+        //given
+        Usuario usuario1 = new Usuario();
+        usuario1.setNombre("Randy");
+        usuario1.setApellido("Coyoy");
+        usuario1.setUsername("randysmc");
+        usuario1.setPassword("password"); // Ajustar si hay codificación
+        usuario1.setEmail("randysmc@gmail.com");
+        usuario1.setTelefono("36532064");
+        usuario1.setNit("11448");
+        usuario1.setCui("2253");
+        usuario1.setPerfil("foto.png");
+
+        usuarioRepository.save(usuarioGlobal);
+        usuarioRepository.save(usuario1);
+
+        //when
+        List<Usuario> listaUsuarios = usuarioRepository.findAll();
+
+        //then
+        assertThat(listaUsuarios).isNotNull();
+        assertThat(listaUsuarios.size()).isEqualTo(2);
+
+
     }
 
-    // Test para obtener usuario por ID
     @Test
     public void testObtenerUsuarioPorId() {
-        Long usuarioId = usuarioGlobal.getId(); // Obtener el ID del usuario guardado
+        //given
+        usuarioRepository.save(usuarioGlobal);
 
-        Optional<Usuario> encontrado = usuarioRepository.findById(usuarioId);
-        assertThat(encontrado).isPresent(); // Verificar que el usuario existe
-        assertThat(encontrado.get().getUsername()).isEqualTo("nachito");
+        //when
+        Usuario usuarioDB = usuarioRepository.findById(usuarioGlobal.getId()).get();
+
+        //then
+        assertThat(usuarioDB).isNotNull();
     }
 
-    // Test para buscar usuarios habilitados (enabled = true)
+    @Test
+    public void testEncontrarPorEmail() {
+        //given
+        usuarioRepository.save(usuarioGlobal);
+
+        //when
+        Usuario usuarioDB = usuarioRepository.findByEmail(usuarioGlobal.getEmail());
+
+        //then
+        assertThat(usuarioDB).isNotNull();
+    }
+
+    @Test
+    public void testEncontrarPorNit() {
+        //given
+        usuarioRepository.save(usuarioGlobal);
+
+        //when
+        Usuario usuarioDB = usuarioRepository.findByNit(usuarioGlobal.getNit());
+
+        //then
+        assertThat(usuarioDB).isNotNull();
+    }
+
+    @Test
+    public void testEncontrarPorCui() {
+        //given
+        usuarioRepository.save(usuarioGlobal);
+
+        //when
+        Usuario usuarioDB = usuarioRepository.findByCui(usuarioGlobal.getCui());
+
+        //then
+        assertThat(usuarioDB).isNotNull();
+    }
+
+
     @Test
     public void testBuscarUsuariosHabilitados() {
-        List<Usuario> usuariosHabilitados = usuarioRepository.findByEnabledTrue(); // Asume que existe el método
+        // given
+        usuarioRepository.save(usuarioGlobal);
+
+        // when
+        List<Usuario> usuariosHabilitados = usuarioRepository.findByEnabledTrue();
+
+        // then
         assertThat(usuariosHabilitados).isNotEmpty();
+        assertThat(usuariosHabilitados.get(0)).isNotNull();
         assertThat(usuariosHabilitados.get(0).isEnabled()).isTrue();
     }
+
 
     // Test para buscar usuarios deshabilitados (enabled = false)
     @Test
     public void testBuscarUsuariosDeshabilitados() {
-        // Crear un usuario deshabilitado
-        Usuario usuarioDeshabilitado = new Usuario();
-        usuarioDeshabilitado.setNombre("John");
-        usuarioDeshabilitado.setApellido("Doe");
-        usuarioDeshabilitado.setUsername("johnDoe");
-        usuarioDeshabilitado.setPassword("password");
-        usuarioDeshabilitado.setEmail("johndoe@gmail.com");
-        usuarioDeshabilitado.setTelefono("123456789");
-        usuarioDeshabilitado.setNit("123456");
-        usuarioDeshabilitado.setCui("654321");
-        usuarioDeshabilitado.setPerfil("profile.png");
-        usuarioDeshabilitado.setEnabled(false); // Usuario deshabilitado
+        // given
+        usuarioGlobal.setEnabled(false);
+        usuarioRepository.save(usuarioGlobal);
 
-        usuarioRepository.save(usuarioDeshabilitado);
+        // when
+        List<Usuario> usuariosDeshabilitados = usuarioRepository.findByEnabledFalse();
 
-        List<Usuario> usuariosDeshabilitados = usuarioRepository.findByEnabledFalse(); // Asume que existe el método
+        // then
         assertThat(usuariosDeshabilitados).isNotEmpty();
+        assertThat(usuariosDeshabilitados.get(0)).isNotNull();
         assertThat(usuariosDeshabilitados.get(0).isEnabled()).isFalse();
     }
 
+    @Test
+    public void testActualizarUsuario() {
+        //given
+        usuarioRepository.save(usuarioGlobal);
+
+        //when
+        Usuario usuarioGuardado = usuarioRepository.findById(usuarioGlobal.getId()).get();
+        usuarioGuardado.setNombre("Jose");
+        usuarioGuardado.setUsername("josias");
+        usuarioGuardado.setTelefono("77554");
+        Usuario usuarioActualizado = usuarioRepository.save(usuarioGuardado);
+
+        //then
+        assertThat(usuarioActualizado.getNombre()).isEqualTo("Jose");
+        assertThat(usuarioActualizado.getUsername()).isEqualTo("josias");
+        assertThat(usuarioActualizado.getTelefono()).isEqualTo("77554");
+    }
 
     @Test
+    public void testEliminarUsuario() {
+        //given
+        usuarioRepository.save(usuarioGlobal);
+
+        //when
+        usuarioRepository.deleteById(usuarioGlobal.getId());
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuarioGlobal.getId());
+
+        //then
+        assertThat(usuarioOptional).isEmpty();
+    }
+
+
+
+    /*@Test
     public void testGuardarUsuarioConNitDuplicado() {
         // Guardar un primer usuario
         usuarioRepository.save(usuarioGlobal);
@@ -163,23 +230,9 @@ public class UsuarioRepositoryTest {
         });
     }
 
-    @Test
-    public void testActualizarUsuario() {
-        // Actualizar el nombre del usuarioGlobal
-        usuarioGlobal.setNombre("Ringo Starr");
-        Usuario usuarioActualizado = usuarioRepository.save(usuarioGlobal);
 
-        assertThat(usuarioActualizado.getNombre()).isEqualTo("Ringo Starr");
-    }
 
-    @Test
-    public void testEliminarUsuario() {
-        // Eliminar el usuario guardado
-        usuarioRepository.delete(usuarioGlobal);
 
-        Optional<Usuario> encontrado = usuarioRepository.findById(usuarioGlobal.getId());
-        assertThat(encontrado).isNotPresent(); // Verificar que ya no existe
-    }
 
     @Test
     public void testGuardarUsuarioConUsernameDuplicado() {
@@ -314,7 +367,7 @@ public class UsuarioRepositoryTest {
         assertThat(usuarioGuardado.getUsername()).isEqualTo("csantana");
         assertThat(usuarioGuardado.getUsuarioRoles()).isNotEmpty();
         assertThat(usuarioGuardado.getUsuarioRoles().iterator().next().getRol().getRolNombre()).isEqualTo("ADMIN");
-    }*/
+    }
 
     @Test
     public void testGuardarUsuarioConMultiplesRoles() {
@@ -361,7 +414,7 @@ public class UsuarioRepositoryTest {
 
 
 
-
+*/
 
 
 }

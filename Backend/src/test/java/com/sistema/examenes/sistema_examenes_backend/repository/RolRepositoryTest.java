@@ -1,17 +1,16 @@
 package com.sistema.examenes.sistema_examenes_backend.repository;
 
+
 import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.RolRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.swing.text.html.Option;
-import javax.transaction.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ActiveProfiles("test") // Usa el archivo application-test.properties
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // No reemplazar H2 por otra base de datos
-@Transactional
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // No reemplazar H2 por otra base de datos
+//@Transactional
 public class RolRepositoryTest {
 
     @Autowired

@@ -1,8 +1,14 @@
 package com.sistema.examenes.sistema_examenes_backend.service;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.Mockito.*;
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
-
+import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityExistenteException;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityNotFoundException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.RolRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.RolServiceImplementacion;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,29 +18,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.test.context.ActiveProfiles;
 
-import javax.transaction.Transactional;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatNoException;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-
-
 @ExtendWith(MockitoExtension.class)
-@ActiveProfiles("test") // Usa el archivo application-test.properties
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // No reemplazar H2 por otra base de datos
-@Transactional
+@ActiveProfiles("test")
 public class RolServiceTest {
 
     @Mock
@@ -43,65 +33,125 @@ public class RolServiceTest {
     @InjectMocks
     private RolServiceImplementacion rolService;
 
-    private Rol rol;
-
     private Rol rolGlobal;
 
     @BeforeEach
-    public void setUp() {
-        // Inicializar el rol global
+    public void setup() {
         rolGlobal = new Rol();
         rolGlobal.setRolId(1L);
         rolGlobal.setRolNombre("ADMIN");
     }
 
+    @DisplayName("Test para guardar un rol")
     @Test
-    @DisplayName("Prueba para guardar un rol")
     public void testGuardarRol() {
-        // Simula el comportamiento del repositorio
+        // given
+        given(rolRepository.findByRolNombre(rolGlobal.getRolNombre())).willReturn(Optional.empty());
         given(rolRepository.save(rolGlobal)).willReturn(rolGlobal);
 
-        // Llama al método
-        Rol resultado = rolService.save(rolGlobal);
+        // when
+        Rol rolGuardado = rolService.save(rolGlobal);
 
-        // Verifica el resultado
-        assertThat(resultado).isNotNull();
-        assertThat(resultado.getRolNombre()).isEqualTo(rolGlobal.getRolNombre());
+        // then
+        assertThat(rolGuardado).isNotNull();
+        verify(rolRepository, times(1)).save(rolGlobal);
     }
 
+    @DisplayName("Test para lanzar excepción al guardar un rol existente")
     @Test
-    @DisplayName("Prueba para obtener un rol por ID")
+    public void testGuardarRolExistente() {
+        // given
+        given(rolRepository.findByRolNombre(rolGlobal.getRolNombre())).willReturn(Optional.of(rolGlobal));
+
+        // when/then
+        org.junit.jupiter.api.Assertions.assertThrows(EntityExistenteException.class, () -> {
+            rolService.save(rolGlobal);
+        });
+    }
+
+    @DisplayName("Test para listar roles")
+    @Test
+    public void testListarRoles() {
+        // given
+        given(rolRepository.findAll()).willReturn(List.of(rolGlobal));
+
+        // when
+        List<Rol> roles = rolService.findAll();
+
+        // then
+        assertThat(roles).isNotEmpty();
+        assertThat(roles.size()).isEqualTo(1);
+        verify(rolRepository, times(1)).findAll();
+    }
+
+    @DisplayName("Test para obtener rol por Id")
+    @Test
     public void testObtenerRolPorId() {
-        // Simula el comportamiento del repositorio
-        given(rolRepository.findById(rolGlobal.getRolId())).willReturn(Optional.of(rolGlobal));
+        // given
+        given(rolRepository.findById(1L)).willReturn(Optional.of(rolGlobal));
 
-        // Llama al método
-        Optional<Rol> resultado = rolService.findById(rolGlobal.getRolId());
+        // when
+        Rol rolObtenido = rolService.findById(1L).get();
 
-        // Verifica el resultado
-        assertThat(resultado).isPresent();
-        assertThat(resultado.get().getRolNombre()).isEqualTo(rolGlobal.getRolNombre());
+        // then
+        assertThat(rolObtenido).isNotNull();
+        verify(rolRepository, times(1)).findById(1L);
+    }
+
+    @DisplayName("Test para lanzar excepción al buscar un rol inexistente por Id")
+    @Test
+    public void testObtenerRolPorIdInexistente() {
+        // given
+        given(rolRepository.findById(1L)).willReturn(Optional.empty());
+
+        // when/then
+        org.junit.jupiter.api.Assertions.assertThrows(EntityNotFoundException.class, () -> {
+            rolService.findById(1L);
+        });
+    }
+
+    @DisplayName("Test para actualizar un rol")
+    @Test
+    public void testActualizarRol() {
+        // given
+        Rol rolActualizado = new Rol();
+        rolActualizado.setRolId(1L);
+        rolActualizado.setRolNombre("ADMIN_ACTUALIZADO");
+
+        given(rolRepository.findById(rolGlobal.getRolId()))
+                .willReturn(Optional.of(rolGlobal));
+        given(rolRepository.save(rolActualizado))
+                .willReturn(rolActualizado);
+
+        // when
+        Rol resultado = rolService.update(rolActualizado);
+
+        // then
+        assertThat(resultado).isNotNull();
+        assertThat(resultado.getRolNombre()).isEqualTo("ADMIN_ACTUALIZADO");
     }
 
 
-
-
-
-    /*@Test
-    @DisplayName("Prueba para eliminar un rol")
+    @DisplayName("Test para eliminar rol")
+    @Test
     public void testEliminarRol() {
-        // Simula el comportamiento del repositorio
-        given(rolRepository.findById(rolGlobal.getRolId())).willReturn(Optional.of(rolGlobal));
+        // given
+        long rolId = 1L;
 
-        // Llama al método
-        rolService.delete(rolGlobal.getRolId());
+        // Simulamos que el rol con el ID 1 existe
+        given(rolRepository.findById(rolId)).willReturn(Optional.of(rolGlobal));
 
-        // Verifica que el rol se haya eliminado
-        given(rolRepository.findById(rolGlobal.getRolId())).willReturn(Optional.empty());
-        Optional<Rol> resultado = rolService.findById(rolGlobal.getRolId());
+        // Simulamos que la eliminación no haga nada
+        willDoNothing().given(rolRepository).deleteById(rolId);
 
-        assertThat(resultado).isNotPresent();
-    }*/
+        // when
+        rolService.delete(rolId);
+
+        // then
+        // Verificamos que se haya llamado una vez a deleteById con el rolId
+        verify(rolRepository, times(1)).deleteById(rolId);
+    }
+
 
 
 }

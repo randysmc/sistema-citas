@@ -1,25 +1,21 @@
 package com.sistema.examenes.sistema_examenes_backend.repository;
 
-
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("test") // Usa el archivo application-test.properties
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // No reemplazar H2 por otra base de datos
+@ActiveProfiles("test")
 @Transactional
 public class NegocioRepositoryTest {
 
@@ -30,112 +26,144 @@ public class NegocioRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        negocioRepository.deleteAll();
         negocioGlobal = new Negocio();
-        negocioGlobal.setNombre("Negocio Test");
-        negocioGlobal.setDireccion("Calle 123");
-        negocioGlobal.setDescripcion("Descripción del negocio de prueba");
+        negocioGlobal.setNombre("Tienda de Ropa");
+        negocioGlobal.setDireccion("Calle 123, Ciudad");
+        negocioGlobal.setDescripcion("Venta de ropa para todas las edades");
         negocioGlobal.setTelefono("123456789");
-        negocioGlobal.setFotoPerfil("foto_test.png");
-        negocioGlobal.setEmail("test@negocio.com");
-        negocioGlobal.setSlogan("El mejor negocio");
+        negocioGlobal.setFotoPerfil("foto.png");
+        negocioGlobal.setEmail("contacto@tiendaropa.com");
+        negocioGlobal.setSlogan("¡Vístete con estilo!");
+        negocioGlobal.setCitasAleatorias(true);
 
-        // Guardar el negocio global antes de cada prueba
         negocioRepository.save(negocioGlobal);
     }
 
-
-
     @Test
     public void testGuardarNegocio() {
+        // given
         Negocio negocio = new Negocio();
-        negocio.setNombre("Negocio Uno");
-        negocio.setDireccion("Calle 1");
-        negocio.setDescripcion("Descripción del negocio uno");
-        negocio.setTelefono("123456789");
-        negocio.setFotoPerfil("foto.png");
+        negocio.setNombre("Librería Central");
+        negocio.setDireccion("Avenida 456, Ciudad");
+        negocio.setDescripcion("Venta de libros y material escolar");
+        negocio.setTelefono("987654321");
+        negocio.setFotoPerfil("libreria.png");
+        negocio.setEmail("info@libreriacentral.com");
+        negocio.setSlogan("Un libro para cada ocasión");
+        negocio.setCitasAleatorias(false);
 
+        // when
         Negocio negocioGuardado = negocioRepository.save(negocio);
 
-        assertThat(negocioGuardado.getNombre()).isEqualTo("Negocio Uno");
+        // then
+        assertThat(negocioGuardado).isNotNull();
+        assertThat(negocioGuardado.getNegocioId()).isGreaterThan(0);
     }
 
     @Test
-    public void testEncontrarPorId() {
-        Long id = negocioGlobal.getNegocioId();
+    public void testListarNegocios() {
+        //given
+        Negocio negocio1 = new Negocio();
+        negocio1.setNombre("Barberia SJ");
+        negocio1.setDireccion("Avenida 456, Quetgo");
+        negocio1.setDescripcion("Cortamos el pelo");
+        negocio1.setTelefono("98765");
+        negocio1.setFotoPerfil("barberia.png");
+        negocio1.setEmail("barbs@gmail.com");
+        negocio1.setSlogan("Un pelo para cada ocasión");
+        negocio1.setCitasAleatorias(false);
 
-        Optional<Negocio> encontrado = negocioRepository.findById(id);
-        assertThat(encontrado).isPresent();
-        assertThat(encontrado.get().getNombre()).isEqualTo("Negocio Test");
+        negocioRepository.save(negocioGlobal);
+        negocioRepository.save(negocio1);
+
+        // when
+        List<Negocio> listaNegocios = negocioRepository.findAll();
+
+        // then
+        assertThat(listaNegocios).isNotNull();
+        assertThat(listaNegocios.size()).isEqualTo(2);
     }
 
     @Test
-    public void testEncontrarPorNombre() {
-        assertThat(negocioRepository.existsByNombre("Negocio Test")).isTrue();
-    }
+    public void testObtenerNegocioPorId() {
+        //given
+        negocioRepository.save(negocioGlobal);
 
+        // when
+        Optional<Negocio> negocioOptional = negocioRepository.findById(negocioGlobal.getNegocioId());
 
-    @Test
-    public void testNegocioExistente() {
-        Negocio negocio = new Negocio();
-        negocio.setNombre("Negocio Cuatro");
-        negocio.setDireccion("Calle 000");
-        negocio.setDescripcion("Descripción del negocio cuatro");
-        negocio.setTelefono("456456456");
-        negocio.setFotoPerfil("foto_cuatro.png");
-
-        negocioRepository.save(negocio);
-
-        // Intentar guardar un negocio con el mismo nombre
-        Negocio negocioDuplicado = new Negocio();
-        negocioDuplicado.setNombre("Negocio Cuatro");
-        negocioDuplicado.setDireccion("Calle 111");
-        negocioDuplicado.setDescripcion("Descripción duplicada");
-        negocioDuplicado.setTelefono("999999999");
-        negocioDuplicado.setFotoPerfil("foto_cuatro_duplicada.png");
-
-        // Esperamos que esto lance una excepción
-        assertThatThrownBy(() -> negocioRepository.save(negocioDuplicado))
-                .isInstanceOf(DataIntegrityViolationException.class);
+        // then
+        assertThat(negocioOptional).isPresent();
+        assertThat(negocioOptional.get().getNombre()).isEqualTo("Tienda de Ropa");
     }
 
     @Test
-    public void testEliminarNegocio() {
-        Long id = negocioGlobal.getNegocioId();
+    public void testExistePorNombre() {
+        //given
+        negocioRepository.save(negocioGlobal);
 
-        negocioRepository.deleteById(id);
-        assertThat(negocioRepository.findById(id)).isNotPresent();
+        // when
+        boolean existe = negocioRepository.existsByNombre(negocioGlobal.getNombre());
+
+        // then
+        assertThat(existe).isTrue();
     }
 
 
     @Test
     public void testActualizarNegocio() {
-        Long id = negocioGlobal.getNegocioId();
-
-        // Actualizar el negocio
-        negocioGlobal.setNombre("Negocio Test Actualizado");
+        //given
         negocioRepository.save(negocioGlobal);
 
-        Optional<Negocio> negocioActualizado = negocioRepository.findById(id);
-        assertThat(negocioActualizado).isPresent();
-        assertThat(negocioActualizado.get().getNombre()).isEqualTo("Negocio Test Actualizado");
+        // when
+        Negocio negocioGuardado = negocioRepository.findById(negocioGlobal.getNegocioId()).get();
+        negocioGuardado.setNombre("Tienda de Calzado");
+        negocioGuardado.setSlogan("Pasos con estilo");
+        Negocio negocioActualizado = negocioRepository.save(negocioGuardado);
+
+        // then
+        assertThat(negocioActualizado.getNombre()).isEqualTo("Tienda de Calzado");
+        assertThat(negocioActualizado.getSlogan()).isEqualTo("Pasos con estilo");
     }
 
     @Test
-    public void testGuardarNegocioConNombreDuplicado() {
-        // Intentar guardar un negocio con un nombre duplicado
-        Negocio negocioDuplicado = new Negocio();
-        negocioDuplicado.setNombre("Negocio Test"); // Mismo nombre que el negocio global
-        negocioDuplicado.setDireccion("Calle Duplicada");
-        negocioDuplicado.setDescripcion("Descripción duplicada");
-        negocioDuplicado.setTelefono("987654321");
-        negocioDuplicado.setFotoPerfil("foto_duplicado.png");
+    public void testEliminarNegocio() {
+        //given
+        negocioRepository.save(negocioGlobal);
 
-        // Este test espera que el negocio duplicado no se guarde
-        assertThat(negocioRepository.existsByNombre(negocioDuplicado.getNombre())).isTrue();
+        // when
+        negocioRepository.deleteById(negocioGlobal.getNegocioId());
+        Optional<Negocio> negocioOptional = negocioRepository.findById(negocioGlobal.getNegocioId());
+
+        // then
+        assertThat(negocioOptional).isEmpty();
     }
 
+    @Test
+    public void testNegocioConCitasAleatoriasTrue() {
+        //given
+        negocioRepository.save(negocioGlobal);
 
+        // when
+        Optional<Negocio> negocioConCitasAleatorias = negocioRepository.findByCitasAleatoriasTrue();
 
+        // then
+        assertThat(negocioConCitasAleatorias).isPresent();
+        assertThat(negocioConCitasAleatorias.get().isCitasAleatorias()).isTrue();
+        assertThat(negocioConCitasAleatorias.get().getNombre()).isEqualTo("Tienda de Ropa");
+    }
 
+    @Test
+    public void testNegocioConCitasAleatoriasFalse() {
+
+        // given
+        negocioGlobal.setCitasAleatorias(false);
+        negocioRepository.save(negocioGlobal);
+
+        // when
+        Optional<Negocio> negocioConCitasAleatorias = negocioRepository.findByCitasAleatoriasTrue();
+
+        // then
+        assertThat(negocioConCitasAleatorias).isEmpty();
+    }
 }

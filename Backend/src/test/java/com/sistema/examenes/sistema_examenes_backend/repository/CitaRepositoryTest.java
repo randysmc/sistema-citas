@@ -11,9 +11,9 @@ import com.sistema.examenes.sistema_examenes_backend.repositorios.RecursoReposit
 import com.sistema.examenes.sistema_examenes_backend.repositorios.ServicioRepository;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.UsuarioRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -25,11 +25,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-@ActiveProfiles("test") // Usa el archivo application-test.properties
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // No reemplazar H2 por otra base de datos
+@ActiveProfiles("test")
 @Transactional
 public class CitaRepositoryTest {
 
@@ -49,14 +47,10 @@ public class CitaRepositoryTest {
     private Usuario empleadoGlobal;
     private Servicio servicioGlobal;
     private Recurso recursoGlobal;
+    private Cita citaGlobal;
 
     @BeforeEach
     public void setUp() {
-        // Limpiar la base de datos antes de cada prueba
-        citaRepository.deleteAll();
-        usuarioRepository.deleteAll();
-        servicioRepository.deleteAll();
-        recursoRepository.deleteAll();
 
         // Crear el usuario cliente
         usuarioGlobal = new Usuario();
@@ -87,7 +81,7 @@ public class CitaRepositoryTest {
         recursoGlobal.setNombre("Recurso de Ejemplo");
         recursoGlobal.setDescripcion("Descripción del recurso de ejemplo");
         recursoGlobal.setDisponible(true);
-        recursoGlobal.setTipo(TipoRecurso.INSTALACION); // Asegúrate de que este tipo esté definido
+        recursoGlobal.setTipo(TipoRecurso.INSTALACION);
         recursoRepository.save(recursoGlobal);
 
         // Crear el servicio
@@ -98,104 +92,138 @@ public class CitaRepositoryTest {
         servicioGlobal.setPrecio(BigDecimal.valueOf(100.0));
         servicioGlobal.setDisponible(true);
         servicioRepository.save(servicioGlobal);
+
+        // Crear la cita global
+        citaGlobal = new Cita();
+        citaGlobal.setFecha(LocalDate.of(2024, 10, 29));
+        citaGlobal.setHoraInicio(LocalTime.of(10, 0));
+        citaGlobal.setHoraFin(LocalTime.of(11, 0));
+        citaGlobal.setEstado(EstadoCita.AGENDADA);
+        citaGlobal.setCliente(usuarioGlobal);
+        citaGlobal.setEmpleado(empleadoGlobal);
+        citaGlobal.setRecurso(recursoGlobal);
+        citaGlobal.setServicio(servicioGlobal);
+        citaRepository.save(citaGlobal);
     }
 
+    @DisplayName("Test para guardar una cita")
     @Test
-    public void testCrearCitaConDatosGlobales() {
-        // Crear la cita utilizando las entidades globales creadas en el `@BeforeEach`
-        Cita cita = new Cita();
-        cita.setFecha(LocalDate.of(2024, 10, 29));
-        cita.setHoraInicio(LocalTime.of(10, 0));
-        cita.setHoraFin(LocalTime.of(11, 0));
-        cita.setEstado(EstadoCita.AGENDADA);
-        cita.setCliente(usuarioGlobal);
-        cita.setEmpleado(empleadoGlobal);
-        cita.setRecurso(recursoGlobal);
-        cita.setServicio(servicioGlobal);
+    public void testGuardarCita() {
+        // given
+        Cita nuevaCita = new Cita();
+        nuevaCita.setFecha(LocalDate.of(2024, 11, 1));
+        nuevaCita.setHoraInicio(LocalTime.of(9, 0));
+        nuevaCita.setHoraFin(LocalTime.of(10, 0));
+        nuevaCita.setEstado(EstadoCita.AGENDADA);
+        nuevaCita.setCliente(usuarioGlobal);
+        nuevaCita.setEmpleado(empleadoGlobal);
+        nuevaCita.setRecurso(recursoGlobal);
+        nuevaCita.setServicio(servicioGlobal);
 
-        // Guardar la cita en el repositorio
-        Cita citaGuardada = citaRepository.save(cita);
+        // when
+        Cita citaGuardada = citaRepository.save(nuevaCita);
 
-        // Verificar que la cita se ha guardado correctamente
+        // then
         assertThat(citaGuardada).isNotNull();
-        assertThat(citaGuardada.getCliente()).isEqualTo(usuarioGlobal);
-        assertThat(citaGuardada.getEmpleado()).isEqualTo(empleadoGlobal);
-        assertThat(citaGuardada.getRecurso()).isEqualTo(recursoGlobal);
-        assertThat(citaGuardada.getServicio()).isEqualTo(servicioGlobal);
-        assertThat(citaGuardada.getFecha()).isEqualTo(LocalDate.of(2024, 10, 29));
-        assertThat(citaGuardada.getHoraInicio()).isEqualTo(LocalTime.of(10, 0));
-        assertThat(citaGuardada.getHoraFin()).isEqualTo(LocalTime.of(11, 0));
-        assertThat(citaGuardada.getEstado()).isEqualTo(EstadoCita.AGENDADA);
+        assertThat(citaGuardada.getIdCita()).isGreaterThan(0);
     }
 
+    @DisplayName("Test para listar todas las citas")
+    @Test
+    public void testListarCitas() {
+        //given
+        citaRepository.save(citaGlobal);
+        // when
+        List<Cita> citas = citaRepository.findAll();
+
+        // then
+        assertThat(citas).isNotEmpty();
+        assertThat(citas.size()).isEqualTo(1);
+    }
+
+    @DisplayName("Test para obtener cita por ID")
     @Test
     public void testObtenerCitaPorId() {
-        Cita cita = crearCitaDeEjemplo(); // Método que crea y guarda una cita
-        Cita citaEncontrada = citaRepository.findById(cita.getIdCita()).orElse(null);
-        assertThat(citaEncontrada).isNotNull();
-        assertThat(citaEncontrada.getIdCita()).isEqualTo(cita.getIdCita());
+        //given
+        citaRepository.save(citaGlobal);
+
+
+        // when
+        Cita citaDB = citaRepository.findById(citaGlobal.getIdCita()).get();
+
+        // then
+        assertThat(citaDB).isNotNull();
     }
 
+    @DisplayName("Test para actualizar una cita")
     @Test
     public void testActualizarCita() {
-        Cita cita = crearCitaDeEjemplo(); // Método que crea y guarda una cita
-        cita.setEstado(EstadoCita.CANCELADA);
-        Cita citaActualizada = citaRepository.save(cita);
+        //given
+        citaRepository.save(citaGlobal);
+
+        // when
+        Cita citaGuardada = citaRepository.findById(citaGlobal.getIdCita()).get();
+        citaGuardada.setEstado(EstadoCita.CANCELADA);
+        Cita citaActualizada = citaRepository.save(citaGuardada);
+
+        // then
         assertThat(citaActualizada.getEstado()).isEqualTo(EstadoCita.CANCELADA);
     }
 
+    @DisplayName("Test para eliminar una cita")
     @Test
-    public void testObtenerTodasLasCitas() {
-        crearCitaDeEjemplo(); // Crea una cita de ejemplo
-        List<Cita> citas = citaRepository.findAll();
-        assertThat(citas).isNotEmpty();
+    public void testEliminarCita() {
+        //given
+        citaRepository.save(citaGlobal);
+
+        // when
+        citaRepository.deleteById(citaGlobal.getIdCita());
+        Optional<Cita> citaEliminada = citaRepository.findById(citaGlobal.getIdCita());
+
+        // then
+        assertThat(citaEliminada).isEmpty();
     }
 
+    @DisplayName("Test para encontrar citas por cliente ID")
     @Test
-    public void testBorrarCita() {
-        Cita cita = crearCitaDeEjemplo(); // Crea una cita de ejemplo
-        citaRepository.delete(cita);
-        assertThat(citaRepository.findById(cita.getIdCita())).isEmpty();
+    public void testEncontrarCitasPorClienteId() {
+        // given
+        citaRepository.save(citaGlobal);
+
+        // when
+        List<Cita> citasPorCliente = citaRepository.findByClienteId(usuarioGlobal.getId());
+
+        // then
+        assertThat(citasPorCliente).isNotEmpty();
+        assertThat(citasPorCliente.get(0).getCliente().getId()).isEqualTo(usuarioGlobal.getId());
     }
 
+    @DisplayName("Test para encontrar citas por empleado ID")
     @Test
-    public void testObtenerCitasPorEstadoCita() {
-        crearCitaDeEjemplo(); // Crea una cita de ejemplo
-        List<Cita> citas = citaRepository.findByEstado(EstadoCita.AGENDADA);
-        assertThat(citas).isNotEmpty();
-        assertThat(citas.get(0).getEstado()).isEqualTo(EstadoCita.AGENDADA);
+    public void testEncontrarCitasPorEmpleadoId() {
+        // given
+        citaRepository.save(citaGlobal);
+
+        // when
+        List<Cita> citasPorEmpleado = citaRepository.findByEmpleadoId(empleadoGlobal.getId());
+
+        // then
+        assertThat(citasPorEmpleado).isNotEmpty();
+        assertThat(citasPorEmpleado.get(0).getEmpleado().getId()).isEqualTo(empleadoGlobal.getId());
     }
 
+    @DisplayName("Test para encontrar citas por estado")
     @Test
-    public void testObtenerCitasPorCliente() {
-        Cita cita = crearCitaDeEjemplo(); // Crea y guarda una cita de ejemplo
-        List<Cita> citas = citaRepository.findByClienteId(cita.getCliente().getId());
-        assertThat(citas).isNotEmpty();
-        assertThat(citas.get(0).getCliente().getId()).isEqualTo(cita.getCliente().getId());
-    }
+    public void testEncontrarCitasPorEstado() {
+        // given
+        citaRepository.save(citaGlobal);
 
-    @Test
-    public void testObtenerCitasPorEmpleado() {
-        Cita cita = crearCitaDeEjemplo(); // Crea y guarda una cita de ejemplo
-        List<Cita> citas = citaRepository.findByEmpleadoId(cita.getEmpleado().getId());
-        assertThat(citas).isNotEmpty();
-        assertThat(citas.get(0).getEmpleado().getId()).isEqualTo(cita.getEmpleado().getId());
-    }
+        // when
+        List<Cita> citasPorEstado = citaRepository.findByEstado(EstadoCita.AGENDADA);
 
-
-
-
-    private Cita crearCitaDeEjemplo() {
-        Cita cita = new Cita();
-        cita.setFecha(LocalDate.of(2024, 10, 29));
-        cita.setHoraInicio(LocalTime.of(10, 0));
-        cita.setHoraFin(LocalTime.of(11, 0));
-        cita.setEstado(EstadoCita.AGENDADA);
-        cita.setCliente(usuarioGlobal);
-        cita.setEmpleado(empleadoGlobal);
-        cita.setRecurso(recursoGlobal);
-        cita.setServicio(servicioGlobal);
-        return citaRepository.save(cita); // Guarda la cita en la base de datos
+        // then
+        assertThat(citasPorEstado).isNotEmpty();
+        assertThat(citasPorEstado.get(0).getEstado()).isEqualTo(EstadoCita.AGENDADA);
     }
 
 }

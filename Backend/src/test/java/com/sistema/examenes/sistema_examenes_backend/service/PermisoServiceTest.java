@@ -9,6 +9,8 @@ import static org.mockito.Mockito.*;
 
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.Permiso;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityExistenteException;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityNotFoundException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.PermisoRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.PermisoServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,8 +31,7 @@ import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Transactional
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class PermisoServiceTest {
 
     @Mock
@@ -43,7 +44,7 @@ public class PermisoServiceTest {
 
     @BeforeEach
     public void setup(){
-        permisoRepository.deleteAll();
+        //permisoRepository.deleteAll();
         permisoGlobal = new Permiso();
         permisoGlobal.setId(1L);
         permisoGlobal.setNombre("CREAR");
@@ -76,7 +77,7 @@ public class PermisoServiceTest {
 
 
         //when
-        assertThrows(ResourceNotFoundException.class, () -> {
+        assertThrows(EntityNotFoundException.class, () -> {
             permisoService.save(permisoGlobal);
         });
 
@@ -104,24 +105,21 @@ public class PermisoServiceTest {
         assertThat(permisos.size()).isEqualTo(2);
     }
 
-    /*@DisplayName("Test para devolver una lista vacia")
-    @Test
-    public void testListarColeccionPermisosVacia(){
-        //given
-        Permiso permiso1 = new Permiso();
-        permiso1.setId(1L);
-        permiso1.setNombre("EDITAR");
 
+    @DisplayName("Test para devolver una lista vacía")
+    @Test
+    public void testListarColeccionPermisosVacia() {
+        //given
         given(permisoRepository.findAll()).willReturn(Collections.emptyList());
 
-        //when
-        List<Permiso> listaPermisos = permisoService.findAll();
+        //when & then
+        assertThrows(EntityNotFoundException.class, () -> {
+            permisoService.findAll();
+        });
 
-        //then
-        assertThat(listaPermisos).isEmpty();
-        assertThat(listaPermisos.size()).isEqualTo(0);
+        verify(permisoRepository, times(1)).findAll();
+    }
 
-    }*/
 
     @DisplayName("Test para obtener Permiso por Id")
     @Test
@@ -136,21 +134,23 @@ public class PermisoServiceTest {
         assertThat(permisoGuardado).isNotNull();
     }
 
-    /*@DisplayName("Test para actualizar permiso")
+    @DisplayName("Test para actualizar permiso")
     @Test
     public void testActualizarPermiso(){
         //given
+        given(permisoRepository.findById(permisoGlobal.getId()))
+                .willReturn(Optional.of(permisoGlobal));
         given(permisoRepository.save(permisoGlobal)).willReturn(permisoGlobal);
-        //permisoGlobal.setNombre("HACER");
-        permisoGlobal.setId(3L);
+
+        permisoGlobal.setNombre("HACER");
 
         //when
         Permiso permisoActualizado = permisoService.update(permisoGlobal);
 
         //then
-        //assertThat(permisoActualizado.getNombre()).isEqualTo("HACER");
-        assertThat(permisoActualizado.getId()).isEqualTo(3);
-    }*/
+        assertThat(permisoActualizado.getNombre()).isEqualTo("HACER");
+    }
+
 
     @DisplayName("Test para eliminar permiso")
     @Test
@@ -165,5 +165,37 @@ public class PermisoServiceTest {
         //then
         verify(permisoRepository,times(1)).deleteById(permisoId);
     }
+
+    @DisplayName("Test para obtener un Permiso por Id con excepción")
+    @Test
+    public void testObtenerPermisoPorIdConExcepcion() {
+        //given
+        given(permisoRepository.findById(1L)).willReturn(Optional.empty());
+
+        //when & then
+        assertThrows(EntityNotFoundException.class, () -> {
+            permisoService.findById(1L);
+        });
+
+        verify(permisoRepository, times(1)).findById(1L);
+    }
+
+
+
+    @DisplayName("Test para listar un solo Permiso")
+    @Test
+    public void testListarUnSoloPermiso() {
+        //given
+        given(permisoRepository.findAll()).willReturn(List.of(permisoGlobal));
+
+        //when
+        List<Permiso> permisos = permisoService.findAll();
+
+        //then
+        assertThat(permisos).isNotNull();
+        assertThat(permisos.size()).isEqualTo(1);
+        assertThat(permisos.get(0).getNombre()).isEqualTo("CREAR");
+    }
+
 
 }

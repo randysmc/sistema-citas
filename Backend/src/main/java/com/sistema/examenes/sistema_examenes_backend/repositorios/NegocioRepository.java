@@ -8,4 +8,7 @@ import java.util.Optional;
 public interface NegocioRepository extends JpaRepository<Negocio, Long> {
     boolean existsByNombre(String nombre);
 
+    public Optional<Negocio> findByCitasAleatoriasTrue();
+
+
 }

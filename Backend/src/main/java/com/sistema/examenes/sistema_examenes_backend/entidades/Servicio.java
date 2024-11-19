@@ -1,6 +1,7 @@
 package com.sistema.examenes.sistema_examenes_backend.entidades;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sistema.examenes.sistema_examenes_backend.Enums.TipoRecurso;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -24,6 +25,8 @@ public class Servicio {
     private Integer duracionServicio;
     private BigDecimal precio;
     private Boolean disponible;
+    @Enumerated(EnumType.STRING)
+    private TipoRecurso tipo;
 
 
     /*@OneToMany(mappedBy = "servicio", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -31,13 +34,14 @@ public class Servicio {
     private Set<Cita> citas = new HashSet<>();*/
 
 
-    public Servicio(Long servicioId, String nombre, String descripcion, Integer duracionServicio, BigDecimal precio) {
+    public Servicio(Long servicioId, String nombre, String descripcion, Integer duracionServicio, BigDecimal precio, Boolean disponible, TipoRecurso tipo) {
         this.servicioId = servicioId;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.duracionServicio = duracionServicio;
         this.precio = precio;
-
+        this.disponible = disponible;
+        this.tipo = tipo;
     }
 
     public Servicio() {
@@ -99,4 +103,12 @@ public class Servicio {
     public void setCitas(Set<Cita> citas) {
         this.citas = citas;
     }*/
+
+    public TipoRecurso getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoRecurso tipo) {
+        this.tipo = tipo;
+    }
 }

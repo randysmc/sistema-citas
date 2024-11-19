@@ -1,27 +1,22 @@
 package com.sistema.examenes.sistema_examenes_backend.repository;
 
-
 import com.sistema.examenes.sistema_examenes_backend.entidades.DiaFestivo;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.DiaFestivoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@ActiveProfiles("test") // Usa el archivo application-test.properties
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // No reemplazar H2 por otra base de datos
+@ActiveProfiles("test")
 @Transactional
 public class DiaFestivoRepositoryTest {
 
@@ -32,7 +27,6 @@ public class DiaFestivoRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        diaFestivoRepository.deleteAll();
         diaFestivoGlobal = new DiaFestivo();
         diaFestivoGlobal.setFecha(LocalDate.of(2024, 12, 25));
         diaFestivoGlobal.setDescripcion("Navidad");
@@ -44,82 +38,93 @@ public class DiaFestivoRepositoryTest {
 
     @Test
     public void testGuardarDiaFestivo() {
+        // given
         DiaFestivo diaFestivo = new DiaFestivo();
-        diaFestivo.setFecha(LocalDate.of(2024, 1, 1));
+        diaFestivo.setFecha(LocalDate.of(2025, 1, 1));
         diaFestivo.setDescripcion("Año Nuevo");
-        diaFestivo.setRecurrente(true);
-        diaFestivo.setAnyo(2024);
+        diaFestivo.setRecurrente(false);
+        diaFestivo.setAnyo(2025);
 
+        // when
         DiaFestivo diaFestivoGuardado = diaFestivoRepository.save(diaFestivo);
 
-        assertThat(diaFestivoGuardado.getDescripcion()).isEqualTo("Año Nuevo");
+        // then
+        assertThat(diaFestivoGuardado).isNotNull();
+        assertThat(diaFestivoGuardado.getIdDiaFestivo()).isGreaterThan(0);
     }
 
     @Test
-    public void testEncontrarPorFechaYAnyo() {
-        Optional<DiaFestivo> encontrado = diaFestivoRepository.findByFechaAndAnyo(LocalDate.of(2024, 12, 25), 2024);
+    public void testBuscarDiaFestivoPorFechaYAnyo() {
+        //given
+        diaFestivoRepository.save(diaFestivoGlobal);
 
-        encontrado.ifPresentOrElse(
-                diaFestivo -> assertThat(diaFestivo.getDescripcion()).isEqualTo("Navidad"),
-                () -> fail("El día festivo no fue encontrado")
+        // when
+        Optional<DiaFestivo> diaFestivo = diaFestivoRepository.findByFechaAndAnyo(
+                diaFestivoGlobal.getFecha(),
+                diaFestivoGlobal.getAnyo()
         );
+
+        // then
+        assertThat(diaFestivo).isPresent();
+        assertThat(diaFestivo.get().getDescripcion()).isEqualTo("Navidad");
     }
 
-
     @Test
-    public void testEncontrarPorFecha() {
-        Optional<DiaFestivo> encontrado = diaFestivoRepository.findByFecha(LocalDate.of(2024, 12, 25));
+    public void testBuscarDiaFestivoPorFecha() {
+        //given
+        diaFestivoRepository.save(diaFestivoGlobal);
 
-        encontrado.ifPresentOrElse(
-                diaFestivo -> assertThat(diaFestivo.getDescripcion()).isEqualTo("Navidad"),
-                () -> fail("El día festivo no fue encontrado")
-        );
+        // when
+        Optional<DiaFestivo> diaFestivo = diaFestivoRepository.findByFecha(diaFestivoGlobal.getFecha());
+
+        // then
+        assertThat(diaFestivo).isPresent();
+        assertThat(diaFestivo.get().getDescripcion()).isEqualTo("Navidad");
     }
 
+    @Test
+    public void testBuscarDiasFestivosRecurrentes() {
+        //given
+        diaFestivoRepository.save(diaFestivoGlobal);
 
+        // when
+        List<DiaFestivo> diasRecurrentes = diaFestivoRepository.findByRecurrenteTrue();
+
+        // then
+        assertThat(diasRecurrentes).isNotEmpty();
+        assertThat(diasRecurrentes.get(0).isRecurrente()).isTrue();
+        assertThat(diasRecurrentes.get(0).getDescripcion()).isEqualTo("Navidad");
+    }
 
     @Test
-    public void testEncontrarDiasFestivosNoRecurrentes() {
-        // Guardar un día no recurrente
+    public void testBuscarDiasFestivosNoRecurrentes() {
+        // given
         DiaFestivo diaNoRecurrente = new DiaFestivo();
-        diaNoRecurrente.setFecha(LocalDate.of(2025, 11, 1));
-        diaNoRecurrente.setDescripcion("Día no recurrente");
+        diaNoRecurrente.setFecha(LocalDate.of(2025, 1, 1));
+        diaNoRecurrente.setDescripcion("Año Nuevo");
         diaNoRecurrente.setRecurrente(false);
         diaNoRecurrente.setAnyo(2025);
         diaFestivoRepository.save(diaNoRecurrente);
 
-        List<DiaFestivo> noRecurrentes = diaFestivoRepository.findByRecurrenteFalse();
+        // when
+        List<DiaFestivo> diasNoRecurrentes = diaFestivoRepository.findByRecurrenteFalse();
 
-        // Comprobar si existe un elemento con la descripción esperada
-        boolean contieneDiaNoRecurrente = noRecurrentes.stream()
-                .anyMatch(dia -> "Día no recurrente".equals(dia.getDescripcion()));
-        assertThat(contieneDiaNoRecurrente).isTrue();
+        // then
+        assertThat(diasNoRecurrentes).isNotEmpty();
+        assertThat(diasNoRecurrentes.get(0).isRecurrente()).isFalse();
+        assertThat(diasNoRecurrentes.get(0).getDescripcion()).isEqualTo("Año Nuevo");
     }
-
-
 
     @Test
     public void testEliminarDiaFestivo() {
-        Long id = diaFestivoGlobal.getIdDiaFestivo();
-        diaFestivoRepository.deleteById(id);
-        assertThat(diaFestivoRepository.findById(id)).isNotPresent();
-    }
-
-    @Test
-    public void testActualizarDiaFestivo() {
-        Long id = diaFestivoGlobal.getIdDiaFestivo();
-        diaFestivoGlobal.setDescripcion("Navidad Actualizada");
+        //given
         diaFestivoRepository.save(diaFestivoGlobal);
 
-        Optional<DiaFestivo> diaFestivoActualizado = diaFestivoRepository.findById(id);
+        // when
+        diaFestivoRepository.deleteById(diaFestivoGlobal.getIdDiaFestivo());
+        Optional<DiaFestivo> diaFestivoEliminado = diaFestivoRepository.findById(diaFestivoGlobal.getIdDiaFestivo());
 
-        diaFestivoActualizado.ifPresentOrElse(
-                diaFestivo -> assertThat(diaFestivo.getDescripcion()).isEqualTo("Navidad Actualizada"),
-                () -> fail("El día festivo actualizado no fue encontrado")
-        );
+        // then
+        assertThat(diaFestivoEliminado).isEmpty();
     }
-
-
-
-
 }

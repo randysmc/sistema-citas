@@ -3,6 +3,8 @@ package com.sistema.examenes.sistema_examenes_backend.controladores;
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.Permiso;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
+import com.sistema.examenes.sistema_examenes_backend.entidades.Servicio;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityNotFoundException;
 import com.sistema.examenes.sistema_examenes_backend.responses.ResponseMessage;
 import com.sistema.examenes.sistema_examenes_backend.servicios.PermisoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/permisos/")
+@RequestMapping("/permisos/")
 @CrossOrigin("http://localhost:4200")
 public class PermisoController {
 
@@ -30,19 +32,41 @@ public class PermisoController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseMessage<Permiso>> crearPermiso(@RequestBody Permiso permiso){
-        if(permiso.getNombre() == null || permiso.getNombre().isEmpty()){
-            ResponseMessage<Permiso> response  = new ResponseMessage<>("El nombre del permiso no puede estar vacio", null);
-            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-        }
-        try {
-            Permiso nuevoPermiso = permisoService.save(permiso);
-            ResponseMessage<Permiso> response = new ResponseMessage<>("Permiso creado exitosamente", nuevoPermiso);
-            return new ResponseEntity<>(response, HttpStatus.CREATED); // Retorna el rol creado con código 201
-        } catch (Exception e) {
-            ResponseMessage<Permiso> response = new ResponseMessage<>("Error al crear el permiso: " + e.getMessage(), null);
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR); // Retorna error 500
-        }
-
+    public ResponseEntity<Permiso> crearPermiso(@RequestBody Permiso permiso) {
+        Permiso nuevoPermiso = permisoService.save(permiso);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoPermiso);
     }
+
+    // Obtener un permiso por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<Permiso> obtenerPermisoPorId(@PathVariable Long id) {
+        try {
+            Permiso permiso = permisoService.findById(id).orElseThrow(() ->
+                    new EntityNotFoundException("Permiso", id));
+            return new ResponseEntity<>(permiso, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Permiso> actualizarPermiso(@PathVariable Long id, @RequestBody Permiso permisoActualizado) {
+        try {
+            permisoActualizado.setId(id); //
+            Permiso permiso = permisoService.update(permisoActualizado);
+            return new ResponseEntity<>(permiso, HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    /*@DeleteMapping("/{id}")
+    public ResponseEntity<Void> eliminarPermiso(@PathVariable Long id) {
+        try {
+            permisoService.delete(id);
+            return ResponseEntity.noContent().build();
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }*/
 }

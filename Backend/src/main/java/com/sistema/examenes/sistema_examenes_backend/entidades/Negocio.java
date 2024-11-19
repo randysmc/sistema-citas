@@ -27,6 +27,7 @@ public class Negocio {
     private String fotoPerfil;
     private String email;
     private String slogan;
+    private boolean citasAleatorias;
 
     /*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "negocio")
     @JsonIgnore
@@ -61,7 +62,7 @@ public class Negocio {
     public Negocio() {
     }
 
-    public Negocio(Long negocioId, String direccion, String nombre, String descripcion, String fotoPerfil, String telefono, String email, String slogan) {
+    public Negocio(Long negocioId, String direccion, String nombre, String descripcion, String fotoPerfil, String telefono, String email, String slogan, boolean citasAleatorias) {
         this.negocioId = negocioId;
         this.direccion = direccion;
         this.nombre = nombre;
@@ -70,6 +71,7 @@ public class Negocio {
         this.telefono = telefono;
         this.email = email;
         this.slogan = slogan;
+        this.citasAleatorias = citasAleatorias;
     }
 
     public Long getNegocioId() {
@@ -135,5 +137,13 @@ public class Negocio {
 
     public void setSlogan(String slogan) {
         this.slogan = slogan;
+    }
+
+    public boolean isCitasAleatorias() {
+        return citasAleatorias;
+    }
+
+    public void setCitasAleatorias(boolean citasAleatorias) {
+        this.citasAleatorias = citasAleatorias;
     }
 }
