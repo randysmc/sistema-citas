@@ -29,10 +29,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -81,11 +78,8 @@ public class CitaServiceTest {
 
         usuarioGlobal = new Usuario();
         usuarioGlobal.setId(1L);
-        usuarioGlobal.setUsername("usuarioEjemplo");
-        usuarioGlobal.setEmail("usuario@example.com");
-        usuarioGlobal.setPassword("contraseña");
-        usuarioGlobal.setNit("123456789");
-        usuarioGlobal.setCui("987654321");
+        usuarioGlobal.setUsername("randysmc");
+
 
         // Inicializar roles del cliente
         Set<UsuarioRol> rolesCliente = new HashSet<>();
@@ -103,13 +97,8 @@ public class CitaServiceTest {
         // Crear el usuario empleado
         empleadoGlobal = new Usuario();
         empleadoGlobal.setId(2L);
-        empleadoGlobal.setNombre("Ana");
-        empleadoGlobal.setApellido("Gómez");
-        empleadoGlobal.setUsername("anagomez");
-        empleadoGlobal.setPassword("password");
-        empleadoGlobal.setEmail("ana.gomez@example.com");
-        empleadoGlobal.setNit("789987987");
-        empleadoGlobal.setCui("44565465");
+        empleadoGlobal.setUsername("critaljyr");
+
 
         // Inicializar roles del empleado
         Set<UsuarioRol> rolesEmpleado = new HashSet<>();
@@ -190,6 +179,197 @@ public class CitaServiceTest {
         verify(citaRepository, times(1)).save(citaGlobal);
     }
 
+    @DisplayName("Test para listar citas")
+    @Test
+    public void testListarCitas(){
+        //given
+        //given(citaRepository.save(citaGlobal)).willReturn(citaGlobal);
+        given(citaRepository.findAll()).willReturn(List.of(citaGlobal));
+
+        //when
+        List<Cita> citas = citaService.obtenerCitas();
+
+        //then
+        assertThat(citas).isNotEmpty();
+        assertThat(citas.size()).isEqualTo(1);
+        verify(citaRepository, times(1)).findAll();
+    }
+
+    @DisplayName("Test para obtener cita por Id")
+    @Test
+    public void testObtenerCitaPorId(){
+        //given
+        given(citaRepository.findById(1L)).willReturn(Optional.of(citaGlobal));
+
+        //when
+        Cita citaObtenida = citaService.obtenerCitaPorId(1L);
+
+        //then
+        assertThat(citaObtenida).isNotNull();
+        verify(citaRepository, times(1)).findById(1L);
+
+    }
+
+
+    //obtener cita por usuario
+    @DisplayName("Test para obtener citas por usuario")
+    @Test
+    public void testObtenerCitaPorUsuario() {
+        //given
+        Long usuarioId = 1L;
+        // Simulamos que el repositorio devuelve una lista con la citaGlobal para el usuario con id = 1L
+        given(citaRepository.findByClienteId(usuarioId)).willReturn(List.of(citaGlobal));
+
+        //when
+        List<Cita> citas = citaService.obtenerCitaPorUsuario(usuarioId);
+
+        //then
+        assertThat(citas).isNotEmpty();
+        assertThat(citas.size()).isEqualTo(1); // Verificamos que solo haya una cita (la citaGlobal)
+        assertThat(citas.get(0).getCliente().getId()).isEqualTo(usuarioId); // Verificamos que la cita esté asociada al usuario correcto
+        verify(citaRepository, times(1)).findByClienteId(usuarioId); // Verificamos que el método del repositorio haya sido llamado una vez
+    }
+
+
+    //actualizar cita
+
+    // cancelarCita
+
+    //confirmar cita
+    @DisplayName("Test para confirmar una cita")
+    @Test
+    public void testConfirmarCita() {
+        //given
+        Long citaId = 1L;
+        // Creamos una cita con estado PENDIENTE
+        Cita cita = new Cita();
+        cita.setIdCita(citaId);
+        cita.setEstado(EstadoCita.AGENDADA);
+
+        // Simulamos que el repositorio devuelve la cita cuando se busca por ID
+        given(citaRepository.findById(citaId)).willReturn(Optional.of(cita));
+        // Simulamos que el repositorio guarda la cita después de confirmar
+        given(citaRepository.save(any(Cita.class))).willReturn(cita);
+
+        //when
+        Cita citaConfirmada = citaService.confirmarCita(citaId);
+
+        //then
+        assertThat(citaConfirmada).isNotNull();
+        assertThat(citaConfirmada.getEstado()).isEqualTo(EstadoCita.CONFIRMADA); // Verificamos que el estado sea CONFIRMADA
+        verify(citaRepository, times(1)).save(cita); // Verificamos que el método save haya sido llamado
+    }
+
+
+    //completar cita
+
+    //obtener cita por empleado
+    @DisplayName("Test para obtener citas por empleado")
+    @Test
+    public void testObtenerCitaPorEmpleado() {
+        //given
+        List<Cita> citas = Arrays.asList(citaGlobal);
+        given(citaRepository.findByEmpleadoId(empleadoGlobal.getId())).willReturn(citas);
+
+        // when
+        List<Cita> result = citaService.obtenerCitaPorEmpleado(empleadoGlobal.getId());
+
+        // then
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(1); // Verificamos que se devuelva 1 cita
+        assertThat(result.get(0).getEmpleado()).isEqualTo(empleadoGlobal); // Verificamos que el empleado sea el correcto
+        verify(citaRepository, times(1)).findByEmpleadoId(empleadoGlobal.getId()); // Verificamos que el repositorio haya sido llamado correctamente
+    }
+
+
+
+    //obtener citas agendadas
+    @DisplayName("Test para obtener citas agendadas")
+    @Test
+    public void testObtenerCitasAgendadas() {
+        //given
+        Cita cita1 = new Cita();
+        cita1.setIdCita(1L);
+        cita1.setEstado(EstadoCita.AGENDADA);
+
+        Cita cita2 = new Cita();
+        cita2.setIdCita(2L);
+        cita2.setEstado(EstadoCita.AGENDADA);
+
+        List<Cita> citasAgendadas = Arrays.asList(cita1, cita2);
+
+        // Simulamos que el repositorio devuelve las citas con estado AGENDADA
+        given(citaRepository.findByEstado(EstadoCita.AGENDADA)).willReturn(citasAgendadas);
+
+        //when
+        List<Cita> result = citaService.obtenerCitasAgendadas();
+
+        //then
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(2); // Verificamos que se devuelvan 2 citas
+        assertThat(result.get(0).getEstado()).isEqualTo(EstadoCita.AGENDADA); // Verificamos que el estado sea AGENDADA
+        verify(citaRepository, times(1)).findByEstado(EstadoCita.AGENDADA); // Verificamos que el repositorio haya sido llamado
+    }
+
+    @DisplayName("Test para obtener citas canceladas")
+    @Test
+    public void testObtenerCitasCanceladas() {
+        //given
+        Cita cita1 = new Cita();
+        cita1.setIdCita(1L);
+        cita1.setEstado(EstadoCita.CANCELADA);
+
+        Cita cita2 = new Cita();
+        cita2.setIdCita(2L);
+        cita2.setEstado(EstadoCita.CANCELADA);
+
+        List<Cita> citasCanceladas = Arrays.asList(cita1, cita2);
+
+        // Simulamos que el repositorio devuelve las citas con estado CANCELADA
+        given(citaRepository.findByEstado(EstadoCita.CANCELADA)).willReturn(citasCanceladas);
+
+        //when
+        List<Cita> result = citaService.obtenerCitasCanceladas();
+
+        //then
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(2); // Verificamos que se devuelvan 2 citas
+        assertThat(result.get(0).getEstado()).isEqualTo(EstadoCita.CANCELADA); // Verificamos que el estado sea CANCELADA
+        verify(citaRepository, times(1)).findByEstado(EstadoCita.CANCELADA); // Verificamos que el repositorio haya sido llamado
+    }
+
+
+    @DisplayName("Test para obtener citas realizadas")
+    @Test
+    public void testObtenerCitasRealizadas() {
+        //given
+        Cita cita1 = new Cita();
+        cita1.setIdCita(1L);
+        cita1.setEstado(EstadoCita.REALIZADA);
+
+        Cita cita2 = new Cita();
+        cita2.setIdCita(2L);
+        cita2.setEstado(EstadoCita.REALIZADA);
+
+        List<Cita> citasRealizadas = Arrays.asList(cita1, cita2);
+
+        // Simulamos que el repositorio devuelve las citas con estado REALIZADA
+        given(citaRepository.findByEstado(EstadoCita.REALIZADA)).willReturn(citasRealizadas);
+
+        //when
+        List<Cita> result = citaService.obtenerCitasRealizadas();
+
+        //then
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(2); // Verificamos que se devuelvan 2 citas
+        assertThat(result.get(0).getEstado()).isEqualTo(EstadoCita.REALIZADA); // Verificamos que el estado sea REALIZADA
+        verify(citaRepository, times(1)).findByEstado(EstadoCita.REALIZADA); // Verificamos que el repositorio haya sido llamado
+    }
+
+
+    //obtener citas canceladas
+
+    //obtener citas realizadas
 
 
 
