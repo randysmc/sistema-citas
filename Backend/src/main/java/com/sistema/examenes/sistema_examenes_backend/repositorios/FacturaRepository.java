@@ -8,4 +8,9 @@ import java.util.List;
 public interface FacturaRepository extends JpaRepository<Factura, Long> {
 
     public List<Factura> findByFacturaId(Long facturaId);
+
+    List<Factura> findByCliente_Id(Long clienteId);
+
+    public Factura findByCita_IdCita(Long citaId);
+
 }

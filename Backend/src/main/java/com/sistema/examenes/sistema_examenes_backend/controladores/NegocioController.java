@@ -1,7 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.controladores;
 
-//import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
-//import com.sistema.examenes.sistema_examenes_backend.DTO.RecursoDTO;
+
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
 import com.sistema.examenes.sistema_examenes_backend.excepciones.NegocioExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.responses.ErrorResponse;
@@ -28,7 +27,7 @@ import java.util.UUID;
 
 public class NegocioController {
 
-    /*@Autowired
+    @Autowired
     private NegocioService negocioService;
 
     @Autowired
@@ -48,7 +47,7 @@ public class NegocioController {
             return ResponseEntity.ok(negocioOptional.get());
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponse("Negocio no encontrado", "No hay negocios con el ID proporcionado: " + id));
+                    .body(new ErrorResponse("Negocio no encontrado", 404));
         }
     }
 
@@ -90,11 +89,11 @@ public class NegocioController {
         } catch (NegocioExistenteException ex) {
             // Responder con estado 400 (BAD REQUEST) si el negocio ya existe
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorResponse(ex.getMessage(), "El nombre del negocio está duplicado"));
+                    .body(new ErrorResponse(ex.getMessage(), 400));
         } catch (Exception ex) {
             // Responder con estado 500 (INTERNAL SERVER ERROR) para cualquier otro error
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("Error inesperado", ex.getMessage()));
+                    .body(new ErrorResponse("Error inesperado", 500));
         }
     }
 
@@ -155,13 +154,13 @@ public class NegocioController {
 
         } catch (IllegalArgumentException ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorResponse(ex.getMessage(), "El negocio no se pudo actualizar."));
+                    .body(new ErrorResponse(ex.getMessage(), 400));
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(new ErrorResponse("Negocio no encontrado.", "No se encontró un negocio con el ID proporcionado."));
+                    .body(new ErrorResponse("Negocio no encontrado.",  404));
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("Error inesperado", ex.getMessage()));
+                    .body(new ErrorResponse("Error inesperado", 500));
         }
     }
 
@@ -212,7 +211,6 @@ public class NegocioController {
             System.err.println("No se pudo eliminar la imagen: " + e.getMessage());
         }
     }
-*/
 
 
 

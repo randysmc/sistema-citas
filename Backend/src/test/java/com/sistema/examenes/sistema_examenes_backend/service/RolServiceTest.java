@@ -1,5 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.service;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -151,6 +153,8 @@ public class RolServiceTest {
         // Verificamos que se haya llamado una vez a deleteById con el rolId
         verify(rolRepository, times(1)).deleteById(rolId);
     }
+
+
 
 
 

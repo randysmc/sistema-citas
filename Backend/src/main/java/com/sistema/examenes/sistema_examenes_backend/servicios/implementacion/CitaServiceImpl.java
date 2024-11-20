@@ -103,13 +103,13 @@ public class CitaServiceImpl implements CitaService {
 
         cita.setHoraFin(horaFin);
 
-        if (hayConflictoConReservas(cita)) {
+        /*if (hayConflictoConReservas(cita)) {
             throw new IllegalArgumentException("El recurso o empleado ya tiene una reservación en este horario y fecha.");
-        }
+        }*/
 
         cita.setEstado(EstadoCita.AGENDADA);
         Cita nuevaCita = citaRepository.save(cita);
-        crearReserva(nuevaCita);
+        //crearReserva(nuevaCita);
 
         return nuevaCita; // Retornar la nueva cita
     }
