@@ -1,6 +1,7 @@
 package com.sistema.examenes.sistema_examenes_backend.service;
 
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willDoNothing;
@@ -59,6 +60,9 @@ public class CitaServiceTest {
     @Mock
     private EmpleadoRepository empleadoRepository;
 
+    @Mock
+    private ReservaRepository reservaRepository;
+
     @InjectMocks
     private CitaServiceImpl citaService;
 
@@ -69,6 +73,7 @@ public class CitaServiceTest {
     private Usuario empleadoGlobal;
     private DiaFestivo diaFestivoGlobal;
     private HorarioLaboral horarioLunes;
+    private Reserva reservaGlobal;
 
     private Set<UsuarioRol> usuarioRoles;
 
@@ -98,6 +103,7 @@ public class CitaServiceTest {
         empleadoGlobal = new Usuario();
         empleadoGlobal.setId(2L);
         empleadoGlobal.setUsername("critaljyr");
+        empleadoGlobal.setEnabled(true);
 
 
         // Inicializar roles del empleado
@@ -149,7 +155,7 @@ public class CitaServiceTest {
         citaGlobal = new Cita();
         citaGlobal.setIdCita(1L);
         citaGlobal.setFecha(LocalDate.of(2024, 11, 29));
-        citaGlobal.setHoraInicio(LocalTime.of(13, 0));
+        citaGlobal.setHoraInicio(LocalTime.of(11, 0));
         //citaGlobal.setHoraFin(LocalTime.of(11, 0));
         //citaGlobal.setEstado(EstadoCita.AGENDADA);
         citaGlobal.setCliente(usuarioGlobal);
@@ -157,27 +163,55 @@ public class CitaServiceTest {
         citaGlobal.setRecurso(recursoGlobal);
         citaGlobal.setServicio(servicioGlobal);
         //citaRepository.save(citaGlobal);
+
+
+        reservaGlobal = new Reserva();
+        reservaGlobal.setFecha(LocalDate.of(2024, 11, 29));
+        reservaGlobal.setHoraInicio(LocalTime.of(10, 0));
+        reservaGlobal.setHoraFin(LocalTime.of(11, 0));
+        reservaGlobal.setActiva(true);
+        reservaGlobal.setCita(citaGlobal);
+        reservaGlobal.setRecurso(recursoGlobal);
+        reservaGlobal.setEmpleado(empleadoGlobal);
+        reservaGlobal.setCliente(usuarioGlobal);
+        //reservaRepository.save(reservaGlobal);
+
+
     }
 
-    @DisplayName("Test para crear una cita")
+
+    @DisplayName("Test para crear una cita con recurso de tipo PERSONAL")
     @Test
-    public void testCrearCita(){
-        //given
+    public void testCrearCitaConEmpleado(){
+        // given
+        recursoGlobal.setTipo(TipoRecurso.PERSONAL); // Asegurarse de que el recurso sea de tipo PERSONAL
         given(recursoRepository.findById(recursoGlobal.getRecursoId())).willReturn(Optional.of(recursoGlobal));
         given(servicioRepository.findById(servicioGlobal.getServicioId())).willReturn(Optional.of(servicioGlobal));
         citaGlobal.setHoraFin(citaGlobal.getHoraInicio().plusMinutes(servicioGlobal.getDuracionServicio()));
         DiaSemana diaSemana = DiaSemanaConverter.convertirADiaSemana(citaGlobal.getFecha().getDayOfWeek());
         given(horarioLaboralRepository.findByDia(diaSemana)).willReturn(List.of(horarioLunes));
         citaGlobal.setEstado(EstadoCita.AGENDADA);
+
+
+        citaGlobal.setEmpleado(empleadoGlobal);
+        given(empleadoRepository.findById(empleadoGlobal.getId())).willReturn(Optional.of(empleadoGlobal));
+
+
+        given(reservaRepository.findByRecursoAndFecha(recursoGlobal, citaGlobal.getFecha()))
+                .willReturn(List.of(reservaGlobal));
+
+
         given(citaRepository.save(citaGlobal)).willReturn(citaGlobal);
 
-        //when
+        // when
         Cita citaGuardada = citaService.crearCita(citaGlobal);
 
-        //then
+        // then
         assertThat(citaGuardada).isNotNull();
-        verify(citaRepository, times(1)).save(citaGlobal);
+        verify(citaRepository, times(1)).save(citaGlobal); // Verificar que se guardó la cita
     }
+
+
 
     @DisplayName("Test para listar citas")
     @Test
@@ -370,6 +404,173 @@ public class CitaServiceTest {
     //obtener citas canceladas
 
     //obtener citas realizadas
+
+
+
+    @DisplayName("Test para crear una cita con fecha anterior a la actual")
+    @Test
+    public void testCrearCitaFechaAnterior() {
+        // given
+        citaGlobal.setFecha(LocalDate.now().minusDays(1)); // Fecha en el pasado
+
+        // when & then
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            citaService.crearCita(citaGlobal);
+        });
+
+        // Validar el mensaje de la excepción
+        assertThat(exception.getMessage()).isEqualTo("La cita debe ser programada para una fecha futura.");
+
+        // Verificar que no se guardó la cita
+        verify(citaRepository, times(0)).save(any(Cita.class));
+    }
+
+    @DisplayName("Test para crear una cita con un recurso no disponible o no encontrado")
+    @Test
+    public void testCrearCitaRecursoNoDisponible() {
+        // given
+        Long recursoIdInvalido = 999L; // ID que no existe
+        citaGlobal.getRecurso().setRecursoId(recursoIdInvalido);
+
+        // Configurar el mock para que devuelva vacío al buscar el recurso
+        given(recursoRepository.findById(recursoIdInvalido)).willReturn(Optional.empty());
+
+        // when & then
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            citaService.crearCita(citaGlobal);
+        });
+
+        // Validar el mensaje de la excepción
+        assertThat(exception.getMessage()).isEqualTo("Recurso no encontrado");
+
+        // Verificar que no se guardó la cita
+        verify(citaRepository, times(0)).save(any(Cita.class));
+    }
+
+    @DisplayName("Test para crear una cita con recurso de tipo PERSONAL sin empleado asignado")
+    @Test
+    public void testCrearCitaRecursoPersonalSinEmpleado() {
+        // given
+        recursoGlobal.setTipo(TipoRecurso.PERSONAL);
+        citaGlobal.setEmpleado(null); // No se asigna empleado
+        given(recursoRepository.findById(recursoGlobal.getRecursoId())).willReturn(Optional.of(recursoGlobal));
+
+        // when & then
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            citaService.crearCita(citaGlobal);
+        });
+
+        // Validar el mensaje de la excepción
+        assertThat(exception.getMessage()).isEqualTo("El empleado es obligatorio para crear una cita con un recurso personal.");
+
+        // Verificar que no se guardó la cita
+        verify(citaRepository, times(0)).save(any(Cita.class));
+    }
+
+    @DisplayName("Test para crear una cita con recurso PERSONAL y empleado que no existe")
+    @Test
+    public void testCrearCitaEmpleadoNoExiste() {
+        // given
+        recursoGlobal.setTipo(TipoRecurso.PERSONAL);
+        citaGlobal.setEmpleado(empleadoGlobal); // Asignamos un empleado
+        given(recursoRepository.findById(recursoGlobal.getRecursoId())).willReturn(Optional.of(recursoGlobal));
+
+
+        // when & then
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            citaService.crearCita(citaGlobal);
+        });
+
+        // Validar el mensaje de la excepción
+        assertThat(exception.getMessage()).isEqualTo("El empleado no tiene permisos para realizar este servicio.");
+
+        // Verificar que no se guardó la cita
+        verify(citaRepository, times(0)).save(any(Cita.class));
+    }
+
+    @DisplayName("Test para crear una cita con recurso PERSONAL y empleado deshabilitado (activo = false)")
+    @Test
+    public void testCrearCitaEmpleadoDeshabilitado() {
+        // given
+        recursoGlobal.setTipo(TipoRecurso.PERSONAL);
+        citaGlobal.setEmpleado(empleadoGlobal); // Asignamos un empleado
+        empleadoGlobal.setEnabled(false); // Empleado deshabilitado
+        given(recursoRepository.findById(recursoGlobal.getRecursoId())).willReturn(Optional.of(recursoGlobal));
+
+
+        // when & then
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            citaService.crearCita(citaGlobal);
+        });
+
+        // Validar el mensaje de la excepción
+        assertThat(exception.getMessage()).isEqualTo("El empleado no tiene permisos para realizar este servicio.");
+
+        // Verificar que no se guardó la cita
+        verify(citaRepository, times(0)).save(any(Cita.class));
+    }
+
+
+    @DisplayName("Test para crear una cita con recurso PERSONAL y empleado sin rol EMPLEADO")
+    @Test
+    public void testCrearCitaEmpleadoSinRol() {
+        // given
+        recursoGlobal.setTipo(TipoRecurso.PERSONAL);
+        citaGlobal.setEmpleado(empleadoGlobal); // Asignamos un empleado
+
+        // Empleado sin rol EMPLEADO
+        Rol rolNoEmpleado = new Rol();
+        rolNoEmpleado.setRolNombre("CLIENTE"); // Rol incorrecto
+        UsuarioRol usuarioRolNoEmpleado = new UsuarioRol();
+        usuarioRolNoEmpleado.setRol(rolNoEmpleado);
+        usuarioRolNoEmpleado.setUsuario(empleadoGlobal);
+
+        Set<UsuarioRol> rolesEmpleado = new HashSet<>();
+        rolesEmpleado.add(usuarioRolNoEmpleado);
+        empleadoGlobal.setUsuarioRoles(rolesEmpleado); // Establecemos el rol incorrecto
+
+        given(recursoRepository.findById(recursoGlobal.getRecursoId())).willReturn(Optional.of(recursoGlobal));
+
+        // when & then
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            citaService.crearCita(citaGlobal);
+        });
+
+        // Validar el mensaje de la excepción
+        assertThat(exception.getMessage()).isEqualTo("El empleado no tiene permisos para realizar este servicio.");
+
+        // Verificar que no se guardó la cita
+        verify(citaRepository, times(0)).save(any(Cita.class));
+    }
+
+    @DisplayName("Test para crear una cita")
+    @Test
+    public void testCrearCitaSinEmpleado(){
+        //given
+        recursoGlobal.setTipo(TipoRecurso.INSTALACION);
+        given(recursoRepository.findById(recursoGlobal.getRecursoId())).willReturn(Optional.of(recursoGlobal));
+        given(servicioRepository.findById(servicioGlobal.getServicioId())).willReturn(Optional.of(servicioGlobal));
+        citaGlobal.setHoraFin(citaGlobal.getHoraInicio().plusMinutes(servicioGlobal.getDuracionServicio()));
+        DiaSemana diaSemana = DiaSemanaConverter.convertirADiaSemana(citaGlobal.getFecha().getDayOfWeek());
+        given(horarioLaboralRepository.findByDia(diaSemana)).willReturn(List.of(horarioLunes));
+        citaGlobal.setEstado(EstadoCita.AGENDADA);
+        citaGlobal.setEmpleado(null);
+        given(citaRepository.save(citaGlobal)).willReturn(citaGlobal);
+        //given(reservaRepository.save(reservaGlobal)).willReturn(reservaGlobal);
+
+        given(reservaRepository.findByRecursoAndFecha(recursoGlobal, citaGlobal.getFecha()))
+                .willReturn(List.of(reservaGlobal));
+
+
+        //when
+        Cita citaGuardada = citaService.crearCita(citaGlobal);
+
+        //then
+        assertThat(citaGuardada).isNotNull();
+        verify(citaRepository, times(1)).save(citaGlobal);
+    }
+
+
 
 
 

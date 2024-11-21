@@ -2,6 +2,7 @@ package com.sistema.examenes.sistema_examenes_backend.controladores;
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.*;
 import com.sistema.examenes.sistema_examenes_backend.configuraciones.JwtUtils;
+import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.UsuarioRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.CorreoServiceImpl;
 import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.UserDetailsServiceImplementacion;
@@ -43,8 +44,16 @@ public class AuthenticationController {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Autowired
+    private NegocioRepository negocioRepository;
+
 
     private final Map<String, String> twoFactorCodes = new HashMap<>();
+
+    private String getNombreNegocio() {
+        Negocio negocio = negocioRepository.findById(1L).orElseThrow(() -> new RuntimeException("Negocio no encontrado"));
+        return negocio.getNombre(); // Ajusta según los atributos de tu entidad Negocio
+    }
 
 
     @PostMapping("/generate-token")
@@ -121,7 +130,7 @@ public class AuthenticationController {
         System.out.println("Código de recuperación generado: " + resetCode);
 
         //enviar el codigo
-        sendTwoFactorCode(email, resetCode);
+        sendResetPasswordCode(email, resetCode);
         // Devolver el código en la respuesta
         return ResponseEntity.ok(Collections.singletonMap("Codigo generado exitosamente", resetCode));
 
@@ -164,10 +173,27 @@ public class AuthenticationController {
 
     private void sendTwoFactorCode(String email, String twoFactorCode) {
         try {
+            String nombreNegocio = getNombreNegocio();
+            String mensaje = String.format("%s le informa que su código de factor de doble autenticación es el siguiente: %s. Gracias.",
+                    nombreNegocio, twoFactorCode);
 
-            correoService.enviarCorreo(email, "Código de autenticación",
-                    "Tu código de autenticación es: " + twoFactorCode);
+            correoService.enviarCorreo(email, "Código de autenticación", mensaje);
             System.out.println("Código 2FA enviado al correo: " + email);
+        } catch (javax.mail.MessagingException e) {
+            System.err.println("Error al enviar el correo: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("No se pudo enviar el código de autenticación por correo.", e);
+        }
+    }
+
+    private void sendResetPasswordCode(String email, String twoFactorCode) {
+        try {
+            String nombreNegocio = getNombreNegocio();
+            String mensaje = String.format("%s le informa que se solicito un cambio de contraseña, el codigo es el siguiente: %s. Gracias. \n" +
+                            "si NO has sido tú porfavor ponte trucha",
+                    nombreNegocio, twoFactorCode);
+
+            correoService.enviarCorreo(email, "Código para cambio de contraseña", mensaje);
         } catch (javax.mail.MessagingException e) {
             System.err.println("Error al enviar el correo: " + e.getMessage());
             e.printStackTrace();

@@ -67,6 +67,15 @@ public class ServicioServiceImpl  implements ServicioService {
             existingServicio.setPrecio(servicio.getPrecio());
         }
 
+        if (servicio.getDisponible() != null) {
+            existingServicio.setDisponible(servicio.getDisponible());
+        }
+
+        // Solo actualiza el tipo si no es nulo
+        if (servicio.getTipo() != null) {
+            existingServicio.setTipo(servicio.getTipo());
+        }
+
         return servicioRepository.save(existingServicio);
     }
 

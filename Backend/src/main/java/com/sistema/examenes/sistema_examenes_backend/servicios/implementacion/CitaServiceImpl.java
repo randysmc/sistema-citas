@@ -67,13 +67,13 @@ public class CitaServiceImpl implements CitaService {
 
         // Verificar tipo de recurso
         if (recurso.getTipo() == TipoRecurso.PERSONAL) {
-            // Para recursos de tipo PERSONAL, verificar que haya un empleado
+
             if (cita.getEmpleado() == null) {
                 throw new IllegalArgumentException("El empleado es obligatorio para crear una cita con un recurso personal.");
             }
 
             Long empleadoId = cita.getEmpleado().getId();
-            // Validar si el empleado es válido
+
             if (!esEmpleadoValido(empleadoId)) {
                 throw new IllegalArgumentException("El empleado no tiene permisos para realizar este servicio.");
             }
@@ -103,9 +103,9 @@ public class CitaServiceImpl implements CitaService {
 
         cita.setHoraFin(horaFin);
 
-        /*if (hayConflictoConReservas(cita)) {
+        if (hayConflictoConReservas(cita)) {
             throw new IllegalArgumentException("El recurso o empleado ya tiene una reservación en este horario y fecha.");
-        }*/
+        }
 
         cita.setEstado(EstadoCita.AGENDADA);
         Cita nuevaCita = citaRepository.save(cita);
@@ -272,7 +272,7 @@ public class CitaServiceImpl implements CitaService {
         return servicio != null && servicio.getDisponible();
     }
 
-    private boolean esEmpleadoValido(Long empleadoId) {
+    public boolean esEmpleadoValido(Long empleadoId) {
         Usuario empleado = empleadoRepository.findById(empleadoId).orElse(null);
 
         if (empleado == null) {
