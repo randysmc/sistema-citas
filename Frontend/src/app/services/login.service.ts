@@ -79,4 +79,16 @@ export class LoginService {
     return this.http.get(`${baserUrl}/actual-usuario`)
   }
 
+
+  // login.service.ts
+  public forgotPassword(email: string) {
+    return this.http.post(`${baserUrl}/forgot-password`, { email });
+  }
+
+  public resetPassword(data: { email: string; resetCode: string; newPassword: string }) {
+    return this.http.post(`${baserUrl}/reset-password`, data);
+  }
+  
+
+
 }

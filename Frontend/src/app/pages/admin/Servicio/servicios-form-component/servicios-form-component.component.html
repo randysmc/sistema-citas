@@ -1,7 +1,11 @@
 <mat-card class="mat-elevation-z8">
     <mat-card-header>
-      <mat-card-title class="text-center">Actualizar Servicio</mat-card-title>
-      <mat-card-subtitle class="text-center">Modifique los campos para actualizar el servicio</mat-card-subtitle>
+      <mat-card-title class="text-center">
+        {{ servicioId ? 'Editar Servicio' : 'Agregar Nuevo Servicio' }}
+      </mat-card-title>
+      <mat-card-subtitle class="text-center">
+        Complete el formulario para {{ servicioId ? 'editar' : 'crear' }} el Servicio
+      </mat-card-subtitle>
     </mat-card-header>
   
     <mat-card-content>
@@ -38,20 +42,6 @@
                 <mat-icon matSuffix>description</mat-icon>
               </mat-form-field>
   
-              <!-- Campo para la duración del servicio -->
-              <mat-form-field class="w100 mb-3" appearance="fill">
-                <mat-label>Duración del Servicio</mat-label>
-                <input
-                  required
-                  type="text"
-                  name="duracionServicio"
-                  matInput
-                  placeholder="Digite la duración del servicio"
-                  [(ngModel)]="servicio.duracionServicio"
-                />
-                <mat-icon matSuffix>access_time</mat-icon>
-              </mat-form-field>
-  
               <!-- Campo para el precio del servicio -->
               <mat-form-field class="w100 mb-3" appearance="fill">
                 <mat-label>Precio del Servicio</mat-label>
@@ -63,21 +53,41 @@
                   placeholder="Digite el precio del servicio"
                   [(ngModel)]="servicio.precio"
                 />
-                <mat-icon matSuffix>attach_money</mat-icon>
+                <mat-icon matSuffix>monetization_on</mat-icon>
+              </mat-form-field>
+  
+              <!-- Campo para la duración del servicio -->
+              <mat-form-field class="w100 mb-3" appearance="fill">
+                <mat-label>Duración del Servicio (en minutos)</mat-label>
+                <input
+                  required
+                  type="number"
+                  name="duracionServicio"
+                  matInput
+                  placeholder="Digite la duración del servicio"
+                  [(ngModel)]="servicio.duracionServicio"
+                />
+                <mat-icon matSuffix>timer</mat-icon>
+              </mat-form-field>
+
+              <!-- Campo para el tipo de servicio-->
+              <mat-form-field class="w100 mb-3" appearance="fill">
+                <mat-label>Tipo de Recurso</mat-label>
+                <mat-select [(ngModel)]="servicio.tipo" name="tipo">
+                  <mat-option *ngFor="let tipo of tipos" [value]="tipo">{{ tipo }}</mat-option>
+                </mat-select>
               </mat-form-field>
   
               <!-- Checkbox para disponibilidad -->
-              <div class="mb-3">
-                <mat-checkbox [(ngModel)]="servicio.disponible" name="disponible">
-                  ¿Está disponible?
-                </mat-checkbox>
-              </div>
+              <mat-checkbox [(ngModel)]="servicio.disponible" name="disponible">
+                ¿Está disponible?
+              </mat-checkbox>
   
-              <!-- Botón para actualizar -->
+              <!-- Botón para guardar -->
               <div class="text-center mt-4">
                 <button mat-raised-button color="primary" class="px-5">
                   <mat-icon>save</mat-icon>
-                  Actualizar Servicio
+                  {{ servicioId ? 'Actualizar' : 'Guardar' }} Servicio
                 </button>
               </div>
   

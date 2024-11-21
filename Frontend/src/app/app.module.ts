@@ -23,11 +23,6 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 
 
-
-
-
-
-
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { LoginComponent } from './pages/login/login.component'; 
@@ -35,29 +30,24 @@ import { FormsModule } from '@angular/forms';
 import { HomeComponent } from './pages/home/home.component';
 import { authInterceptorProviders } from './services/auth.interceptors';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component';
-import { UserDashboardComponent } from './pages/user/user-dashboard/user-dashboard.component';
 import { TwoFaComponent } from './pages/two-fa/two-fa.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SidebarComponent } from './pages/admin/sidebar/sidebar.component';
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
-import { ViewRecursosComponent } from './pages/admin/view-recursos/view-recursos.component';
-import { AddRecursosComponent } from './pages/admin/add-recursos/add-recursos.component';
-import { ViewRecursoDetailComponent } from './pages/admin/view-recurso-detail/view-recurso-detail.component';
-import { UpdateRecursoComponent } from './pages/admin/update-recurso/update-recurso.component';
+import { ViewRecursosComponent } from './pages/admin/Recurso/view-recursos/view-recursos.component';
+import { ViewRecursoDetailComponent } from './pages/admin/Recurso/view-recurso-detail/view-recurso-detail.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { AddUsersComponent } from './pages/admin/add-users/add-users.component';
-import { ViewUserDetailComponent } from './pages/admin/view-user-detail/view-user-detail.component';
-import { ViewUsersComponent } from './pages/admin/view-users/view-users.component';
-import { AddEmpleadoComponent } from './pages/admin/add-empleado/add-empleado.component';
+import { ViewUserDetailComponent } from './pages/admin/Usuario/view-user-detail/view-user-detail.component';
+import { ViewUsersComponent } from './pages/admin/Usuario/view-users/view-users.component';
+import { AddEmpleadoComponent } from './pages/admin/Usuario/add-empleado/add-empleado.component';
 import { ClienteDashboardComponent } from './pages/cliente/cliente-dashboard/cliente-dashboard.component';
 import { SidebarClienteComponent } from './pages/cliente/sidebar-cliente/sidebar-cliente.component';
 import { UpdateAdminUserComponent } from './pages/admin/update-admin-user/update-admin-user.component';
 import { UpdateClienteUserComponent } from './pages/cliente/update-cliente-user/update-cliente-user.component';
-import { ViewServicesComponent } from './pages/admin/view-services/view-services.component';
-import { ViewServicesDetailComponent } from './pages/admin/view-services-detail/view-services-detail.component';
-import { AddServiceComponent } from './pages/admin/add-service/add-service.component';
-import { UpdateServiceComponent } from './pages/admin/update-service/update-service.component';
+import { ViewServicesComponent } from './pages/admin/Servicio/view-services/view-services.component';
+import { ViewServicesDetailComponent } from './pages/admin/Servicio/view-services-detail/view-services-detail.component';
 import { AddDiaFestivoComponent } from './pages/admin/add-dia-festivo/add-dia-festivo.component';
 import { AddHorarioLaboralComponent } from './pages/admin/add-horario-laboral/add-horario-laboral.component';
 import { UpdateNegocioComponent } from './pages/admin/update-negocio/update-negocio.component';
@@ -74,6 +64,11 @@ import { UserViewCitasComponent } from './pages/cliente/user-view-citas/user-vie
 import { UserViewCitasDetailComponent } from './pages/cliente/user-view-citas-detail/user-view-citas-detail.component';
 import { UserViewFacturasDetailComponent } from './pages/cliente/user-view-facturas-detail/user-view-facturas-detail.component';
 import { ReportesComponent } from './pages/admin/reportes/reportes.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { RecursosFormComponent } from './pages/admin/Recurso/recursos-form-component/recursos-form-component.component';
+import { ServiciosFormComponentComponent } from './pages/admin/Servicio/servicios-form-component/servicios-form-component.component';
+import { EmpleadoDashboardComponent } from './pages/empleado/empleado-dashboard/empleado-dashboard.component';
+import { SidebarEmpleadoComponent } from './pages/empleado/sidebar-empleado/sidebar-empleado.component';
 
 
 
@@ -88,15 +83,12 @@ import { ReportesComponent } from './pages/admin/reportes/reportes.component';
     LoginComponent,
     HomeComponent,
     DashboardComponent,
-    UserDashboardComponent,
     TwoFaComponent,
     ProfileComponent,
     SidebarComponent,
     WelcomeComponent,
     ViewRecursosComponent,
-    AddRecursosComponent,
     ViewRecursoDetailComponent,
-    UpdateRecursoComponent,
     CalendarComponent,
     ViewUserDetailComponent,
     AddUsersComponent,
@@ -108,8 +100,6 @@ import { ReportesComponent } from './pages/admin/reportes/reportes.component';
     UpdateClienteUserComponent,
     ViewServicesComponent,
     ViewServicesDetailComponent,
-    AddServiceComponent,
-    UpdateServiceComponent,
     AddDiaFestivoComponent,
     AddHorarioLaboralComponent,
     UpdateNegocioComponent,
@@ -126,9 +116,11 @@ import { ReportesComponent } from './pages/admin/reportes/reportes.component';
     UserViewCitasDetailComponent,
     UserViewFacturasDetailComponent,
     ReportesComponent,
-
-
-
+    ResetPasswordComponent,
+    RecursosFormComponent,
+    ServiciosFormComponentComponent,
+    EmpleadoDashboardComponent,
+    SidebarEmpleadoComponent,
 
   ],
   imports: [

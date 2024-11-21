@@ -14,6 +14,8 @@
               <mat-option value="MIERCOLES">Miércoles</mat-option>
               <mat-option value="JUEVES">Jueves</mat-option>
               <mat-option value="VIERNES">Viernes</mat-option>
+              <mat-option value="SABADO">Sabado</mat-option>
+              <mat-option value="DOMINGO">Domingo</mat-option>
             </mat-select>
           </mat-form-field>
 
@@ -43,15 +45,6 @@
             <mat-hint>Formato 24 horas (HH:mm)</mat-hint>
           </mat-form-field>
 
-          <!-- Tipo de Horario -->
-          <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Tipo de Horario</mat-label>
-            <mat-select [(ngModel)]="horarioLaboral.tipoHorario" name="tipoHorario" required>
-              <mat-option value="MAÑANA">Mañana</mat-option>
-              <mat-option value="TARDE">Tarde</mat-option>
-              <mat-option value="NOCHE">Noche</mat-option>
-            </mat-select>
-          </mat-form-field>
 
           <!-- Botón de Envío -->
           <button mat-raised-button color="primary" type="submit" class="full-width mt-3">
