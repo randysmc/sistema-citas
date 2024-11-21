@@ -8,6 +8,8 @@ public interface CitaService {
 
     public Cita crearCita(Cita cita);
 
+    public Cita crearCitaAleatoria(Cita cita);
+
     public List<Cita> obtenerCitas();
 
     public List<Cita> obtenerCitaPorUsuario(Long usuarioId);

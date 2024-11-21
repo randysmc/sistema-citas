@@ -15,6 +15,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class CitaServiceImpl implements CitaService {
@@ -47,6 +49,10 @@ public class CitaServiceImpl implements CitaService {
     @Autowired
     private  FacturaRepository facturaRepository;
 
+    @Autowired
+    private NegocioRepository negocioRepository;
+
+    private Negocio negocio = new Negocio();
 
 
     @Override
@@ -61,28 +67,34 @@ public class CitaServiceImpl implements CitaService {
             throw new IllegalArgumentException("La cita debe ser programada para una fecha futura.");
         }
 
-        // Obtener recurso
+        // Obtener servicio
+        Servicio servicio = servicioRepository.findById(servicioId)
+                .orElseThrow(() -> new IllegalArgumentException("Servicio no encontrado"));
+
+        // Verificar tipo de recurso
         Recurso recurso = recursoRepository.findById(recursoId)
                 .orElseThrow(() -> new IllegalArgumentException("Recurso no encontrado"));
 
-        // Verificar tipo de recurso
-        if (recurso.getTipo() == TipoRecurso.PERSONAL) {
+        if (recurso.getTipo() != servicio.getTipo()) {
+            throw new IllegalArgumentException("El recurso debe ser del mismo tipo que el servicio.");
+        }
 
+        // Validaciones de empleado y otros criterios
+        if (servicio.getTipo() == TipoRecurso.PERSONAL) {
             if (cita.getEmpleado() == null) {
-                throw new IllegalArgumentException("El empleado es obligatorio para crear una cita con un recurso personal.");
+                throw new IllegalArgumentException("El empleado es obligatorio para crear una cita con un servicio personal.");
             }
 
             Long empleadoId = cita.getEmpleado().getId();
-
             if (!esEmpleadoValido(empleadoId)) {
                 throw new IllegalArgumentException("El empleado no tiene permisos para realizar este servicio.");
             }
-        } else if (recurso.getTipo() == TipoRecurso.INSTALACION) {
+        } else if (servicio.getTipo() == TipoRecurso.INSTALACION) {
             // Para recursos de tipo INSTALACIÓN, no se necesita un empleado
             cita.setEmpleado(null); // Asegurarse de que no se asigna un empleado
         }
 
-        // Validaciones existentes...
+        // Validaciones adicionales como días festivos, horario laboral, etc.
         if (esDiaFestivo(fecha)) {
             throw new IllegalArgumentException("No se pueden crear citas en días festivos.");
         }
@@ -115,6 +127,93 @@ public class CitaServiceImpl implements CitaService {
     }
 
 
+    @Override
+    public Cita crearCitaAleatoria(Cita cita) {
+        LocalDate fecha = cita.getFecha();
+        LocalTime horaInicio = cita.getHoraInicio();
+        Long servicioId = cita.getServicio().getServicioId();
+        Long recursoId = cita.getRecurso().getRecursoId();
+
+        // Validación de fecha futura
+        if (fecha.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("La cita debe ser programada para una fecha futura.");
+        }
+
+        // Obtener servicio
+        Servicio servicio = servicioRepository.findById(servicioId)
+                .orElseThrow(() -> new IllegalArgumentException("Servicio no encontrado"));
+
+        // Verificar tipo de recurso
+        Recurso recurso = recursoRepository.findById(recursoId)
+                .orElseThrow(() -> new IllegalArgumentException("Recurso no encontrado"));
+
+        if (recurso.getTipo() != servicio.getTipo()) {
+            throw new IllegalArgumentException("El recurso debe ser del mismo tipo que el servicio.");
+        }
+
+        // Validaciones de empleado y otros criterios
+        if (servicio.getTipo() == TipoRecurso.PERSONAL) {
+            List<Usuario> empleados = empleadoRepository.findByEnabledTrue().stream()
+                    .filter(emp -> emp.getAuthorities().stream()
+                            .anyMatch(authority -> authority.getAuthority().equals("EMPLEADO")))
+                    .collect(Collectors.toList());
+
+            if (empleados.isEmpty()) {
+                throw new IllegalArgumentException("No hay empleados con el rol 'EMPLEADO' disponibles para la cita.");
+            }
+
+            // Buscar un empleado aleatorio que no tenga conflictos con reservas
+            Usuario empleadoAleatorio = null;
+            for (Usuario empleado : empleados) {
+                LocalTime horaFin = calcularHoraFin(horaInicio, servicioId);
+                if (!hayConflictoConReservasDelEmpleado(empleado, fecha, horaInicio, horaFin)) {
+                    empleadoAleatorio = empleado;
+                    break; // Se encontró un empleado disponible
+                }
+            }
+
+            if (empleadoAleatorio == null) {
+                throw new IllegalArgumentException("No hay empleados disponibles en el horario solicitado.");
+            }
+
+            cita.setEmpleado(empleadoAleatorio);
+        } else if (servicio.getTipo() == TipoRecurso.INSTALACION) {
+            cita.setEmpleado(null);
+        }
+
+        // Validaciones adicionales como días festivos, horario laboral, etc.
+        if (esDiaFestivo(fecha)) {
+            throw new IllegalArgumentException("No se pueden crear citas en días festivos.");
+        }
+
+        LocalTime horaFin = calcularHoraFin(horaInicio, servicioId);
+
+        if (!esHorarioLaboral(fecha, horaInicio, horaFin)) {
+            throw new IllegalArgumentException("No se puede crear citas fuera de horario laboral.");
+        }
+
+        if (!recursoDisponible(recursoId)) {
+            throw new IllegalArgumentException("El recurso no está disponible o no existe.");
+        }
+
+        if (!servicioDisponible(servicioId)) {
+            throw new IllegalArgumentException("El servicio no está disponible o no existe.");
+        }
+
+        cita.setHoraFin(horaFin);
+
+        // Verificar si ya hay conflicto con la cita en el recurso o el empleado
+        if (hayConflictoConReservas(cita)) {
+            throw new IllegalArgumentException("El recurso o empleado ya tiene una reservación en este horario y fecha.");
+        }
+
+        cita.setEstado(EstadoCita.AGENDADA);
+        Cita nuevaCita = citaRepository.save(cita);
+        // Si es necesario, puedes agregar la lógica para crear una reserva aquí
+        //crearReserva(nuevaCita);
+
+        return nuevaCita; // Retornar la nueva cita
+    }
 
     @Override
     public List<Cita> obtenerCitas(){
@@ -174,6 +273,7 @@ public class CitaServiceImpl implements CitaService {
 
         // Cambiar el estado de la cita a CANCELADA
         cita.setEstado(EstadoCita.CONFIRMADA);
+        crearReserva(cita);
         return citaRepository.save(cita);
     }
 

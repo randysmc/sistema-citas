@@ -4,10 +4,13 @@ import com.sistema.examenes.sistema_examenes_backend.entidades.Cita;
 import com.sistema.examenes.sistema_examenes_backend.entidades.CitaResponse;
 import com.sistema.examenes.sistema_examenes_backend.servicios.CitaService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/citas")
@@ -18,10 +21,38 @@ public class CitaController {
     private CitaService citaService;
 
     @PostMapping
-    public ResponseEntity<Cita> crearCita(@RequestBody Cita cita) {
-        Cita nuevaCita = citaService.crearCita(cita);
-        return ResponseEntity.status(201).body(nuevaCita); // 201 Created
+    public ResponseEntity<?> crearCita(@RequestBody Cita cita) {
+        try {
+            Cita nuevaCita = citaService.crearCita(cita);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevaCita); // 201 Created
+        } catch (IllegalArgumentException ex) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", ex.getMessage());
+            return ResponseEntity.badRequest().body(response); // 400 Bad Request
+        } catch (Exception ex) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Ocurrió un error inesperado: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response); // 500 Internal Server Error
+        }
     }
+
+    @PostMapping("/aleatoria")
+    public ResponseEntity<?> crearCitaAleatoria(@RequestBody Cita cita) {
+        System.out.println("PASAMOS POR ACA \n\n\n\n\n\n\n\n");
+        try {
+            Cita nuevaCita = citaService.crearCitaAleatoria(cita);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevaCita); // 201 Created
+        } catch (IllegalArgumentException ex) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", ex.getMessage());
+            return ResponseEntity.badRequest().body(response); // 400 Bad Request
+        } catch (Exception ex) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", "Ocurrió un error inesperado: " + ex.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response); // 500 Internal Server Error
+        }
+    }
+
 
     @GetMapping
     public ResponseEntity<List<Cita>> obtenerCitas() {
