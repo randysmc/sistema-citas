@@ -318,7 +318,7 @@ public class CitaServiceImpl implements CitaService {
         return citaRepository.findByEstado(EstadoCita.REALIZADA);
     }
 
-    private boolean esDiaFestivo(LocalDate fecha) {
+    public boolean esDiaFestivo(LocalDate fecha) {
         List<DiaFestivo> diasFestivos = diaFestivoRepository.findAll(); // Cambiado para obtener todos los días festivos
         return diasFestivos.stream().anyMatch(diaFestivo -> diaFestivo.getFecha().equals(fecha));
     }
@@ -330,7 +330,7 @@ public class CitaServiceImpl implements CitaService {
         return horaInicio.plusMinutes(servicio.getDuracionServicio());
     }
 
-    private boolean esHorarioLaboral(LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
+    public boolean esHorarioLaboral(LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
         // Convertir el día de la semana a DiaSemana
         DayOfWeek dayOfWeek = fecha.getDayOfWeek();
         DiaSemana diaSemana = DiaSemanaConverter.convertirADiaSemana(dayOfWeek);

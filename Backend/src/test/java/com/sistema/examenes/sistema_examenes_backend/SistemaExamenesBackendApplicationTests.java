@@ -10,6 +10,12 @@ class SistemaExamenesBackendApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// Este método asegura que la aplicación se carga correctamente
 	}
 
+	@Test
+	void testMainMethod() {
+		// Llamamos al método main de la aplicación para cubrirlo en Jacoco
+		SistemaExamenesBackendApplication.main(new String[] {});
+	}
 }
