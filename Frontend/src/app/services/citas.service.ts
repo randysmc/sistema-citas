@@ -14,6 +14,11 @@ export class CitasService {
     return this.http.post(`${baserUrl}/citas/`, cita);
   }
 
+
+  public crearCitaAleatoria(cita: any){
+    return this.http.post(`${baserUrl}/citas/aleatoria`, cita)
+  }
+
   // Obtener todas las citas
   /*public obtenerCitas() {
     return this.http.get(`${baserUrl}/citas/`);

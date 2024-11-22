@@ -45,4 +45,13 @@ export class RecursoService {
   }
 
 
+  public obtenerRecursos(tipo: string) {
+    return this.http.get(`${baserUrl}/recursos/lista`, {
+        params: { tipo, disponible: 'true' }
+    });
+}
+
+
+
+
 }

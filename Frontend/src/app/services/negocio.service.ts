@@ -27,6 +27,8 @@ export class NegocioService {
     public actualizarNegocio(id: number, formData: FormData) {
       return this.http.put(`${baserUrl}/negocios/${id}`, formData);
     }
+
+    
     
 
 }

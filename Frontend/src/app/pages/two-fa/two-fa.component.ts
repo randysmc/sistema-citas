@@ -49,6 +49,8 @@ export class TwoFaComponent {
             this.router.navigate(['admin']);
           } else if (this.loginService.getUserRole() === "CLIENTE") {
             this.router.navigate(['cliente']);
+          } else if(this.loginService.getUserRole() == "EMPLEADO"){
+            this.router.navigate(['empleado'])
           }
         });
       },
