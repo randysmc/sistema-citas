@@ -2,6 +2,7 @@ package com.sistema.examenes.sistema_examenes_backend.repositorios;
 
 //import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
 //import com.sistema.examenes.sistema_examenes_backend.DTO.RecursoDTO;
+import com.sistema.examenes.sistema_examenes_backend.Enums.TipoRecurso;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -18,4 +19,6 @@ public interface RecursoRepository extends JpaRepository<Recurso,Long> {
     public Optional<Recurso> findById(Long recursoId);
 
     public List<Recurso> findByDisponible(boolean disponible);
+
+    List<Recurso> findByTipoAndDisponible(TipoRecurso tipo, Boolean disponible);
 }

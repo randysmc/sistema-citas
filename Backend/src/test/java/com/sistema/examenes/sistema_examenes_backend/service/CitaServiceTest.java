@@ -267,10 +267,6 @@ public class CitaServiceTest {
         verify(citaRepository, times(1)).save(citaGlobal); // Verificar que se guardó la cita
     }
 
-
-
-
-
     @DisplayName("Test para listar citas")
     @Test
     public void testListarCitas(){
@@ -302,8 +298,6 @@ public class CitaServiceTest {
 
     }
 
-
-    //obtener cita por usuario
     @DisplayName("Test para obtener citas por usuario")
     @Test
     public void testObtenerCitaPorUsuario() {
@@ -372,8 +366,6 @@ public class CitaServiceTest {
         assertThat(result.get(0).getEmpleado()).isEqualTo(empleadoGlobal); // Verificamos que el empleado sea el correcto
         verify(citaRepository, times(1)).findByEmpleadoId(empleadoGlobal.getId()); // Verificamos que el repositorio haya sido llamado correctamente
     }
-
-
 
     //obtener citas agendadas
     @DisplayName("Test para obtener citas agendadas")
@@ -476,12 +468,28 @@ public class CitaServiceTest {
             citaService.crearCita(citaGlobal);
         });
 
-        // Validar el mensaje de la excepción
         assertThat(exception.getMessage()).isEqualTo("La cita debe ser programada para una fecha futura.");
 
-        // Verificar que no se guardó la cita
         verify(citaRepository, times(0)).save(any(Cita.class));
     }
+
+    @DisplayName("Test para crear una cita aleatoria con fecha anterior a la actual")
+    @Test
+    public void testCrearCitaAleatoriaFechaAnterior() {
+        // given
+        citaGlobal.setFecha(LocalDate.now().minusDays(1)); // Fecha en el pasado
+
+        // when & then
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            citaService.crearCitaAleatoria(citaGlobal);
+        });
+
+        assertThat(exception.getMessage()).isEqualTo("La cita debe ser programada para una fecha futura.");
+
+        verify(citaRepository, times(0)).save(any(Cita.class));
+    }
+
+
 
     @DisplayName("Test para crear una cita con un servicio no disponible o no encontrado")
     @Test
@@ -497,6 +505,29 @@ public class CitaServiceTest {
         // when & then
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             citaService.crearCita(citaGlobal);
+        });
+
+        // Validar el mensaje de la excepción
+        assertThat(exception.getMessage()).isEqualTo("Servicio no encontrado");
+
+        // Verificar que no se guardó la cita
+        verify(citaRepository, times(0)).save(any(Cita.class));
+    }
+
+    @DisplayName("Test para crear una cita aleatoria con un servicio no disponible o no encontrado")
+    @Test
+    public void testCrearCitaAleatoriaServicioNoDisponible() {
+        // given
+        Long servicioIdInvalido = 999L; // ID que no existe
+        citaGlobal.setServicio(new Servicio()); // Asignar un servicio ficticio a la cita
+        citaGlobal.getServicio().setServicioId(servicioIdInvalido);
+
+        // Configurar el mock para que devuelva vacío al buscar el servicio
+        given(servicioRepository.findById(servicioIdInvalido)).willReturn(Optional.empty());
+
+        // when & then
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            citaService.crearCitaAleatoria(citaGlobal);
         });
 
         // Validar el mensaje de la excepción
@@ -530,7 +561,29 @@ public class CitaServiceTest {
         verify(citaRepository, times(0)).save(any(Cita.class));
     }
 
+    @DisplayName("Test para crear una cita aleatoria con un recurso no disponible o no encontrado")
+    @Test
+    public void testCrearCitaAleatoriaRecursoNoDisponible() {
+        // given
+        recursoGlobal.setTipo(TipoRecurso.PERSONAL);
+        Long servicioIdInvalido = 999L; // ID que no existe
+        citaGlobal.setServicio(new Servicio()); // Asignar un servicio ficticio a la cita
+        citaGlobal.getServicio().setServicioId(servicioIdInvalido);
 
+        // Configurar el mock para que devuelva vacío al buscar el servicio
+        given(servicioRepository.findById(servicioIdInvalido)).willReturn(Optional.empty());
+
+        // when & then
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            citaService.crearCitaAleatoria(citaGlobal);
+        });
+
+        // Validar el mensaje de la excepción
+        assertThat(exception.getMessage()).isEqualTo("Servicio no encontrado");
+
+        // Verificar que no se guardó la cita
+        verify(citaRepository, times(0)).save(any(Cita.class));
+    }
 
     @DisplayName("Test para crear una cita con un recurso con tipo incorrecto")
     @Test
@@ -561,8 +614,30 @@ public class CitaServiceTest {
         verify(citaRepository, times(0)).save(any(Cita.class));
     }
 
+    @DisplayName("Test para crear una cita aleatoria con un recurso con tipo incorrecto")
+    @Test
+    public void testCrearCitaAleatoriaRecursoTipoIncorrecto() {
+        // given
+        servicioGlobal.setTipo(TipoRecurso.PERSONAL); // El servicio es de tipo PERSONAL
+        recursoGlobal.setTipo(TipoRecurso.INSTALACION); // El recurso es de tipo INSTALACION
 
+        // Configurar la cita con los objetos globales
+        citaGlobal.setServicio(servicioGlobal);
+        citaGlobal.setEmpleado(empleadoGlobal); // El empleado global es asignado a la cita
+        citaGlobal.setRecurso(recursoGlobal);
 
+        // Configurar los mocks para que devuelvan los objetos globales
+        given(servicioRepository.findById(servicioGlobal.getServicioId())).willReturn(Optional.of(servicioGlobal));
+        given(recursoRepository.findById(recursoGlobal.getRecursoId())).willReturn(Optional.of(recursoGlobal));
+
+        // when & then
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            citaService.crearCitaAleatoria(citaGlobal); // Intentamos crear la cita
+        });
+
+        assertThat(exception.getMessage()).isEqualTo("El recurso debe ser del mismo tipo que el servicio.");
+        verify(citaRepository, times(0)).save(any(Cita.class));
+    }
 
 
     @DisplayName("Test para crear una cita con servicio de tipo PERSONAL sin empleado asignado")
@@ -891,8 +966,28 @@ public class CitaServiceTest {
                 .hasMessage("El recurso no está disponible o no existe.");
     }
 
+    @DisplayName("Test para manejar excepción ServicioNoEncontradoException")
+    @Test
+    public void testCrearCitaAleatoriaServicioNoEncontrado() {
+        // given
+        given(servicioRepository.findById(servicioGlobal.getServicioId())).willReturn(Optional.empty());
 
+        // when & then
+        assertThatThrownBy(() -> citaService.crearCitaAleatoria(citaGlobal))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Servicio no encontrado");
+    }
 
+    @DisplayName("Test para manejar excepción RecursoNoEncontradoException")
+    @Test
+    public void testCrearCitaAleatoriaRecursoNoEncontrado() {
+        // given
+        given(servicioRepository.findById(servicioGlobal.getServicioId())).willReturn(Optional.of(servicioGlobal));
+        given(recursoRepository.findById(recursoGlobal.getRecursoId())).willReturn(Optional.empty());
 
-
+        // when & then
+        assertThatThrownBy(() -> citaService.crearCitaAleatoria(citaGlobal))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Recurso no encontrado");
+    }
 }

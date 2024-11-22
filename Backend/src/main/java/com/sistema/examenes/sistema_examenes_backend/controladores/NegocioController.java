@@ -18,6 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -162,6 +163,18 @@ public class NegocioController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("Error inesperado", 500));
         }
+    }
+
+    @PutMapping("/habilitar/{id}")
+    public ResponseEntity<?> habilitarCitasAleatorias(@PathVariable Long id){
+        negocioService.cambiarTipoCitas(id, true);
+        return ResponseEntity.ok(Map.of("message", "Citas aleatorias habilitadas"));
+    }
+
+    @PutMapping("/deshabilitar/{id}")
+    public ResponseEntity<?> deshabilitarCitasAleatorias(@PathVariable Long id){
+        negocioService.cambiarTipoCitas(id, false);
+        return ResponseEntity.ok(Map.of("message", "Citas aleatorias deshabilitadas"));
     }
 
 

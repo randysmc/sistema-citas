@@ -20,6 +20,8 @@ public interface NegocioService {
 
     public void eliminarNegocio(Long id);
 
+    void cambiarTipoCitas(Long id, boolean disponible);
+
     //List<NegocioDTO> obtenerServiciosPorNegocio(Long negocioId);
 
 }

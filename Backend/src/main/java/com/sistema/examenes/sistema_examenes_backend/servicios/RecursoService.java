@@ -2,6 +2,7 @@ package com.sistema.examenes.sistema_examenes_backend.servicios;
 
 //import com.sistema.examenes.sistema_examenes_backend.DTO.NegocioDTO;
 //import com.sistema.examenes.sistema_examenes_backend.DTO.RecursoDTO;
+import com.sistema.examenes.sistema_examenes_backend.Enums.TipoRecurso;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
 
 
@@ -28,6 +29,10 @@ public interface RecursoService {
     public List<Recurso> obtenerRecursosNoDisponibles();
 
     void cambiarDisponibilidad(Long recursoId, boolean disponible);
+
+    List<Recurso> obtenerRecursosPorTipoYDisponibilidad(TipoRecurso tipoRecurso, Boolean disponible);
+
+
 
 
 }

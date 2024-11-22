@@ -1,6 +1,7 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
 
+import com.sistema.examenes.sistema_examenes_backend.Enums.TipoRecurso;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Recurso;
 import com.sistema.examenes.sistema_examenes_backend.excepciones.RecursoExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
@@ -109,8 +110,10 @@ public class RecursoServiceImpl implements RecursoService {
         recursoRepository.save(recurso);
     }
 
-
-
+    @Override
+    public List<Recurso> obtenerRecursosPorTipoYDisponibilidad(TipoRecurso tipoRecurso, Boolean disponible) {
+        return recursoRepository.findByTipoAndDisponible(tipoRecurso, disponible);
+    }
 
 
 }

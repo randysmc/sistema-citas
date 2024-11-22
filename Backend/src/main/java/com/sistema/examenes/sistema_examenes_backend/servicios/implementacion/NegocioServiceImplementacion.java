@@ -88,7 +88,15 @@ public class NegocioServiceImplementacion implements NegocioService {
         negocioRepository.deleteById(id);
     }
 
+    @Override
+    public void cambiarTipoCitas(Long id, boolean disponible) {
+        Negocio negocio = negocioRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Negocio no encontrado con ID: " + id));
 
+        negocio.setCitasAleatorias(disponible);
+
+        negocioRepository.save(negocio);
+    }
 
 
 }
