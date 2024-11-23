@@ -1,0 +1,36 @@
+<footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <!-- Información principal -->
+        <div class="footer-info">
+          <p><strong></strong> {{ negocio?.nombre }}</p>
+          <p><strong></strong> "{{ negocio?.slogan }}"</p>
+          <p><strong>Dirección:</strong> {{ negocio?.direccion }}</p>
+
+        </div>
+  
+        <!-- Links útiles -->
+        <div class="footer-links">
+          <h4>Links útiles</h4>
+          <ul>
+            <li><a routerLink="/inicio">Inicio</a></li>
+            <li><a routerLink="/contacto">Contacto</a></li>
+            <li><a routerLink="/soporte">Soporte</a></li>
+          </ul>
+        </div>
+  
+        <!-- Información de contacto -->
+        <div class="footer-contact">
+          <h4>Contáctanos</h4>
+          <p><strong>Teléfono:</strong> {{ negocio?.telefono }}</p>
+          <p><strong>Email:</strong> {{ negocio?.email }}</p>
+        </div>
+      </div>
+  
+      <!-- Derechos reservados -->
+      <div class="footer-bottom">
+        <p>&copy; {{ negocio?.nombre}} Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+  
