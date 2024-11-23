@@ -1,3 +1,116 @@
-.w100{
+/* Contenedor del formulario */
+mat-card {
+  max-width: 600px; /* Limita el ancho máximo */
+  margin: 20px auto; /* Centra el formulario en la pantalla */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Títulos dentro de mat-card */
+mat-card-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+mat-card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+mat-card-subtitle {
+  font-size: 1rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* Estilos para el formulario */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px; /* Espacio entre los elementos del formulario */
+}
+
+/* Estilos generales para los campos de formulario */
+mat-form-field {
+  width: 100%; /* Asegura que los campos ocupen todo el ancho disponible */
+}
+
+textarea {
+  resize: vertical; /* Permite que el textarea se redimensione verticalmente */
+}
+
+/* Botón de acción */
+button.mat-raised-button {
+  width: 100%;
+  padding: 12px;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 600px) {
+  mat-card {
+    padding: 16px; /* Menos espacio en pantallas pequeñas */
+    width: 100%; /* El formulario ocupa todo el ancho en móviles */
+  }
+
+  mat-card-title {
+    font-size: 1.2rem; /* Ajuste en el tamaño del título */
+  }
+
+  mat-card-subtitle {
+    font-size: 0.9rem; /* Ajuste en el tamaño del subtítulo */
+  }
+
+  /* Asegura que el contenido dentro de los campos también se ajuste a móviles */
+  mat-form-field {
     width: 100%;
   }
+
+  button.mat-raised-button {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Estilos para iconos en los campos */
+mat-icon {
+  margin-right: 8px; /* Espacio entre el icono y el texto */
+  color: #3f51b5; /* Color primario */
+}
+
+/* Estilos para los mensajes de error */
+mat-error {
+  color: red;
+  font-size: 0.875rem;
+}
+
+/* Estilos para mat-hint */
+mat-hint {
+  font-size: 0.875rem;
+  color: rgba(0, 0, 0, 0.6);
+}
+
+/* Estilos para mat-checkbox */
+mat-checkbox {
+  margin-top: 10px; /* Espacio adicional para el checkbox */
+}
+
+/* Estilos adicionales para botones */
+button.mat-raised-button {
+  font-size: 1.1rem; /* Aumentar el tamaño del texto */
+  padding: 10px;
+  width: 100%; /* Botón con ancho completo */
+}
+
+
+/* Ajustes para pantallas muy grandes (tabletas, computadoras) */
+@media (min-width: 1200px) {
+  mat-card {
+    width: 800px; /* Limitar el tamaño en pantallas grandes */
+  }
+}
+
+

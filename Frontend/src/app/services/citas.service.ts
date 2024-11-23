@@ -66,8 +66,8 @@ export class CitasService {
   }
 
   // Obtener citas por empleado
-  public obtenerCitasPorEmpleado(empleadoId: number) {
-    return this.http.get(`${baserUrl}/citas/empleado/${empleadoId}`);
+  public obtenerCitasPorEmpleado(empleadoId: number): Observable<Cita[]> {
+    return this.http.get<Cita[]>(`${baserUrl}/citas/empleado/${empleadoId}`);
   }
 
   // Cancelar una cita

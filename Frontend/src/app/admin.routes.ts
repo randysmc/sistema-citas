@@ -21,7 +21,8 @@ import { ViewCitasComponent } from './pages/admin/view-citas/view-citas.componen
 import { ViewCitasDetailComponent } from './pages/admin/view-citas-detail/view-citas-detail.component';
 import { AddEmpleadoComponent } from './pages/admin/Usuario/add-empleado/add-empleado.component';
 import { ReportesComponent } from './pages/admin/reportes/reportes.component';
-import { UpdateNegocioComponent } from './pages/admin/update-negocio/update-negocio.component';
+import { UpdateNegocioComponent } from './pages/admin/Negocio/update-negocio/update-negocio.component';
+import { ViewNegocioDetailComponent } from './pages/admin/Negocio/view-negocio-detail/view-negocio-detail.component';
 
 
 export const AdminRoutes: Routes = [
@@ -29,6 +30,10 @@ export const AdminRoutes: Routes = [
       path: '',
       component: DashboardComponent,
       children: [
+        {
+          path: '',
+          component: WelcomeComponent
+        },
         {
             path: 'profile',
             component: ProfileComponent,
@@ -61,11 +66,6 @@ export const AdminRoutes: Routes = [
           {
             path: 'update-admin/:id',
             component: UpdateAdminUserComponent,
-          },
-    
-          {
-            path: '',
-            component: WelcomeComponent,
           },
           {
             path: 'recursos',
@@ -136,6 +136,10 @@ export const AdminRoutes: Routes = [
           {
             path: 'update-negocio/:id',
             component: UpdateNegocioComponent
+          },
+          {
+            path: 'view-negocio',
+            component: ViewNegocioDetailComponent
           }
 
       ],

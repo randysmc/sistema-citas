@@ -15,11 +15,11 @@ export class MyChartComponent {
 
   createChart(): void {
     this.chart = new Chart('myChart', {
-      type: 'bar', // Cambia a 'pie' para un gráfico de pastel
+      type: 'pie', 
       data: {
         labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'],
         datasets: [{
-          label: 'Mi Primer Gráfico',
+          label: 'Citas realizadas',
           data: [10, 20, 30, 40, 50],
           backgroundColor: 'rgba(75, 192, 192, 0.2)',
           borderColor: 'rgba(75, 192, 192, 1)',

@@ -50,7 +50,7 @@ import { ViewServicesComponent } from './pages/admin/Servicio/view-services/view
 import { ViewServicesDetailComponent } from './pages/admin/Servicio/view-services-detail/view-services-detail.component';
 import { AddDiaFestivoComponent } from './pages/admin/add-dia-festivo/add-dia-festivo.component';
 import { AddHorarioLaboralComponent } from './pages/admin/add-horario-laboral/add-horario-laboral.component';
-import { UpdateNegocioComponent } from './pages/admin/update-negocio/update-negocio.component';
+import { UpdateNegocioComponent } from './pages/admin/Negocio/update-negocio/update-negocio.component';
 import { ViewCitasComponent } from './pages/admin/view-citas/view-citas.component';
 import { ViewCitasDetailComponent } from './pages/admin/view-citas-detail/view-citas-detail.component';
 import { AddClienteCitaComponent } from './pages/cliente/add-cliente-cita/add-cliente-cita.component';
@@ -69,6 +69,11 @@ import { RecursosFormComponent } from './pages/admin/Recurso/recursos-form-compo
 import { ServiciosFormComponentComponent } from './pages/admin/Servicio/servicios-form-component/servicios-form-component.component';
 import { EmpleadoDashboardComponent } from './pages/empleado/empleado-dashboard/empleado-dashboard.component';
 import { SidebarEmpleadoComponent } from './pages/empleado/sidebar-empleado/sidebar-empleado.component';
+import { ViewCitasEmpleadoComponent } from './pages/empleado/citas/view-citas-empleado/view-citas-empleado.component';
+import { ViewCitasDetailEmpleadoComponent } from './pages/empleado/citas/view-citas-detail-empleado/view-citas-detail-empleado.component';
+import { EmpleadoUpdateProfileComponent } from './pages/empleado/empleado-update-profile/empleado-update-profile.component';
+import { ViewNegocioDetailComponent } from './pages/admin/Negocio/view-negocio-detail/view-negocio-detail.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 
 
@@ -121,6 +126,11 @@ import { SidebarEmpleadoComponent } from './pages/empleado/sidebar-empleado/side
     ServiciosFormComponentComponent,
     EmpleadoDashboardComponent,
     SidebarEmpleadoComponent,
+    ViewCitasEmpleadoComponent,
+    ViewCitasDetailEmpleadoComponent,
+    EmpleadoUpdateProfileComponent,
+    ViewNegocioDetailComponent,
+    FooterComponent,
 
   ],
   imports: [

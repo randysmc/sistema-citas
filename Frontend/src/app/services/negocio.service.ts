@@ -28,7 +28,13 @@ export class NegocioService {
       return this.http.put(`${baserUrl}/negocios/${id}`, formData);
     }
 
+    public habilitarCitasAleatorias(id: number) {
+      return this.http.put(`${baserUrl}/negocios/habilitar/${id}`, {});
+    }
     
+    public deshabilitarCitasAleatorias(id: number) {
+      return this.http.put(`${baserUrl}/negocios/deshabilitar/${id}`, {});
+    }
     
 
 }

@@ -59,4 +59,19 @@ export class ViewRecursosComponent implements OnInit {
   verDetalle(id: number) {
     this.router.navigate(['/admin/recursos', id]);
   }
+
+  scrollUp() {
+    const container = document.querySelector('.recursos-container');
+    if (container) {
+      container.scrollBy(0, -100); // Desplaza hacia arriba 100px
+    }
+  }
+
+  // Función para hacer scroll hacia abajo
+  scrollDown() {
+    const container = document.querySelector('.recursos-container');
+    if (container) {
+      container.scrollBy(0, 100); // Desplaza hacia abajo 100px
+    }
+  }
 }

@@ -1,0 +1,54 @@
+<div class="business-details-container">
+  <!-- Encabezado -->
+  <div class="header-card mat-elevation-z4">
+    <h1 class="text-center">Bienvenido a {{ negocio?.nombre }}</h1>
+    <img [src]="negocio?.fotoPerfilUrl" alt="Imagen del negocio" class="profile-image" />
+  </div>
+
+  <!-- Información del negocio -->
+  <div class="info-cards">
+    <!-- Nombre -->
+    <mat-card class="info-card">
+      <mat-card-title>Información General</mat-card-title>
+      <mat-card-content>
+        <p><strong>Nombre:</strong> {{ negocio?.nombre }}</p>
+        <p><strong>Slogan:</strong> "{{ negocio?.slogan }}"</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Dirección -->
+    <mat-card class="info-card">
+      <mat-card-title>Ubicación</mat-card-title>
+      <mat-card-content>
+        <p><strong>Dirección:</strong> {{ negocio?.direccion }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Descripción -->
+    <mat-card class="info-card">
+      <mat-card-title>Descripción</mat-card-title>
+      <mat-card-content>
+        <p>{{ negocio?.descripcion }}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Contacto -->
+    <mat-card class="info-card">
+      <mat-card-title>Contacto</mat-card-title>
+      <mat-card-content>
+        <p><strong>Teléfono:</strong> {{ negocio?.telefono }}</p>
+        <p><strong>Email:</strong> {{ negocio?.email }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Acciones -->
+  <div class="action-buttons">
+    <button mat-raised-button color="primary" (click)="cambiarEstadoCitasAleatorias()">
+      {{ negocio?.citasAleatorias ? 'Deshabilitar Citas Aleatorias' : 'Habilitar Citas Aleatorias' }}
+    </button>
+    <button mat-raised-button color="accent" (click)="irAActualizarNegocio()">
+      Actualizar Negocio
+    </button>
+  </div>
+</div>

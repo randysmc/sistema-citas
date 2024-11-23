@@ -51,6 +51,8 @@ export class ProfileComponent {
       this.router.navigate([`/admin/update-admin`, this.user.id]);
     } else if (role === 'CLIENTE') {
       this.router.navigate([`/cliente/update-cliente`, this.user.id]);
+    } else if(role === 'EMPLEADO'){
+      this.router.navigate([`/empleado/update-profile`, this.user.id]);
     }
   }
 

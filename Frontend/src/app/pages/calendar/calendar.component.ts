@@ -9,6 +9,8 @@ import { HorariosLaboralesService } from 'src/app/services/horarios-laborales.se
 import { CitasService } from 'src/app/services/citas.service';
 import { Cita } from 'src/app/models/cita.model';
 import { LoginService } from 'src/app/services/login.service';
+import timeGridPlugin from '@fullcalendar/timegrid';
+
 
 @Component({
   selector: 'app-calendar',
@@ -25,8 +27,15 @@ export class CalendarComponent implements OnInit {
 
 
   calendarOptions: CalendarOptions = {
-    initialView: 'dayGridMonth',
-    plugins: [dayGridPlugin, interactionPlugin],
+    initialView: 'dayGridMonth',  // Vista inicial
+    headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay',  // Este es el lugar donde definimos las vistas
+     },
+     
+    plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
+
     events: [], 
   };
 
@@ -81,8 +90,6 @@ export class CalendarComponent implements OnInit {
     );
 }
 
-
-
   cargarDiasFestivos() {
     this.diasFestivosService.obtenerDiasFestivos().subscribe(
         (diasFestivos: any[]) => { // Cambia `DiaFestivo[]` por `any[]` si no tienes el tipo definido
@@ -135,7 +142,6 @@ cargarCitas() {
     );
 }
 
-
 cargarCitasAgendadas() {
   this.citasService.obtenerCitasAgendadas().subscribe(
       (citas: Cita[]) => {
@@ -162,9 +168,6 @@ cargarCitasAgendadas() {
       }
   );
 }
-
-
-
 
 
   cargarHorariosLaborales() {
@@ -225,24 +228,5 @@ cargarCitasAgendadas() {
     );
   }
 
-  private agregarEventosCitas(citas: Cita[], color: string) {
-    const eventosCitas: EventInput[] = citas.map(cita => {
-      const start = new Date(cita.fecha[0], cita.fecha[1] - 1, cita.fecha[2], cita.horaInicio[0], cita.horaInicio[1]);
-      const end = new Date(cita.fecha[0], cita.fecha[1] - 1, cita.fecha[2], cita.horaFin[0], cita.horaFin[1]);
-
-      return {
-        title: `Cita con: ${cita.cliente.nombre} ${cita.cliente.apellido} - ${cita.servicio.nombre}`,
-        start: start,
-        end: end,
-        color: color,
-        allDay: false
-      };
-    });
-
-    // Agrega los eventos de citas al calendario
-    this.calendarOptions.events = Array.isArray(this.calendarOptions.events)
-      ? this.calendarOptions.events.concat(eventosCitas)
-      : eventosCitas;
-  }
 
 }
