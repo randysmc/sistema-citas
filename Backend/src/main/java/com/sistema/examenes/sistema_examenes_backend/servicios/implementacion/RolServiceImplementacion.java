@@ -1,8 +1,8 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
-import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityNotFoundException;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.RolExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.RolRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.RolService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class RolServiceImplementacion implements RolService {
     public Rol save(Rol rol) {
         // Validar si ya existe un rol con el mismo nombre
         if (rolRepository.findByRolNombre(rol.getRolNombre()).isPresent()) {
-            throw new EntityExistenteException("Rol", "rolNombre", rol.getRolNombre());
+            throw new RolExistenteException("El nombre del rol ya existe");
         }
 
         // Si no existe, guardamos el rol
@@ -51,7 +51,7 @@ public class RolServiceImplementacion implements RolService {
         // Verificamos si el rol existe antes de intentar actualizarlo
         Optional<Rol> existingRol = rolRepository.findById(rol.getRolId());
         if (!existingRol.isPresent()) {
-            throw new EntityExistenteException("Rol", "rolId", rol.getRolId());
+            throw new RolExistenteException("El nombre del rol ya existe");
         }
 
         // Actualizamos el rol
@@ -63,7 +63,7 @@ public class RolServiceImplementacion implements RolService {
         // Verificamos si el rol existe antes de eliminarlo
         Optional<Rol> existingRol = rolRepository.findById(id);
         if (!existingRol.isPresent()) {
-            throw new EntityExistenteException("Rol", "rolId", id);
+            throw new RolExistenteException("El nombre del rol ya existe");
         }
 
         rolRepository.deleteById(id);

@@ -8,8 +8,8 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.Rol;
-import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityNotFoundException;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.RolExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.RolRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.RolServiceImplementacion;
 import org.junit.jupiter.api.BeforeEach;
@@ -66,7 +66,7 @@ public class RolServiceTest {
         given(rolRepository.findByRolNombre(rolGlobal.getRolNombre())).willReturn(Optional.of(rolGlobal));
 
         // when/then
-        org.junit.jupiter.api.Assertions.assertThrows(EntityExistenteException.class, () -> {
+        org.junit.jupiter.api.Assertions.assertThrows(RolExistenteException.class, () -> {
             rolService.save(rolGlobal);
         });
     }

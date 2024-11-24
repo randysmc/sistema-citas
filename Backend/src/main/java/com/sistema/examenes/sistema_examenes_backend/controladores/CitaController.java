@@ -38,7 +38,6 @@ public class CitaController {
 
     @PostMapping("/aleatoria")
     public ResponseEntity<?> crearCitaAleatoria(@RequestBody Cita cita) {
-        System.out.println("PASAMOS POR ACA \n\n\n\n\n\n\n\n");
         try {
             Cita nuevaCita = citaService.crearCitaAleatoria(cita);
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevaCita); // 201 Created

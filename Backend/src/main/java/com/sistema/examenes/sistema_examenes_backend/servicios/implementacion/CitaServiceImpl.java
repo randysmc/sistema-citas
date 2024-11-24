@@ -121,7 +121,7 @@ public class CitaServiceImpl implements CitaService {
 
         cita.setEstado(EstadoCita.AGENDADA);
         Cita nuevaCita = citaRepository.save(cita);
-        //crearReserva(nuevaCita);
+        crearReserva(nuevaCita);
 
         return nuevaCita; // Retornar la nueva cita
     }
@@ -210,7 +210,7 @@ public class CitaServiceImpl implements CitaService {
         cita.setEstado(EstadoCita.AGENDADA);
         Cita nuevaCita = citaRepository.save(cita);
         // Si es necesario, puedes agregar la lógica para crear una reserva aquí
-        //crearReserva(nuevaCita);
+        crearReserva(nuevaCita);
 
         return nuevaCita; // Retornar la nueva cita
     }
@@ -231,12 +231,10 @@ public class CitaServiceImpl implements CitaService {
                 .orElseThrow(() -> new IllegalArgumentException("Cita no encontrada con id: " + id));
     }
 
-
     @Override
     public Cita actualizaCita(Cita cita) {
         return null;
     }
-
 
     @Override
     public Cita cancelarCita(Long id) {
@@ -273,7 +271,7 @@ public class CitaServiceImpl implements CitaService {
 
         // Cambiar el estado de la cita a CANCELADA
         cita.setEstado(EstadoCita.CONFIRMADA);
-        crearReserva(cita);
+        //crearReserva(cita);
         return citaRepository.save(cita);
     }
 
@@ -295,8 +293,6 @@ public class CitaServiceImpl implements CitaService {
 
         return cita; // Retornar la cita actualizada
     }
-
-
 
     @Override
     public List<Cita> obtenerCitaPorEmpleado(Long empleadoId) {
@@ -358,7 +354,6 @@ public class CitaServiceImpl implements CitaService {
     }
 
 
-
     private boolean recursoDisponible(Long recursoId) {
 
         Recurso recurso = recursoRepository.findById(recursoId).orElse(null);
@@ -402,37 +397,29 @@ public class CitaServiceImpl implements CitaService {
     public Reserva crearReserva(Cita cita) {
         Reserva reserva = new Reserva();
 
-        // Agregar logs para depuración
-        System.out.println("Cita para crear reserva: " + cita);
-        System.out.println("Empleado en la cita: " + cita.getEmpleado());
-
         reserva.setFecha(cita.getFecha());
         reserva.setHoraInicio(cita.getHoraInicio());
         reserva.setHoraFin(cita.getHoraFin());
-        reserva.setActiva(true); // Siempre activa al crear una nueva reserva
+        reserva.setActiva(true);
         reserva.setCita(cita);
         reserva.setRecurso(cita.getRecurso());
 
-        // Verifica si el recurso es de tipo PERSONAL
-        if (cita.getRecurso().getTipo() == TipoRecurso.PERSONAL) {
-            reserva.setEmpleado(cita.getEmpleado()); // Asigna el empleado si es PERSONAL
+        if (cita.getEmpleado() != null) {
+            reserva.setEmpleado(cita.getEmpleado());
         } else {
-            reserva.setEmpleado(cita.getEmpleado()); // No asignar empleado si no es PERSONAL
+            reserva.setEmpleado(null);
         }
+
+        System.out.println("Cliente de la cita: " + cita.getCliente().getId());
 
         reserva.setCliente(cita.getCliente());
 
-        // Guardar la reserva en el repositorio
         Reserva nuevaReserva = reservaRepository.save(reserva);
 
-        // Crear el comprobante para la reserva
         crearComprobanteParaReserva(nuevaReserva, EstadoComprobante.AGENDADA);
 
-        return reservaRepository.save(reserva);
+        return reserva;
     }
-
-
-
 
 
     private boolean hayConflictoConReservas(Cita cita) {
@@ -471,7 +458,7 @@ public class CitaServiceImpl implements CitaService {
         return false; // No hay conflicto con reservas del recurso
     }
 
-    private boolean hayConflictoConReservasDelEmpleado(Usuario empleado, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
+    public boolean hayConflictoConReservasDelEmpleado(Usuario empleado, LocalDate fecha, LocalTime horaInicio, LocalTime horaFin) {
         List<Reserva> reservasEmpleado = reservaRepository.findByEmpleadoAndFecha(empleado, fecha);
 
         // Verifica si hay traslape en los horarios

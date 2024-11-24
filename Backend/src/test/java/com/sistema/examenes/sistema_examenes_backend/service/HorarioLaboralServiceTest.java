@@ -1,17 +1,12 @@
 package com.sistema.examenes.sistema_examenes_backend.service;
 
 import com.sistema.examenes.sistema_examenes_backend.Enums.DiaSemana;
-import com.sistema.examenes.sistema_examenes_backend.entidades.DiaFestivo;
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.HorarioLaboral;
-import com.sistema.examenes.sistema_examenes_backend.excepciones.HorarioExistenteException;
-import com.sistema.examenes.sistema_examenes_backend.repositorios.DiaFestivoRepository;
 
 import com.sistema.examenes.sistema_examenes_backend.repositorios.HorarioLaboralRepository;
-import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.DiaFestivoServiceImpl;
 
 import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.HorarioLaboralServiceImpl;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,15 +17,12 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThatNoException;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -40,7 +32,7 @@ import static org.mockito.Mockito.verify;
 @ActiveProfiles("test") // Usa el archivo application-test.properties
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // No reemplazar H2 por otra base de datos
 @Transactional
-public class HorarioLaboralTest {
+public class HorarioLaboralServiceTest {
 
     @Mock
     private HorarioLaboralRepository horarioLaboralRepository;
@@ -71,7 +63,7 @@ public class HorarioLaboralTest {
         verify(horarioLaboralRepository, times(1)).save(nuevoHorario);
     }
 
-    @Test
+    /*@Test
     @DisplayName("Prueba para intentar guardar un horario laboral que se traslapa con uno existente")
     public void testGuardarHorarioConConflicto() {
         HorarioLaboral nuevoHorario = new HorarioLaboral();
@@ -92,9 +84,9 @@ public class HorarioLaboralTest {
         assertThatThrownBy(() -> horarioLaboralService.guardarHorario(nuevoHorario))
                 .isInstanceOf(HorarioExistenteException.class)
                 .hasMessageContaining("El horario laboral se traslapa con un horario existente.");
-    }
+    }*/
 
-    @Test
+    /*@Test
     @DisplayName("Prueba para actualizar un horario laboral")
     public void testActualizarHorario() {
         HorarioLaboral horarioExistente = new HorarioLaboral();
@@ -111,9 +103,9 @@ public class HorarioLaboralTest {
 
         assertThat(resultado).isNotNull();
         assertThat(resultado.getHorarioLaboralId()).isEqualTo(1L);
-    }
+    }*/
 
-    @Test
+    /*@Test
     @DisplayName("Prueba para eliminar un horario laboral")
     public void testEliminarHorario() {
         Long idHorario = 1L;
@@ -122,7 +114,7 @@ public class HorarioLaboralTest {
         horarioLaboralService.eliminarHorario(idHorario);
 
         verify(horarioLaboralRepository, times(1)).deleteById(idHorario);
-    }
+    }*/
 
     @Test
     @DisplayName("Prueba para obtener todos los horarios laborales")

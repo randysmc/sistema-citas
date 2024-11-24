@@ -66,7 +66,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                         "/validate-token",
                         "/empleados/**",
                         "/recursos/**",
-                        "/servicios/**",
+                        "/notificaciones/**",
                         "/roles/**",
                         "/horarios-laborales/**",
                         "/dias-festivos/**",

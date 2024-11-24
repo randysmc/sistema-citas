@@ -13,7 +13,7 @@ public interface HorarioLaboralService {
 
     public List<HorarioLaboral> obtenerHorarios();
 
-    public HorarioLaboral obtenerHorario(Long id);
+    public Optional<HorarioLaboral> obtenerHorarioPorId(Long id);
 
     public HorarioLaboral guardarHorario(HorarioLaboral horarioLaboral);
 

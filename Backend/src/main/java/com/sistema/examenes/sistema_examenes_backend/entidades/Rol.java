@@ -22,7 +22,6 @@ public class Rol {
     private Set<UsuarioRol> usuarioRoles = new HashSet<>();
 
     @OneToMany(mappedBy = "rol")
-
     private Set<RolPermiso> rolPermisos = new HashSet<>();
 
     public Rol(){

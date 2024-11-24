@@ -1,8 +1,9 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.Permiso;
-import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityExistenteException;
+
 import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityNotFoundException;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.PermisoExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.PermisoRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.PermisoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class PermisoServiceImpl implements PermisoService {
     @Override
     public Permiso save(Permiso permiso) {
         if(permisoRepository.findByNombre(permiso.getNombre()).isPresent()){
-            throw new EntityExistenteException("Permiso", "nombre", permiso.getNombre());
+            throw new PermisoExistenteException("El nombre del permiso ya existe");
         }
         return permisoRepository.save(permiso);
     }
@@ -47,7 +48,7 @@ public class PermisoServiceImpl implements PermisoService {
     public Permiso update(Permiso permiso) {
         Optional<Permiso> existingPermiso = permisoRepository.findById(permiso.getId());
         if(!existingPermiso.isPresent()){
-            throw new EntityExistenteException("Permiso", "nombre", permiso.getNombre());
+            throw new PermisoExistenteException("El nombre del permiso ya existe");
         }
 
         return permisoRepository.save(permiso);

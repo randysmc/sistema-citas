@@ -9,7 +9,6 @@ import static org.mockito.Mockito.*;
 
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.Permiso;
-import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityNotFoundException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.PermisoRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.PermisoServiceImpl;
