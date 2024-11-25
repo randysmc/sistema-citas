@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-//@RequestMapping("/api/v1/horarios-laborales")
 @RequestMapping("/horarios-laborales")
 @CrossOrigin("*")
 public class HorarioLaboralController {
@@ -41,12 +40,9 @@ public class HorarioLaboralController {
 
     @PostMapping
     public ResponseEntity<HorarioLaboral> crearHorario(@RequestBody HorarioLaboral horarioLaboral) {
-        try {
             HorarioLaboral nuevoHorario = horarioLaboralService.guardarHorario(horarioLaboral);
             return ResponseEntity.status(HttpStatus.CREATED).body(nuevoHorario);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+
     }
 
     @PutMapping("/{id}")
@@ -54,15 +50,11 @@ public class HorarioLaboralController {
         // Establecemos el ID en el objeto de horario laboral
         horarioLaboral.setHorarioLaboralId(id);
 
-        try {
-            HorarioLaboral horarioActualizado = horarioLaboralService.actualizarHorario(horarioLaboral);
-            return ResponseEntity.status(HttpStatus.OK).body(horarioActualizado);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        } catch (HorarioExistenteException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+        HorarioLaboral horarioActualizado = horarioLaboralService.actualizarHorario(horarioLaboral);
+        return ResponseEntity.status(HttpStatus.OK).body(horarioActualizado);
     }
+
+
 
     // Eliminar horario
     @DeleteMapping("/{id}")

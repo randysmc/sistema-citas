@@ -8,8 +8,10 @@ import com.sistema.examenes.sistema_examenes_backend.servicios.HorarioLaboralSer
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class HorarioLaboralServiceImpl implements HorarioLaboralService {
@@ -38,8 +40,32 @@ public class HorarioLaboralServiceImpl implements HorarioLaboralService {
 
     }
 
+    /*@Override
+    public HorarioLaboral guardarHorario(HorarioLaboral horarioLaboral) {
+        // Verificar si ya existe un horario que se traslape
+        List<HorarioLaboral> horariosExistentes = horarioLaboralRepository.findAll(); // Obtener todos los horarios
+
+        for (HorarioLaboral existente : horariosExistentes) {
+            if (horariosSeTraslapan(horarioLaboral, existente)) {
+                throw new HorarioExistenteException("Ya existe un horario establecido");
+            }
+        }
+
+        return horarioLaboralRepository.save(horarioLaboral);
+    }*/
+
     @Override
     public HorarioLaboral guardarHorario(HorarioLaboral horarioLaboral) {
+        // Validar que se envíen ambas horas
+        if (horarioLaboral.getHoraInicio() == null || horarioLaboral.getHoraFin() == null) {
+            throw new IllegalArgumentException("La hora de inicio y la hora de fin son obligatorias.");
+        }
+
+        // Validar que horaInicio no sea después de horaFin
+        if (horarioLaboral.getHoraInicio().isAfter(horarioLaboral.getHoraFin())) {
+            throw new IllegalArgumentException("La hora de inicio no puede ser después de la hora de fin.");
+        }
+
         // Verificar si ya existe un horario que se traslape
         List<HorarioLaboral> horariosExistentes = horarioLaboralRepository.findAll(); // Obtener todos los horarios
 
@@ -54,32 +80,51 @@ public class HorarioLaboralServiceImpl implements HorarioLaboralService {
 
     @Override
     public HorarioLaboral actualizarHorario(HorarioLaboral horarioLaboral) {
-        // Primero buscamos el horario existente por el ID
+        // Buscar el horario existente
         Optional<HorarioLaboral> horarioExistenteOpt = horarioLaboralRepository.findById(horarioLaboral.getHorarioLaboralId());
-
         if (!horarioExistenteOpt.isPresent()) {
-            throw new HorarioExistenteException("Ya existe un horario establecido");
+            throw new IllegalArgumentException("El horario no existe.");
         }
 
         HorarioLaboral horarioExistente = horarioExistenteOpt.get();
 
-        // Actualizamos los campos del horario laboral con los nuevos valores
-        horarioExistente.setDia(horarioLaboral.getDia());
-        horarioExistente.setHoraInicio(horarioLaboral.getHoraInicio());
-        horarioExistente.setHoraFin(horarioLaboral.getHoraFin());
-        horarioExistente.setTipoHorario(horarioLaboral.getTipoHorario());
+        // Validación de horas
+        LocalTime nuevaHoraInicio = horarioLaboral.getHoraInicio() != null ? horarioLaboral.getHoraInicio() : horarioExistente.getHoraInicio();
+        LocalTime nuevaHoraFin = horarioLaboral.getHoraFin() != null ? horarioLaboral.getHoraFin() : horarioExistente.getHoraFin();
 
-        // Verificamos si el horario actualizado se traslapa con algún otro horario existente
-        List<HorarioLaboral> horariosExistentes = horarioLaboralRepository.findAll();
+        if (nuevaHoraInicio.isAfter(nuevaHoraFin)) {
+            throw new IllegalArgumentException("La hora de inicio no puede ser después de la hora de fin.");
+        }
+
+        // Obtener todos los horarios existentes (excepto el actual)
+        List<HorarioLaboral> horariosExistentes = horarioLaboralRepository.findAll()
+                .stream()
+                .filter(horario -> !horario.getHorarioLaboralId().equals(horarioLaboral.getHorarioLaboralId()))
+                .collect(Collectors.toList());
+
+        // Validar traslape con otros horarios
         for (HorarioLaboral existente : horariosExistentes) {
-            if (horariosSeTraslapan(horarioExistente, existente)) {
+            HorarioLaboral nuevoHorario = new HorarioLaboral();
+            nuevoHorario.setDia(horarioExistente.getDia()); // El día no se cambia
+            nuevoHorario.setHoraInicio(nuevaHoraInicio);
+            nuevoHorario.setHoraFin(nuevaHoraFin);
+
+            if (horariosSeTraslapan(nuevoHorario, existente)) {
                 throw new HorarioExistenteException("Ya existe un horario establecido");
             }
         }
 
-        // Guardamos el horario actualizado
+        // Actualizar solo los campos permitidos
+        horarioExistente.setHoraInicio(nuevaHoraInicio);
+        horarioExistente.setHoraFin(nuevaHoraFin);
+        if (horarioLaboral.getTipoHorario() != null) {
+            horarioExistente.setTipoHorario(horarioLaboral.getTipoHorario());
+        }
+
+        // Guardar y devolver el horario actualizado
         return horarioLaboralRepository.save(horarioExistente);
     }
+
 
     @Override
     public void eliminarHorario(Long id) {
