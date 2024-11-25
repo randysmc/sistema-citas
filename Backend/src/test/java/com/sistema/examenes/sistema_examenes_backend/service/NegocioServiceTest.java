@@ -2,6 +2,7 @@ package com.sistema.examenes.sistema_examenes_backend.service;
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.Negocio;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Servicio;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.NegocioExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.NegocioRepository;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.ServicioRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.NegocioServiceImplementacion;
@@ -15,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.test.context.ActiveProfiles;
+import org.junit.jupiter.api.Assertions.*;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
@@ -28,8 +30,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatNoException;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -86,6 +87,24 @@ public class NegocioServiceTest {
         assertThat(negocioGuardado.getEmail()).isEqualTo(negocio.getEmail());
         assertThat(negocioGuardado.getSlogan()).isEqualTo(negocio.getSlogan());
     }
+
+    @DisplayName("Test para guardar un negocio con nombre existente")
+    @Test
+    void testGuardarNegocioConNombreExistente() {
+        // given
+        String nombreExistente = "NegocioExistente";
+        Negocio negocioGlobal = new Negocio();
+        negocioGlobal.setNombre(nombreExistente);
+
+        given(negocioRepository.existsByNombre(nombreExistente)).willReturn(true);
+
+       //when
+        assertThrows(NegocioExistenteException.class, () -> negocioService.guardarNegocio(negocioGlobal));
+
+        // then
+        verify(negocioRepository, times(1)).existsByNombre(nombreExistente);
+    }
+
 
     @DisplayName("Test para encontrar un negocio por ID")
     @Test

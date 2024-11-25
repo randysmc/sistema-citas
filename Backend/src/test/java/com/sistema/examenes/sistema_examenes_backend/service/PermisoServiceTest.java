@@ -10,6 +10,8 @@ import static org.mockito.Mockito.*;
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.Permiso;
 import com.sistema.examenes.sistema_examenes_backend.excepciones.EntityNotFoundException;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.PermisoExistenteException;
+import com.sistema.examenes.sistema_examenes_backend.excepciones.RolExistenteException;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.PermisoRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.implementacion.PermisoServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -67,23 +69,17 @@ public class PermisoServiceTest {
 
     }
 
-    /*@DisplayName("Test para guardar un permiso con ThrowException")
+    @DisplayName("Test para lanzar excepción al guardar un rol existente")
     @Test
-    public void testGuardarPermisoConThrowException(){
-        //given
-        given(permisoRepository.findByNombre(permisoGlobal.getNombre()))
-                .willReturn(Optional.of(permisoGlobal));
+    public void testGuardarPermisoExistente() {
+        // given
+        given(permisoRepository.findByNombre(permisoGlobal.getNombre())).willReturn(Optional.of(permisoGlobal));
 
-
-        //when
-        assertThrows(EntityNotFoundException.class, () -> {
+        // when/then
+        org.junit.jupiter.api.Assertions.assertThrows(PermisoExistenteException.class, () -> {
             permisoService.save(permisoGlobal);
         });
-
-        //then
-        verify(permisoRepository, never()).save(any(Permiso.class));
-
-    }*/
+    }
 
     @DisplayName("Test para listar permisos")
     @Test

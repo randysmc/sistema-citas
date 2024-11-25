@@ -170,7 +170,7 @@ public class UsuarioController {
 
 
 
-    private String guardarImagen(MultipartFile file, String nombreNegocio) throws IOException {
+    public String guardarImagen(MultipartFile file, String nombreNegocio) throws IOException {
         String nombreArchivo = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 
         // Define la ruta dentro de static

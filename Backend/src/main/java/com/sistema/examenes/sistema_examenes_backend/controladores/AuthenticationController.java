@@ -220,6 +220,8 @@ public class AuthenticationController {
         return (Usuario) this.userDetailsService.loadUserByUsername(principal.getName());
     }
 
+
+
 }
 
 

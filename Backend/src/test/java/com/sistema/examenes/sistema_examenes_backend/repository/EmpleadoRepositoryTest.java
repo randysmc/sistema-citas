@@ -1,7 +1,8 @@
 package com.sistema.examenes.sistema_examenes_backend.repository;
 
 import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
-import com.sistema.examenes.sistema_examenes_backend.repositorios.UsuarioRepository;
+import com.sistema.examenes.sistema_examenes_backend.repositorios.EmpleadoRepository;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 @Transactional
-public class UsuarioRepositoryTest {
-
+public class EmpleadoRepositoryTest {
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private EmpleadoRepository empleadoRepository;
 
 
 
@@ -42,7 +42,7 @@ public class UsuarioRepositoryTest {
         usuarioGlobal.setCui("654");
         usuarioGlobal.setPerfil("foto.png");
 
-        usuarioRepository.save(usuarioGlobal);
+        empleadoRepository.save(usuarioGlobal);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class UsuarioRepositoryTest {
         usuario1.setPerfil("foto.png");
 
         //when
-        Usuario usuarioGuardado = usuarioRepository.save(usuario1);
+        Usuario usuarioGuardado = empleadoRepository.save(usuario1);
 
         //then
         assertThat(usuarioGuardado).isNotNull();
@@ -82,11 +82,11 @@ public class UsuarioRepositoryTest {
         usuario1.setCui("2253");
         usuario1.setPerfil("foto.png");
 
-        usuarioRepository.save(usuarioGlobal);
-        usuarioRepository.save(usuario1);
+        empleadoRepository.save(usuarioGlobal);
+        empleadoRepository.save(usuario1);
 
         //when
-        List<Usuario> listaUsuarios = usuarioRepository.findAll();
+        List<Usuario> listaUsuarios = empleadoRepository.findAll();
 
         //then
         assertThat(listaUsuarios).isNotNull();
@@ -98,10 +98,10 @@ public class UsuarioRepositoryTest {
     @Test
     public void testObtenerUsuarioPorId() {
         //given
-        usuarioRepository.save(usuarioGlobal);
+        empleadoRepository.save(usuarioGlobal);
 
         //when
-        Usuario usuarioDB = usuarioRepository.findById(usuarioGlobal.getId()).get();
+        Usuario usuarioDB = empleadoRepository.findById(usuarioGlobal.getId()).get();
 
         //then
         assertThat(usuarioDB).isNotNull();
@@ -110,10 +110,10 @@ public class UsuarioRepositoryTest {
     @Test
     public void testEncontrarPorEmail() {
         //given
-        usuarioRepository.save(usuarioGlobal);
+        empleadoRepository.save(usuarioGlobal);
 
         //when
-        Usuario usuarioDB = usuarioRepository.findByEmail(usuarioGlobal.getEmail());
+        Usuario usuarioDB = empleadoRepository.findByEmail(usuarioGlobal.getEmail());
 
         //then
         assertThat(usuarioDB).isNotNull();
@@ -122,10 +122,10 @@ public class UsuarioRepositoryTest {
     @Test
     public void testEncontrarPorNit() {
         //given
-        usuarioRepository.save(usuarioGlobal);
+        empleadoRepository.save(usuarioGlobal);
 
         //when
-        Usuario usuarioDB = usuarioRepository.findByNit(usuarioGlobal.getNit());
+        Usuario usuarioDB = empleadoRepository.findByNit(usuarioGlobal.getNit());
 
         //then
         assertThat(usuarioDB).isNotNull();
@@ -134,10 +134,10 @@ public class UsuarioRepositoryTest {
     @Test
     public void testEncontrarPorCui() {
         //given
-        usuarioRepository.save(usuarioGlobal);
+        empleadoRepository.save(usuarioGlobal);
 
         //when
-        Usuario usuarioDB = usuarioRepository.findByCui(usuarioGlobal.getCui());
+        Usuario usuarioDB = empleadoRepository.findByCui(usuarioGlobal.getCui());
 
         //then
         assertThat(usuarioDB).isNotNull();
@@ -147,10 +147,10 @@ public class UsuarioRepositoryTest {
     @Test
     public void testBuscarUsuariosHabilitados() {
         // given
-        usuarioRepository.save(usuarioGlobal);
+        empleadoRepository.save(usuarioGlobal);
 
         // when
-        List<Usuario> usuariosHabilitados = usuarioRepository.findByEnabledTrue();
+        List<Usuario> usuariosHabilitados = empleadoRepository.findByEnabledTrue();
 
         // then
         assertThat(usuariosHabilitados).isNotEmpty();
@@ -164,10 +164,10 @@ public class UsuarioRepositoryTest {
     public void testBuscarUsuariosDeshabilitados() {
         // given
         usuarioGlobal.setEnabled(false);
-        usuarioRepository.save(usuarioGlobal);
+        empleadoRepository.save(usuarioGlobal);
 
         // when
-        List<Usuario> usuariosDeshabilitados = usuarioRepository.findByEnabledFalse();
+        List<Usuario> usuariosDeshabilitados = empleadoRepository.findByEnabledFalse();
 
         // then
         assertThat(usuariosDeshabilitados).isNotEmpty();
@@ -178,14 +178,14 @@ public class UsuarioRepositoryTest {
     @Test
     public void testActualizarUsuario() {
         //given
-        usuarioRepository.save(usuarioGlobal);
+        empleadoRepository.save(usuarioGlobal);
 
         //when
-        Usuario usuarioGuardado = usuarioRepository.findById(usuarioGlobal.getId()).get();
+        Usuario usuarioGuardado = empleadoRepository.findById(usuarioGlobal.getId()).get();
         usuarioGuardado.setNombre("Jose");
         usuarioGuardado.setUsername("josias");
         usuarioGuardado.setTelefono("77554");
-        Usuario usuarioActualizado = usuarioRepository.save(usuarioGuardado);
+        Usuario usuarioActualizado = empleadoRepository.save(usuarioGuardado);
 
         //then
         assertThat(usuarioActualizado.getNombre()).isEqualTo("Jose");
@@ -196,15 +196,14 @@ public class UsuarioRepositoryTest {
     @Test
     public void testEliminarUsuario() {
         //given
-        usuarioRepository.save(usuarioGlobal);
+        empleadoRepository.save(usuarioGlobal);
 
         //when
-        usuarioRepository.deleteById(usuarioGlobal.getId());
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuarioGlobal.getId());
+        empleadoRepository.deleteById(usuarioGlobal.getId());
+        Optional<Usuario> usuarioOptional = empleadoRepository.findById(usuarioGlobal.getId());
 
         //then
         assertThat(usuarioOptional).isEmpty();
     }
-
 
 }
