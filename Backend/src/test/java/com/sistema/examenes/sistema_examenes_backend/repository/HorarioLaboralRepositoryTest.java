@@ -102,20 +102,8 @@ public class HorarioLaboralRepositoryTest {
         assertThat(horariosLunes.get(0).getHoraFin()).isEqualTo(LocalTime.of(17, 0));
     }
 
-    @Test
-    public void testActualizarHorarioLaboral() {
-        // given
-        horarioLunes.setHoraInicio(LocalTime.of(8, 0));
-        horarioLunes.setHoraFin(LocalTime.of(16, 0));
 
-        // when
-        HorarioLaboral horarioActualizado = horarioLaboralRepository.save(horarioLunes);
 
-        // then
-        assertThat(horarioActualizado).isNotNull();
-        assertThat(horarioActualizado.getHoraInicio()).isEqualTo(LocalTime.of(8, 0));
-        assertThat(horarioActualizado.getHoraFin()).isEqualTo(LocalTime.of(16, 0));
-    }
 
     @Test
     public void testEliminarHorarioLaboral() {

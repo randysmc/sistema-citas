@@ -167,6 +167,17 @@ public class UsuarioController {
     }
 
 
+    @PutMapping("habilitar/{id}")
+    public ResponseEntity<?> habilitarAutenticacion(@PathVariable Long id){
+        usuarioService.cambiarAutenticacion(id, true);
+        return ResponseEntity.ok(Map.of("message", "Usuario con doble autenticacion activado"));
+    }
+
+    @PutMapping("deshabilitar/{id}")
+    public ResponseEntity<?> deshabilitarAutenticacion(@PathVariable Long id){
+        usuarioService.cambiarAutenticacion(id, false);
+        return ResponseEntity.ok(Map.of("message", "Usuario con doble autenticacion activado"));
+    }
 
 
 

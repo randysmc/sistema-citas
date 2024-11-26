@@ -27,7 +27,7 @@ public class HorarioLaboralController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<HorarioLaboral> obtenerPermisoPorId(@PathVariable Long id) {
+    public ResponseEntity<HorarioLaboral> obtenerHorarioPorId(@PathVariable Long id) {
         try {
             HorarioLaboral horarioLaboral = horarioLaboralService.findById(id).orElseThrow(() ->
                     new EntityNotFoundException("Horario", id));
@@ -59,12 +59,10 @@ public class HorarioLaboralController {
     // Eliminar horario
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminarHorario(@PathVariable Long id) {
-        try {
+
             horarioLaboralService.eliminarHorario(id);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+            return ResponseEntity.status(HttpStatus.OK).build();
+
     }
 
 

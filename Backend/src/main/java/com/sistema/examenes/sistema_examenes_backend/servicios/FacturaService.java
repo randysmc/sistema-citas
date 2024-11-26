@@ -1,5 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios;
 
+import com.sistema.examenes.sistema_examenes_backend.DTO.ServiceReportDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Factura;
 
 import java.util.List;
@@ -23,6 +24,13 @@ public interface FacturaService {
     public Factura crearFacturaDesdeCita(Long citaId);
 
     public Factura obtenerFacturaPorCita(Long citaId);
+
+
+
+
+
+
+
 
 
 

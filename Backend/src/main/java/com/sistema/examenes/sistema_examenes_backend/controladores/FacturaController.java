@@ -1,5 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.controladores;
 
+import com.sistema.examenes.sistema_examenes_backend.DTO.ServiceReportDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Comprobante;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Factura;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.FacturaRepository;
@@ -85,6 +86,10 @@ public class FacturaController {
         Factura factura = facturaService.obtenerFacturaPorCita(citaId);
         return ResponseEntity.ok(factura);
     }
+
+
+
+
 
 
 

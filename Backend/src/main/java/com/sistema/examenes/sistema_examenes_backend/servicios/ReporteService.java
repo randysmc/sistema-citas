@@ -1,6 +1,8 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios;
 
 import com.sistema.examenes.sistema_examenes_backend.DTO.ReporteDTO;
+import com.sistema.examenes.sistema_examenes_backend.DTO.ServiceReportDTO;
+import com.sistema.examenes.sistema_examenes_backend.DTO.UsuarioReporteDTO;
 import com.sistema.examenes.sistema_examenes_backend.Enums.EstadoCita;
 
 import java.util.List;
@@ -20,7 +22,7 @@ public interface ReporteService {
 
     public ReporteDTO obtenerHorariosMasSolicitados();
 
-    public ReporteDTO obtenerFrecuenciaUsoPorDiaSemana();
+    //public ReporteDTO obtenerFrecuenciaUsoPorDiaSemana();
 
     public ReporteDTO obtenerRecursosMasYMenosUtilizados();
 
@@ -30,6 +32,22 @@ public interface ReporteService {
 
     public ReporteDTO obtenerListaServiciosUtilizados();
 
+
+    public List<ServiceReportDTO> getMostUsedServices();
+
+    List<ServiceReportDTO> getMostUsedServicesByMonth(int month, int year);
+
+    List<ServiceReportDTO> getRevenueByServiceAndMonth(int month, int year);
+
+    List<UsuarioReporteDTO> getTopClientsByCitas();
+
+    List<UsuarioReporteDTO> getTopEmployeesByCitas();
+
+    Long getCitasWithNoEmpleado();
+
+    List<UsuarioReporteDTO> getTopEmployeesByRevenue();
+
+    List<UsuarioReporteDTO> getTopClientsByRevenue();
 
 
 }

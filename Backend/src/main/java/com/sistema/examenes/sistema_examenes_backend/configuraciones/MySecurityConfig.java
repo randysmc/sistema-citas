@@ -71,6 +71,7 @@ public class MySecurityConfig extends WebSecurityConfigurerAdapter {
                         "/horarios-laborales/**",
                         "/dias-festivos/**",
                         "/citas/**",
+                        "/servicios/**",
                         "/reservas/**",
                         "/comprobantes/**",
                         "/facturas/**",

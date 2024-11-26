@@ -1,6 +1,8 @@
 package com.sistema.examenes.sistema_examenes_backend.controladores;
 
 import com.sistema.examenes.sistema_examenes_backend.DTO.ReporteDTO;
+import com.sistema.examenes.sistema_examenes_backend.DTO.ServiceReportDTO;
+import com.sistema.examenes.sistema_examenes_backend.DTO.UsuarioReporteDTO;
 import com.sistema.examenes.sistema_examenes_backend.Enums.EstadoCita;
 import com.sistema.examenes.sistema_examenes_backend.servicios.ReporteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +45,10 @@ public class ReportesController {
     }
 
     // ReporteController.java
-    @GetMapping("/frecuencia-uso-dia-semana")
+    /*@GetMapping("/frecuencia-uso-dia-semana")
     public ResponseEntity<ReporteDTO> obtenerFrecuenciaUsoPorDiaSemana() {
         return ResponseEntity.ok(reporteService.obtenerFrecuenciaUsoPorDiaSemana());
-    }
+    }*/
 
     // ReporteController.java
     @GetMapping("/recursos-mas-menos-utilizados")
@@ -68,6 +70,56 @@ public class ReportesController {
     public ResponseEntity<ReporteDTO> obtenerListaServiciosUtilizados() {
         return ResponseEntity.ok(reporteService.obtenerListaServiciosUtilizados());
     }
+
+
+    @GetMapping("/servicio-mas-usado")
+    public ResponseEntity<List<ServiceReportDTO>> getMostUsedServices() {
+        List<ServiceReportDTO> report = reporteService.getMostUsedServices();
+        return ResponseEntity.ok(report);
+    }
+
+    @GetMapping("/servicio-mas-usado-por-mes")
+    public ResponseEntity<List<ServiceReportDTO>> getMostUsedServicesByMonth(
+            @RequestParam int month,
+            @RequestParam int year) {
+        List<ServiceReportDTO> report = reporteService.getMostUsedServicesByMonth(month, year);
+        return ResponseEntity.ok(report);
+    }
+
+    @GetMapping("/ingresos-por-servicio")
+    public ResponseEntity<List<ServiceReportDTO>> getRevenueByServiceAndMonth(
+            @RequestParam int month,
+            @RequestParam int year) {
+        List<ServiceReportDTO> report = reporteService.getRevenueByServiceAndMonth(month, year);
+        return ResponseEntity.ok(report);
+    }
+
+    @GetMapping("/clientes-mas-citas")
+    public ResponseEntity<List<UsuarioReporteDTO>> getTopClientsByCitas() {
+        return ResponseEntity.ok(reporteService.getTopClientsByCitas());
+    }
+
+    @GetMapping("/empleados-mas-citas")
+    public ResponseEntity<List<UsuarioReporteDTO>> getTopEmployeesByCitas() {
+        return ResponseEntity.ok(reporteService.getTopEmployeesByCitas());
+    }
+
+    @GetMapping("/citas-sin-empleado")
+    public ResponseEntity<Long> getCitasWithNoEmpleado() {
+        return ResponseEntity.ok(reporteService.getCitasWithNoEmpleado());
+    }
+
+    @GetMapping("/empleado-mas-dinero")
+    public ResponseEntity<List<UsuarioReporteDTO>> getTopEmployeesByRevenue() {
+        return ResponseEntity.ok(reporteService.getTopEmployeesByRevenue());
+    }
+
+    @GetMapping("/cliente-mas-dinero")
+    public ResponseEntity<List<UsuarioReporteDTO>> getTopClientsByRevenue() {
+        return ResponseEntity.ok(reporteService.getTopClientsByRevenue());
+    }
+
+
 
 
 

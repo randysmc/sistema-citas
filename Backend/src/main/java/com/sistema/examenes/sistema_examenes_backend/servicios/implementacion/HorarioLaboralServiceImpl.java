@@ -40,20 +40,6 @@ public class HorarioLaboralServiceImpl implements HorarioLaboralService {
 
     }
 
-    /*@Override
-    public HorarioLaboral guardarHorario(HorarioLaboral horarioLaboral) {
-        // Verificar si ya existe un horario que se traslape
-        List<HorarioLaboral> horariosExistentes = horarioLaboralRepository.findAll(); // Obtener todos los horarios
-
-        for (HorarioLaboral existente : horariosExistentes) {
-            if (horariosSeTraslapan(horarioLaboral, existente)) {
-                throw new HorarioExistenteException("Ya existe un horario establecido");
-            }
-        }
-
-        return horarioLaboralRepository.save(horarioLaboral);
-    }*/
-
     @Override
     public HorarioLaboral guardarHorario(HorarioLaboral horarioLaboral) {
         // Validar que se envíen ambas horas

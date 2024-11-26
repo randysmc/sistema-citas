@@ -435,7 +435,7 @@ public class CitaServiceTest {
             citaService.crearCita(citaGlobal);
         });
 
-        assertThat(exception.getMessage()).isEqualTo("La cita debe ser programada para una fecha futura.");
+        assertThat(exception.getMessage()).isEqualTo("La cita debe ser programada para una fecha y hora futura.");
 
         verify(citaRepository, times(0)).save(any(Cita.class));
     }
@@ -451,7 +451,7 @@ public class CitaServiceTest {
             citaService.crearCitaAleatoria(citaGlobal);
         });
 
-        assertThat(exception.getMessage()).isEqualTo("La cita debe ser programada para una fecha futura.");
+        assertThat(exception.getMessage()).isEqualTo("La cita debe ser programada para una fecha y hora futura.");
 
         verify(citaRepository, times(0)).save(any(Cita.class));
     }
@@ -777,7 +777,7 @@ public class CitaServiceTest {
         // when/then
         assertThatThrownBy(() -> citaService.crearCita(citaGlobal))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("La cita debe ser programada para una fecha futura.");
+                .hasMessage("La cita debe ser programada para una fecha y hora futura.");
     }
 
     @DisplayName("Test para cita dentro del horario laboral")
@@ -833,7 +833,7 @@ public class CitaServiceTest {
         // when/then
         assertThatThrownBy(() -> citaService.crearCita(citaGlobal))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("La cita debe ser programada para una fecha futura.");
+                .hasMessage("La cita debe ser programada para una fecha y hora futura.");
     }
 
     @DisplayName("Test para recurso no disponible o inexistente")

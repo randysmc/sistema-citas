@@ -31,5 +31,7 @@ public interface UsuarioService {
 
     public Usuario desactivarUsuario(Long id);
 
+    void cambiarAutenticacion(Long id, boolean disponible);
+
 
 }

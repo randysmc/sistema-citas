@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Random;
@@ -62,9 +63,11 @@ public class CitaServiceImpl implements CitaService {
         Long servicioId = cita.getServicio().getServicioId();
         Long recursoId = cita.getRecurso().getRecursoId();
 
-        // Validación de fecha futura
-        if (fecha.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("La cita debe ser programada para una fecha futura.");
+        LocalDateTime fechaYHoraCita = fecha.atTime(horaInicio); // Combina la fecha y la hora
+        LocalDateTime fechaYHoraActual = LocalDateTime.now(); // Obtiene la fecha y hora actual
+
+        if (fechaYHoraCita.isBefore(fechaYHoraActual)) {
+            throw new IllegalArgumentException("La cita debe ser programada para una fecha y hora futura.");
         }
 
         // Obtener servicio
@@ -131,12 +134,21 @@ public class CitaServiceImpl implements CitaService {
     public Cita crearCitaAleatoria(Cita cita) {
         LocalDate fecha = cita.getFecha();
         LocalTime horaInicio = cita.getHoraInicio();
+
+        LocalDateTime fechaYHoraCita = fecha.atTime(horaInicio); // Combina la fecha y la hora
+        LocalDateTime fechaYHoraActual = LocalDateTime.now(); // Obtiene la fecha y hora actual
+
+        if (fechaYHoraCita.isBefore(fechaYHoraActual)) {
+            throw new IllegalArgumentException("La cita debe ser programada para una fecha y hora futura.");
+        }
+
+
         Long servicioId = cita.getServicio().getServicioId();
         Long recursoId = cita.getRecurso().getRecursoId();
 
         // Validación de fecha futura
-        if (fecha.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("La cita debe ser programada para una fecha futura.");
+        if (fecha.atStartOfDay().isBefore(LocalDateTime.now())) {
+            throw new IllegalArgumentException("La cita debe ser programada para una fecha y hora futura.");
         }
 
         // Obtener servicio

@@ -11,6 +11,8 @@ import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
+import com.sistema.examenes.sistema_examenes_backend.Enums.EstadoCita;
+import com.sistema.examenes.sistema_examenes_backend.Enums.TipoRecurso;
 import com.sistema.examenes.sistema_examenes_backend.entidades.*;
 
 import com.sistema.examenes.sistema_examenes_backend.repositorios.*;
@@ -29,6 +31,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -46,6 +49,12 @@ public class FacturaServiceTest {
     @Mock
     private CitaRepository citaRepository;
 
+    @Mock
+    private RecursoRepository recursoRepository;
+
+    @Mock
+    private ServicioRepository servicioRepository;
+
     @InjectMocks
     private FacturaServiceImpl facturaService;
 
@@ -53,44 +62,90 @@ public class FacturaServiceTest {
     private Cita citaGlobal;
     private Usuario usuarioGlobal;
     private Factura facturaGlobal;
+    private Usuario empleadoGlobal;
+    private Recurso recursoGlobal;
+    private Servicio servicioGlobal;
 
     @BeforeEach
-    public void setUp(){
-        // Inicializa el usuario global para los tests
+    public void setUp() {
+        // Limpiar la base de datos antes de cada prueba
+
+        // Crear el usuario cliente
         usuarioGlobal = new Usuario();
-        usuarioGlobal.setId(1L);
-        usuarioGlobal.setUsername("randysmc");
+        usuarioGlobal.setNombre("Ringo");
+        usuarioGlobal.setApellido("Sum");
+        usuarioGlobal.setUsername("nachito");
+        usuarioGlobal.setPassword("password");
+        usuarioGlobal.setEmail("nacho@gmail.com");
+        usuarioGlobal.setTelefono("7754");
+        usuarioGlobal.setNit("465654");
+        usuarioGlobal.setCui("654");
+        usuarioGlobal.setPerfil("foto.png");
+        usuarioRepository.save(usuarioGlobal);
+
+        // Crear el usuario empleado
+        empleadoGlobal = new Usuario();
+        empleadoGlobal.setNombre("Ana");
+        empleadoGlobal.setApellido("Gómez");
+        empleadoGlobal.setUsername("anagomez");
+        empleadoGlobal.setPassword("password");
+        empleadoGlobal.setEmail("ana.gomez@example.com");
+        empleadoGlobal.setNit("789987987");
+        empleadoGlobal.setCui("44565465");
+        usuarioRepository.save(empleadoGlobal);
+
+        // Crear el recurso
+        recursoGlobal = new Recurso();
+        recursoGlobal.setNombre("Recurso de Ejemplo");
+        recursoGlobal.setDescripcion("Descripción del recurso de ejemplo");
+        recursoGlobal.setDisponible(true);
+        recursoGlobal.setTipo(TipoRecurso.INSTALACION); // Asegúrate de que este tipo esté definido
+        recursoRepository.save(recursoGlobal);
+
+        // Crear el servicio
+        servicioGlobal = new Servicio();
+        servicioGlobal.setNombre("Servicio de Ejemplo");
+        servicioGlobal.setDescripcion("Descripción del servicio de ejemplo");
+        servicioGlobal.setDuracionServicio(60);
+        servicioGlobal.setPrecio(BigDecimal.valueOf(100.0));
+        servicioGlobal.setDisponible(true);
+        servicioRepository.save(servicioGlobal);
 
         citaGlobal = new Cita();
-        citaGlobal.setIdCita(1L);
+        citaGlobal.setFecha(LocalDate.of(2024, 10, 29));
+        citaGlobal.setHoraInicio(LocalTime.of(10, 0));
+        citaGlobal.setHoraFin(LocalTime.of(11, 0));
+        citaGlobal.setEstado(EstadoCita.AGENDADA);
+        citaGlobal.setCliente(usuarioGlobal);
+        citaGlobal.setEmpleado(empleadoGlobal);
+        citaGlobal.setRecurso(recursoGlobal);
+        citaGlobal.setServicio(servicioGlobal);
+        citaRepository.save(citaGlobal);
 
-        facturaGlobal= new Factura();
-        facturaGlobal.setFacturaId(1L);
-        facturaGlobal.setCita(citaGlobal);
+
+        facturaGlobal = new Factura();
+        facturaGlobal.setMonto(BigDecimal.valueOf(150));
+        facturaGlobal.setDetalleServicio("Servicio realizado");
+        facturaGlobal.setFecha(LocalDate.now());
         facturaGlobal.setCliente(usuarioGlobal);
-        facturaGlobal.setFecha(LocalDate.of(2024,12,25));
-        facturaGlobal.setMonto(BigDecimal.valueOf(100));
-        facturaGlobal.setDetalleServicio("Un buen servicio");
-
-
+        facturaGlobal.setCita(citaGlobal);
     }
 
 
     @DisplayName("Test para crear una factura")
     @Test
     public void testGuardarFactura(){
-        // Dado que los repositorios devuelven el objeto correcto
-        given(usuarioRepository.findById(1L)).willReturn(Optional.of(usuarioGlobal));
-        given(citaRepository.findById(1L)).willReturn(Optional.of(citaGlobal));
+        //given
+        given(usuarioRepository.findById(usuarioGlobal.getId())).willReturn(Optional.of(usuarioGlobal));
+        given(citaRepository.findById(citaGlobal.getIdCita())).willReturn(Optional.of(citaGlobal));
         given(facturaRepository.save(facturaGlobal)).willReturn(facturaGlobal);
 
-        // Cuando se llama al método para crear la factura
+        //when
         Factura facturaGuardada = facturaService.crearFactura(facturaGlobal);
 
-        // Entonces la factura no debe ser nula
+        // then
         assertThat(facturaGuardada).isNotNull();
-        // Verifica que se haya llamado al repositorio de factura para guardar la factura
-        verify(facturaRepository).save(facturaGlobal);
+        verify(facturaRepository, times(1)).save(facturaGlobal);
     }
 
     @DisplayName("Test para crear una factura - Usuario no encontrado")
@@ -168,22 +223,6 @@ public class FacturaServiceTest {
         assertThat(facturas.get(0)).isEqualTo(facturaGlobal);
     }
 
-    /*@DisplayName("Test para crear una factura desde una cita - éxito")
-    @Test
-    public void testCrearFacturaDesdeCita() {
-        // Dado que el repositorio de citas devuelve la cita correcta
-        given(citaRepository.findById(1L)).willReturn(Optional.of(citaGlobal));
-        given(facturaRepository.save(any(Factura.class))).willReturn(facturaGlobal);
-
-        // Cuando se llama al método crearFacturaDesdeCita
-        Factura facturaCreada = facturaService.crearFacturaDesdeCita(1L);
-
-        // Entonces la factura debe ser igual a la que se crea
-        assertThat(facturaCreada).isNotNull();
-        assertThat(facturaCreada.getCliente()).isEqualTo(citaGlobal.getCliente());
-        assertThat(facturaCreada.getMonto()).isEqualTo(citaGlobal.getServicio().getPrecio());
-        assertThat(facturaCreada.getDetalleServicio()).contains("Factura por utilizar el servicio de");
-    }*/
 
     @DisplayName("Test para crear una factura desde una cita - cita no encontrada")
     @Test
@@ -229,4 +268,6 @@ public class FacturaServiceTest {
         // Verificamos que no se interactúa con el repositorio porque el método no tiene implementación.
         verify(facturaRepository, times(0)).deleteById(anyLong());
     }
+
+
 }

@@ -70,6 +70,15 @@ public class UsuarioServiceImplementacion implements UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
+    @Override
+    public void cambiarAutenticacion(Long id, boolean disponible){
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Usuario no encontrado"));
+        usuario.setTfa(disponible);
+
+        usuarioRepository.save(usuario);
+    }
+
 
 
     @Override

@@ -1,19 +1,19 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
 import com.sistema.examenes.sistema_examenes_backend.DTO.ReporteDTO;
+import com.sistema.examenes.sistema_examenes_backend.DTO.ServiceReportDTO;
+import com.sistema.examenes.sistema_examenes_backend.DTO.UsuarioReporteDTO;
 import com.sistema.examenes.sistema_examenes_backend.Enums.EstadoCita;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Cita;
 import com.sistema.examenes.sistema_examenes_backend.repositorios.CitaRepository;
+import com.sistema.examenes.sistema_examenes_backend.repositorios.FacturaRepository;
 import com.sistema.examenes.sistema_examenes_backend.servicios.ReporteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,6 +22,9 @@ public class ReportesServiceImpl implements ReporteService {
 
     @Autowired
     private CitaRepository citaRepository;
+
+    @Autowired
+    private FacturaRepository facturaRepository;
 
     @Override
     public List<ReporteDTO> contarCitasPorCliente() {
@@ -69,7 +72,7 @@ public class ReportesServiceImpl implements ReporteService {
         return new ReporteDTO(detalles);
     }
 
-    @Override
+    /*@Override
     public ReporteDTO obtenerFrecuenciaUsoPorDiaSemana() {
         List<Object[]> resultados = citaRepository.findUsageFrequencyByDayOfWeek();
         Map<String, Object> detalles = new HashMap<>();
@@ -78,11 +81,13 @@ public class ReportesServiceImpl implements ReporteService {
         for (Object[] resultado : resultados) {
             Integer diaSemana = (Integer) resultado[0];
             Long total = (Long) resultado[1];
+            System.out.println("Día de la semana: " + diaSemana + ", Total: " + total);  // Depuración
             detalles.put(dias[diaSemana - 1], total);
         }
 
         return new ReporteDTO(detalles);
-    }
+    }*/
+
 
     @Override
     public ReporteDTO obtenerRecursosMasYMenosUtilizados() {
@@ -140,6 +145,90 @@ public class ReportesServiceImpl implements ReporteService {
 
         return new ReporteDTO(detalles);
     }
+
+
+
+    @Override
+    public List<ServiceReportDTO> getMostUsedServices() {
+        List<Object[]> results = facturaRepository.findMostUsedService();
+        List<ServiceReportDTO> serviceReportDTOs = new ArrayList<>();
+
+        for (Object[] result : results) {
+            String serviceName = (String) result[0];
+            Long usageCount = ((Number) result[1]).longValue();
+            serviceReportDTOs.add(new ServiceReportDTO(serviceName, usageCount));
+        }
+
+        return serviceReportDTOs;
+    }
+
+    @Override
+    public List<ServiceReportDTO> getMostUsedServicesByMonth(int month, int year) {
+        List<Object[]> results = facturaRepository.findMostUsedServiceByMonth(month, year);
+        List<ServiceReportDTO> serviceReportDTOs = new ArrayList<>();
+
+        for (Object[] result : results) {
+            String serviceName = (String) result[0];
+            Long usageCount = ((Number) result[1]).longValue();
+            serviceReportDTOs.add(new ServiceReportDTO(serviceName, usageCount));
+        }
+
+        return serviceReportDTOs;
+    }
+
+    @Override
+    public List<ServiceReportDTO> getRevenueByServiceAndMonth(int month, int year) {
+        List<Object[]> results = facturaRepository.findRevenueByServiceAndMonth(month, year);
+        List<ServiceReportDTO> serviceReportDTOs = new ArrayList<>();
+
+        for (Object[] result : results) {
+            String serviceName = (String) result[0];
+            Long totalRevenue = ((Number) result[1]).longValue(); // Aquí tratamos el monto como un valor entero.
+            serviceReportDTOs.add(new ServiceReportDTO(serviceName, totalRevenue));
+        }
+
+        return serviceReportDTOs;
+    }
+
+    @Override
+    public List<UsuarioReporteDTO> getTopClientsByCitas() {
+        List<Object[]> results = facturaRepository.findTopClientsByCitas();
+        return results.stream()
+                .map(result -> new UsuarioReporteDTO((String) result[0], (String) result[1], ((Number) result[2]).longValue()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UsuarioReporteDTO> getTopEmployeesByCitas() {
+        List<Object[]> results = facturaRepository.findTopEmployeesByCitas();
+        return results.stream()
+                .map(result -> new UsuarioReporteDTO((String) result[0], (String) result[1], ((Number) result[2]).longValue()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Long getCitasWithNoEmpleado() {
+        return facturaRepository.countCitasWithNoEmpleado();
+    }
+
+    @Override
+    public List<UsuarioReporteDTO> getTopEmployeesByRevenue() {
+        List<Object[]> results = facturaRepository.findTopEmployeesByRevenue();
+        return results.stream()
+                .map(result -> new UsuarioReporteDTO((String) result[0], (String) result[1], ((Number) result[2]).longValue()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UsuarioReporteDTO> getTopClientsByRevenue() {
+        List<Object[]> results = facturaRepository.findTopClientsByRevenue();
+        return results.stream()
+                .map(result -> new UsuarioReporteDTO((String) result[0], (String) result[1], ((Number) result[2]).longValue()))
+                .collect(Collectors.toList());
+    }
+
+
+
 
 
 

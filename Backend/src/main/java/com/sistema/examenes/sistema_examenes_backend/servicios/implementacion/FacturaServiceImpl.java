@@ -1,5 +1,6 @@
 package com.sistema.examenes.sistema_examenes_backend.servicios.implementacion;
 
+import com.sistema.examenes.sistema_examenes_backend.DTO.ServiceReportDTO;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Cita;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Factura;
 import com.sistema.examenes.sistema_examenes_backend.entidades.Usuario;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -94,6 +96,10 @@ public class FacturaServiceImpl implements FacturaService {
     public Factura obtenerFacturaPorCita(Long citaId) {
         return facturaRepository.findByCita_IdCita(citaId); // Asegúrate de que el método existe en el repositorio
     }
+
+
+
+
 
 
 

@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -103,7 +104,7 @@ public class CitaRepositoryTest {
         citaGlobal.setEmpleado(empleadoGlobal);
         citaGlobal.setRecurso(recursoGlobal);
         citaGlobal.setServicio(servicioGlobal);
-        citaRepository.save(citaGlobal);
+        //citaRepository.save(citaGlobal);
     }
 
     @DisplayName("Test para guardar una cita")
@@ -225,5 +226,242 @@ public class CitaRepositoryTest {
         assertThat(citasPorEstado).isNotEmpty();
         assertThat(citasPorEstado.get(0).getEstado()).isEqualTo(EstadoCita.AGENDADA);
     }
+
+    @DisplayName("Test para contar citas por cliente")
+    @Test
+    public void testContarCitasPorCliente() {
+        // given
+
+        citaRepository.save(citaGlobal);
+
+        Cita cita2 = new Cita();
+        cita2.setFecha(LocalDate.of(2024, 11, 1));
+        cita2.setHoraInicio(LocalTime.of(9, 0));
+        cita2.setHoraFin(LocalTime.of(10, 0));
+        cita2.setEstado(EstadoCita.AGENDADA);
+        cita2.setCliente(usuarioGlobal);
+        cita2.setEmpleado(empleadoGlobal);
+        cita2.setRecurso(recursoGlobal);
+        cita2.setServicio(servicioGlobal);
+        citaRepository.save(cita2);
+
+        // when
+        List<Map<String, Object>> result = citaRepository.contarCitasPorCliente();
+
+        // then
+        assertThat(result).isNotEmpty();
+        assertThat(result.size()).isEqualTo(1);
+        assertThat(result.get(0).get("numeroCitas")).isEqualTo(2L); // Asumiendo que el usuario tiene 2 citas
+    }
+
+    @DisplayName("Test para obtener citas por estado")
+    @Test
+    public void testObtenerCitasPorEstado() {
+        // given
+
+        citaRepository.save(citaGlobal);
+
+        Cita cita2 = new Cita();
+        cita2.setFecha(LocalDate.of(2024, 11, 1));
+        cita2.setHoraInicio(LocalTime.of(9, 0));
+        cita2.setHoraFin(LocalTime.of(10, 0));
+        cita2.setEstado(EstadoCita.CANCELADA);
+        cita2.setCliente(usuarioGlobal);
+        cita2.setEmpleado(empleadoGlobal);
+        cita2.setRecurso(recursoGlobal);
+        cita2.setServicio(servicioGlobal);
+        citaRepository.save(cita2);
+
+        // when
+        List<Map<String, Object>> result = citaRepository.obtenerCitasPorEstado();
+
+        // then
+        assertThat(result).isNotEmpty();
+        assertThat(result.size()).isEqualTo(2); // Debe devolver dos estados: AGENDADA y CANCELADA
+    }
+
+    @DisplayName("Test para obtener usuario con más citas agendadas")
+    @Test
+    public void testObtenerUsuarioConMasCitasAgendadas() {
+        // given
+
+        citaRepository.save(citaGlobal);
+
+        // when
+        List<Map<String, Object>> result = citaRepository.obtenerUsuarioConMasCitasAgendadas(EstadoCita.AGENDADA);
+
+        // then
+        assertThat(result).isNotEmpty();
+        assertThat(result.get(0).get("nombre")).isEqualTo("Ringo");
+        assertThat(result.get(0).get("numeroCitas")).isEqualTo(1L); // Usuario tiene 1 cita agendada
+    }
+
+    @DisplayName("Test para obtener usuario con más citas agendadas")
+    @Test
+    public void testObtenerUsuarioConMasCitasCanceladas() {
+        // given
+        citaGlobal.setEstado(EstadoCita.CANCELADA);
+        citaRepository.save(citaGlobal);
+
+        // when
+        List<Map<String, Object>> result = citaRepository.obtenerUsuarioConMasCitasCanceladas(EstadoCita.CANCELADA);
+
+        // then
+        assertThat(result).isNotEmpty();
+        assertThat(result.get(0).get("nombre")).isEqualTo("Ringo");
+        assertThat(result.get(0).get("numeroCitas")).isEqualTo(1L); // Usuario tiene 1 cita agendada
+    }
+
+    @DisplayName("Test para obtener las horas más solicitadas")
+    @Test
+    public void testFindMostRequestedHours() {
+        // given
+        Cita cita1 = new Cita();
+        cita1.setFecha(LocalDate.of(2024, 10, 29));
+        cita1.setHoraInicio(LocalTime.of(10, 0));
+        cita1.setHoraFin(LocalTime.of(11, 0));
+        cita1.setEstado(EstadoCita.AGENDADA);
+        cita1.setCliente(usuarioGlobal);
+        cita1.setEmpleado(empleadoGlobal);
+        cita1.setRecurso(recursoGlobal);
+        cita1.setServicio(servicioGlobal);
+        citaRepository.save(cita1);
+
+        // when
+        List<Object[]> result = citaRepository.findMostRequestedHours();
+
+        // then
+        assertThat(result).isNotEmpty();
+        assertThat(result.get(0)[0]).isEqualTo(10); // Hora más solicitada es la 10
+        assertThat(result.get(0)[1]).isEqualTo(1L); // Solo 1 cita fue agendada a las 10:00
+    }
+
+
+
+    @DisplayName("Test para la frecuencia de uso por día de la semana")
+    @Test
+    public void testFindUsageFrequencyByDayOfWeek() {
+        // given
+        citaGlobal.setFecha(LocalDate.of(2024, 10, 29)); // Martes
+        citaRepository.save(citaGlobal);
+
+        Cita citaLunes = new Cita();
+        citaLunes.setFecha(LocalDate.of(2024, 10, 28)); // Lunes
+        citaLunes.setHoraInicio(LocalTime.of(11, 0));
+        citaLunes.setHoraFin(LocalTime.of(12, 0));
+        citaLunes.setEstado(EstadoCita.AGENDADA);
+        citaLunes.setCliente(usuarioGlobal);
+        citaLunes.setEmpleado(empleadoGlobal);
+        citaLunes.setRecurso(recursoGlobal);
+        citaLunes.setServicio(servicioGlobal);
+        citaRepository.save(citaLunes);
+
+        // when
+        List<Object[]> result = citaRepository.findUsageFrequencyByDayOfWeek();
+
+        // then
+        assertThat(result).isNotEmpty();
+        assertThat(result.size()).isEqualTo(2); // Lunes y Martes
+
+        assertThat(((Number) result.get(0)[0]).intValue()).isEqualTo(2);  // Día 2 -> Lunes
+        assertThat(((Number) result.get(0)[1]).intValue()).isEqualTo(1);  // 1 cita el lunes
+
+        assertThat(((Number) result.get(1)[0]).intValue()).isEqualTo(3);  // Día 3 -> Martes
+        assertThat(((Number) result.get(1)[1]).intValue()).isEqualTo(1);  // 1 cita el martes
+    }
+
+
+    @DisplayName("Test para el uso de recursos")
+    @Test
+    public void testFindResourceUsage() {
+        // given
+        citaRepository.save(citaGlobal);
+
+        Cita cita2 = new Cita();
+        cita2.setFecha(LocalDate.of(2024, 10, 29));
+        cita2.setHoraInicio(LocalTime.of(11, 0));
+        cita2.setHoraFin(LocalTime.of(12, 0));
+        cita2.setEstado(EstadoCita.AGENDADA);
+        cita2.setCliente(usuarioGlobal);
+        cita2.setEmpleado(empleadoGlobal);
+        cita2.setRecurso(recursoGlobal);
+        cita2.setServicio(servicioGlobal);
+        citaRepository.save(cita2);
+
+        // when
+        List<Object[]> result = citaRepository.findResourceUsage();
+
+        // then
+        assertThat(result).isNotEmpty();
+        assertThat(result.size()).isEqualTo(1); // Solo un recurso utilizado
+
+        assertThat(result.get(0)[0]).isEqualTo("Recurso de Ejemplo"); // Nombre del recurso
+        assertThat(((Number) result.get(0)[1]).intValue()).isEqualTo(2); // 2 citas para el recurso
+    }
+
+
+    @DisplayName("Test para la tasa de cancelaciones por servicio")
+    @Test
+    public void testFindCancellationRateByService() {
+        // given
+        citaGlobal.setEstado(EstadoCita.CANCELADA);
+        citaRepository.save(citaGlobal);
+
+        Cita cita2 = new Cita();
+        cita2.setFecha(LocalDate.of(2024, 10, 29));
+        cita2.setHoraInicio(LocalTime.of(11, 0));
+        cita2.setHoraFin(LocalTime.of(12, 0));
+        cita2.setEstado(EstadoCita.AGENDADA);
+        cita2.setCliente(usuarioGlobal);
+        cita2.setEmpleado(empleadoGlobal);
+        cita2.setRecurso(recursoGlobal);
+        cita2.setServicio(servicioGlobal);
+        citaRepository.save(cita2);
+
+        // when
+        List<Object[]> result = citaRepository.findCancellationRateByService();
+
+        // then
+        assertThat(result).isNotEmpty();
+        assertThat(result.size()).isEqualTo(1); // Un servicio
+
+        assertThat(result.get(0)[0]).isEqualTo("Servicio de Ejemplo"); // Nombre del servicio
+        assertThat(((Number) result.get(0)[1]).intValue()).isEqualTo(1); // 1 cita cancelada
+        assertThat(((Number) result.get(0)[2]).intValue()).isEqualTo(2); // Total de 2 citas
+    }
+
+
+    @DisplayName("Test para listar todos los recursos utilizados")
+    @Test
+    public void testFindAllResourceUsage() {
+        // given
+        citaRepository.save(citaGlobal);  // Guardamos la primera cita
+        Cita cita2 = new Cita();  // Creamos una nueva cita para asegurarnos de que hay más de una
+        cita2.setFecha(LocalDate.of(2024, 10, 30)); // Fecha diferente, para diferenciar la cita
+        cita2.setHoraInicio(LocalTime.of(10, 0));
+        cita2.setHoraFin(LocalTime.of(11, 0));
+        cita2.setEstado(EstadoCita.AGENDADA);
+        cita2.setCliente(usuarioGlobal);
+        cita2.setEmpleado(empleadoGlobal);
+        cita2.setRecurso(recursoGlobal); // Usamos el mismo recurso
+        cita2.setServicio(servicioGlobal);
+        citaRepository.save(cita2);  // Guardamos la segunda cita
+
+        // when
+        List<Object[]> result = citaRepository.findAllResourceUsage();
+
+        // then
+        assertThat(result).isNotEmpty();
+        assertThat(result.size()).isEqualTo(1); // Solo un recurso
+
+        assertThat(result.get(0)[0]).isEqualTo("Recurso de Ejemplo"); // Nombre del recurso
+        assertThat(((Number) result.get(0)[1]).intValue()).isEqualTo(2); // 2 citas para el recurso
+    }
+
+
+
+
+
+
 
 }
