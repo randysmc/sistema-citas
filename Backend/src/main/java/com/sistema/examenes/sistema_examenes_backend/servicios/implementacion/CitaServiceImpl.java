@@ -278,10 +278,9 @@ public class CitaServiceImpl implements CitaService {
         Cita cita = citaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Cita no encontrada con id: " + id));
 
-        // Eliminar la reserva relacionada si existe
-        // eliminarReserva(cita);
 
-        // Cambiar el estado de la cita a CANCELADA
+
+        // Cambiar el estado de la cita a Confirmada
         cita.setEstado(EstadoCita.CONFIRMADA);
         //crearReserva(cita);
         return citaRepository.save(cita);
@@ -541,6 +540,8 @@ public class CitaServiceImpl implements CitaService {
         // Guardar la factura en el repositorio
         return facturaRepository.save(factura);
     }
+
+
 
 
 
