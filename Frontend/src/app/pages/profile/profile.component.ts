@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service'; // Asegúrate de tener el servicio para manejar la autenticación
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-profile',
@@ -12,7 +15,11 @@ export class ProfileComponent {
   imageUrl: string = ''; // Para almacenar la URL de la imagen
   isLoading: boolean = true; // Estado de carga
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(
+    private loginService: LoginService, 
+    private router: Router, 
+    private userService: UserService // Asegúrate de importar el servicio
+  ) {}
 
   ngOnInit(): void {
     // Obtenemos el usuario actual
@@ -31,18 +38,11 @@ export class ProfileComponent {
     );
   }
 
-
-
   private buildImageUrl(user: any): string {
     const folder = 'usuario'; // Todos los usuarios en la carpeta 'usuarios'
-
-    // Extraer solo el nombre del archivo de la ruta completa
     const filename = user.perfil.split('/').pop(); // Obtiene solo el nombre del archivo
-
-    // Construir la URL usando solo el nombre del archivo
     return `http://localhost:8080/uploads/${folder}/${filename}`; 
   }
-
 
   actualizarPerfil(): void {
     const role = this.user.authorities[0].authority;
@@ -56,4 +56,52 @@ export class ProfileComponent {
     }
   }
 
+  // Función para habilitar o deshabilitar la autenticación en dos pasos
+  toggleTFA(): void {
+    const userId = this.user.id;
+
+    if (this.user.tfa) {
+      // Si la autenticación en dos pasos está habilitada, deshabilitarla
+      this.userService.deshabilitarAutenticacin(userId).subscribe(
+        () => {
+          this.user.tfa = false; // Cambiar el estado de tfa
+          Swal.fire({
+            title: 'Éxito!',
+            text: 'Autenticación en dos pasos deshabilitada.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+          });
+        },
+        (error) => {
+          Swal.fire({
+            title: 'Error',
+            text: 'Hubo un error al deshabilitar la autenticación en dos pasos.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+          });
+        }
+      );
+    } else {
+      // Si la autenticación en dos pasos está deshabilitada, habilitarla
+      this.userService.habilitarAutenticacin(userId).subscribe(
+        () => {
+          this.user.tfa = true; // Cambiar el estado de tfa
+          Swal.fire({
+            title: 'Éxito!',
+            text: 'Autenticación en dos pasos habilitada.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+          });
+        },
+        (error) => {
+          Swal.fire({
+            title: 'Error',
+            text: 'Hubo un error al habilitar la autenticación en dos pasos.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+          });
+        }
+      );
+    }
+  }
 }

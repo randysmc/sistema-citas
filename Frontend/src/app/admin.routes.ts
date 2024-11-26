@@ -2,11 +2,10 @@ import { Routes } from '@angular/router';
 import { DashboardComponent } from './pages/admin/dashboard/dashboard.component'; 
 import { ProfileComponent } from './pages/profile/profile.component'; 
 import { CalendarComponent } from './pages/calendar/calendar.component';
-import { FacturasComponent } from './pages/admin/facturas/facturas.component';
-import { ViewFacturaDetailComponent } from './pages/admin/view-factura-detail/view-factura-detail.component';
-import { ViewUsersComponent } from './pages/admin/Usuario/view-users/view-users.component';
-import { AddUsersComponent } from './pages/admin/add-users/add-users.component';
-import { ViewUserDetailComponent } from './pages/admin/Usuario/view-user-detail/view-user-detail.component';
+import { FacturasComponent } from './pages/admin/Factura/facturas/facturas.component';
+import { ViewFacturaDetailComponent } from './pages/admin/Factura/view-factura-detail/view-factura-detail.component';
+import { ViewUsersComponent } from './pages/admin/crudCliente/view-users/view-users.component';
+import { ViewUserDetailComponent } from './pages/admin/crudCliente/view-user-detail/view-user-detail.component';
 import { UpdateAdminUserComponent } from './pages/admin/update-admin-user/update-admin-user.component';
 import { WelcomeComponent } from './pages/admin/welcome/welcome.component';
 import { ViewRecursosComponent } from './pages/admin/Recurso/view-recursos/view-recursos.component';
@@ -18,13 +17,15 @@ import { ViewServicesDetailComponent } from './pages/admin/Servicio/view-service
 import { AddDiaFestivoComponent } from './pages/admin/Dia_Festivo/add-dia-festivo/add-dia-festivo.component';
 import { ViewCitasComponent } from './pages/admin/Citas/view-citas/view-citas.component';
 import { ViewCitasDetailComponent } from './pages/admin/Citas/view-citas/view-citas-detail/view-citas-detail.component';
-import { AddEmpleadoComponent } from './pages/admin/Usuario/add-empleado/add-empleado.component';
+import { AddEmpleadoComponent } from './pages/admin/crudEmpleado/add-empleado/add-empleado.component';
 import { ReportesComponent } from './pages/admin/reportes/reportes.component';
 import { UpdateNegocioComponent } from './pages/admin/Negocio/update-negocio/update-negocio.component';
 import { ViewNegocioDetailComponent } from './pages/admin/Negocio/view-negocio-detail/view-negocio-detail.component';
 import { HorariosFormComponent } from './pages/admin/Horario_Laboral/horarios-form/horarios-form.component';
 import { ViewHorariosComponent } from './pages/admin/Horario_Laboral/view-horarios/view-horarios.component';
 import { ViewHorarioDetailComponent } from './pages/admin/Horario_Laboral/view-horario-detail/view-horario-detail.component';
+import { ViewEmpleadosComponent } from './pages/admin/crudEmpleado/view-empleados/view-empleados.component';
+import { ViewEmpleadoDetailComponent } from './pages/admin/crudEmpleado/view-empleado-detail/view-empleado-detail.component';
 
 
 export const AdminRoutes: Routes = [
@@ -53,22 +54,25 @@ export const AdminRoutes: Routes = [
             path: 'facturas/:id',
             component: ViewFacturaDetailComponent,
           },
+
+
           {
             path: 'users',
             component: ViewUsersComponent,
           },
           {
-            path: 'add-usuario',
-            component: AddUsersComponent,
-          },
-          {
             path: 'users/:id',
             component: ViewUserDetailComponent,
           },
+
+
+
           {
             path: 'update-admin/:id',
             component: UpdateAdminUserComponent,
           },
+
+
           {
             path: 'recursos',
             component: ViewRecursosComponent,
@@ -85,7 +89,9 @@ export const AdminRoutes: Routes = [
             path: 'update-recurso/:id',
             component: RecursosFormComponent,
           },
-    
+
+
+
           {
             path: 'servicios',
             component: ViewServicesComponent,
@@ -102,10 +108,17 @@ export const AdminRoutes: Routes = [
             path: 'update-servicio/:id',
             component: ServiciosFormComponentComponent,
           },
+
+
+
+
           {
             path: 'add-dia-festivo',
             component: AddDiaFestivoComponent,
           },
+
+
+
           
           {
             path: 'horarios-laborales',
@@ -123,6 +136,9 @@ export const AdminRoutes: Routes = [
             path: 'update-horario-laboral/:id',
             component:HorariosFormComponent
           },
+
+
+
           {
             path: 'citas',
             component: ViewCitasComponent,
@@ -132,9 +148,11 @@ export const AdminRoutes: Routes = [
             component: ViewCitasDetailComponent,
           },
     
+
+
           {
             path: 'empleados',
-            component: ViewRecursosComponent,
+            component: ViewEmpleadosComponent
           },
           {
             path: 'add-empleado',
@@ -142,8 +160,12 @@ export const AdminRoutes: Routes = [
           },
           {
             path: 'empleado/:id',
-            component: ViewRecursoDetailComponent,
+            component: ViewEmpleadoDetailComponent,
           },
+
+
+          
+
           {
             path: 'reportes',
             component: ReportesComponent

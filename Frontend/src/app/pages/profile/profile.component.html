@@ -4,11 +4,7 @@
     <div class="bootstrap-wrapper">
       <div class="container">
         <div class="text-center">
-          <img
-            [src]="imageUrl"
-            alt="Imagen de perfil"
-            class="profile-image">
-
+          <img [src]="imageUrl" alt="Imagen de perfil" class="profile-image">
           <h1 class="mt20">{{ user.nombre }} {{ user.apellido }}</h1>
         </div>
         <div class="row">
@@ -27,12 +23,19 @@
                 <td>{{ user.telefono }}</td>
               </tr>
               <tr>
-                <td>Rol</td>
                 <td>{{ user.authorities[0].authority }}</td>
               </tr>
               <tr>
                 <td>Estado</td>
                 <td>{{ user.enabled ? "Activo" : "No activo" }}</td>
+              </tr>
+              <tr>
+                <td>Numero de NIT</td>
+                <td>{{ user.nit}}</td>
+              </tr>
+              <tr>
+                <td>Autenticación en dos pasos</td>
+                <td>{{ user.tfa ? 'Habilitada' : 'Deshabilitada' }}</td>
               </tr>
             </table>
           </div>
@@ -40,11 +43,16 @@
       </div>
     </div>
     <mat-card-actions class="text-center">
-      <mat-card-actions class="text-center">
-        <button mat-raised-button color="primary" (click)="actualizarPerfil()">Actualizar</button>
-        <button mat-raised-button color="accent">Compartir</button>
-      </mat-card-actions>
+      <button mat-raised-button color="primary" (click)="actualizarPerfil()">Actualizar</button>
       
+      <!-- Nuevo botón para habilitar/deshabilitar la autenticación en dos pasos -->
+      <button 
+        mat-raised-button 
+        color="warn" 
+        (click)="toggleTFA()" 
+        [disabled]="isLoading">
+        {{ user.tfa ? 'Deshabilitar autenticación en dos pasos' : 'Habilitar autenticación en dos pasos' }}
+      </button>
     </mat-card-actions>
   </mat-card-content>
 </mat-card>

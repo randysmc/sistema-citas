@@ -43,5 +43,13 @@ export class UserService {
     return this.httpClient.put(`${baserUrl}/usuarios/desactivar/{id}`, {})
   }
 
+  public habilitarAutenticacin(id:number){
+    return this.httpClient.put(`${baserUrl}/usuarios/habilitar/${id}`, {})
+  }
+
+  public deshabilitarAutenticacin(id:number){
+    return this.httpClient.put(`${baserUrl}/usuarios/deshabilitar/${id}`, {})
+  }
+
   
 }

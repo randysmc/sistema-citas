@@ -38,10 +38,9 @@ import { ViewRecursosComponent } from './pages/admin/Recurso/view-recursos/view-
 import { ViewRecursoDetailComponent } from './pages/admin/Recurso/view-recurso-detail/view-recurso-detail.component';
 import { CalendarComponent } from './pages/calendar/calendar.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
-import { AddUsersComponent } from './pages/admin/add-users/add-users.component';
-import { ViewUserDetailComponent } from './pages/admin/Usuario/view-user-detail/view-user-detail.component';
-import { ViewUsersComponent } from './pages/admin/Usuario/view-users/view-users.component';
-import { AddEmpleadoComponent } from './pages/admin/Usuario/add-empleado/add-empleado.component';
+import { ViewUserDetailComponent } from './pages/admin/crudCliente/view-user-detail/view-user-detail.component';
+import { ViewUsersComponent } from './pages/admin/crudCliente/view-users/view-users.component';
+import { AddEmpleadoComponent } from './pages/admin/crudEmpleado/add-empleado/add-empleado.component';
 import { ClienteDashboardComponent } from './pages/cliente/cliente-dashboard/cliente-dashboard.component';
 import { SidebarClienteComponent } from './pages/cliente/sidebar-cliente/sidebar-cliente.component';
 import { UpdateAdminUserComponent } from './pages/admin/update-admin-user/update-admin-user.component';
@@ -54,14 +53,14 @@ import { ViewCitasComponent } from './pages/admin/Citas/view-citas/view-citas.co
 import { ViewCitasDetailComponent } from './pages/admin/Citas/view-citas/view-citas-detail/view-citas-detail.component';
 import { AddClienteCitaComponent } from './pages/cliente/Citas/add-cliente-cita/add-cliente-cita.component';
 import { MyChartComponent } from './pages/admin/my-chart/my-chart.component';
-import { UserViewServicesComponent } from './pages/cliente/user-view-services/user-view-services.component';
-import { UserViewServicesDetailComponent } from './pages/cliente/user-view-services-detail/user-view-services-detail.component';
-import { FacturasComponent } from './pages/admin/facturas/facturas.component';
-import { ViewFacturaDetailComponent } from './pages/admin/view-factura-detail/view-factura-detail.component';
-import { UserViewFacturasComponent } from './pages/cliente/user-view-facturas/user-view-facturas.component';
+import { UserViewServicesComponent } from './pages/cliente/Servicio/user-view-services/user-view-services.component';
+import { UserViewServicesDetailComponent } from './pages/cliente/Servicio/user-view-services-detail/user-view-services-detail.component';
+import { FacturasComponent } from './pages/admin/Factura/facturas/facturas.component';
+import { ViewFacturaDetailComponent } from './pages/admin/Factura/view-factura-detail/view-factura-detail.component';
+import { UserViewFacturasComponent } from './pages/cliente/Factura/user-view-facturas/user-view-facturas.component';
 import { UserViewCitasComponent } from './pages/cliente/Citas/user-view-citas/user-view-citas.component';
 import { UserViewCitasDetailComponent } from './pages/cliente/Citas/user-view-citas-detail/user-view-citas-detail.component';
-import { UserViewFacturasDetailComponent } from './pages/cliente/user-view-facturas-detail/user-view-facturas-detail.component';
+import { UserViewFacturasDetailComponent } from './pages/cliente/Factura/user-view-facturas-detail/user-view-facturas-detail.component';
 import { ReportesComponent } from './pages/admin/reportes/reportes.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
 import { RecursosFormComponent } from './pages/admin/Recurso/recursos-form-component/recursos-form-component.component';
@@ -76,6 +75,8 @@ import { FooterComponent } from './components/footer/footer.component';
 import { HorariosFormComponent } from './pages/admin/Horario_Laboral/horarios-form/horarios-form.component';
 import { ViewHorariosComponent } from './pages/admin/Horario_Laboral/view-horarios/view-horarios.component';
 import { ViewHorarioDetailComponent } from './pages/admin/Horario_Laboral/view-horario-detail/view-horario-detail.component';
+import { ViewEmpleadoDetailComponent } from './pages/admin/crudEmpleado/view-empleado-detail/view-empleado-detail.component';
+import { ViewEmpleadosComponent } from './pages/admin/crudEmpleado/view-empleados/view-empleados.component';
 
 
 
@@ -98,7 +99,6 @@ import { ViewHorarioDetailComponent } from './pages/admin/Horario_Laboral/view-h
     ViewRecursoDetailComponent,
     CalendarComponent,
     ViewUserDetailComponent,
-    AddUsersComponent,
     ViewUsersComponent,
     AddEmpleadoComponent,
     ClienteDashboardComponent,
@@ -135,6 +135,8 @@ import { ViewHorarioDetailComponent } from './pages/admin/Horario_Laboral/view-h
     HorariosFormComponent,
     ViewHorariosComponent,
     ViewHorarioDetailComponent,
+    ViewEmpleadoDetailComponent,
+    ViewEmpleadosComponent,
 
   ],
   imports: [
