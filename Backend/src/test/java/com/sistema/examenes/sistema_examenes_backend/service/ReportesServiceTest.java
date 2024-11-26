@@ -300,32 +300,6 @@ public class ReportesServiceTest {
         verify(citaRepository, times(1)).findMostRequestedHours();
     }
 
-    /*@Test
-    @DisplayName("Prueba obtener frecuencia de uso por día de la semana")
-    void obtenerFrecuenciaUsoPorDiaSemanaTest() {
-        // Simulamos el comportamiento de la consulta para obtener la frecuencia de uso por día de la semana
-        List<Object[]> mockResultados = new ArrayList<>();
-        mockResultados.add(new Object[] { 1, 10L }); // Lunes, 10 citas
-        mockResultados.add(new Object[] { 3, 15L }); // Miércoles, 15 citas
-
-        // Simulamos el repositorio
-        given(citaRepository.findUsageFrequencyByDayOfWeek()).willReturn(mockResultados);
-
-        // Ejecutar el método
-        ReporteDTO resultado = reportesService.obtenerFrecuenciaUsoPorDiaSemana();
-
-        // Verificación: El mapa de detalles debe tener los días de la semana como claves y el total como valores
-        assertNotNull(resultado);
-        Map<String, Object> detalles = resultado.getDetalles();
-        assertEquals(2, detalles.size());
-        assertEquals(10L, detalles.get("Lunes"));
-        assertEquals(15L, detalles.get("Miércoles"));
-
-        // Verificar que el método del repositorio se haya llamado una vez
-        verify(citaRepository, times(1)).findUsageFrequencyByDayOfWeek();
-    }*/
-
-
 
     @Test
     @DisplayName("Prueba obtener recursos más y menos utilizados")

@@ -259,15 +259,7 @@ public class FacturaServiceTest {
         verify(facturaRepository, times(0)).save(any(Factura.class));
     }
 
-    @DisplayName("Test para eliminar una factura - sin implementación")
-    @Test
-    public void testEliminarFactura() {
-        // Aunque no hay implementación, simplemente verificamos que no se lanza ninguna excepción.
-        assertDoesNotThrow(() -> facturaService.eliminarFactura(1L));
 
-        // Verificamos que no se interactúa con el repositorio porque el método no tiene implementación.
-        verify(facturaRepository, times(0)).deleteById(anyLong());
-    }
 
 
 }

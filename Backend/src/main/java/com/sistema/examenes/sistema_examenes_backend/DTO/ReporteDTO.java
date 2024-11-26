@@ -10,6 +10,7 @@ public class ReporteDTO {
         this.detalles = detalles;
     }
 
+
     public Map<String, Object> getDetalles() {
         return detalles;
     }

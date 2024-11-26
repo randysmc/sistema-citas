@@ -59,10 +59,7 @@ public class FacturaServiceImpl implements FacturaService {
         return null;
     }
 
-    @Override
-    public Factura eliminarFactura(Long id) {
-        return null;
-    }
+
 
     @Override
     public List<Factura> obtenerFacturasPorUsuario(Long usuarioId) {

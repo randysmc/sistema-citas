@@ -59,8 +59,6 @@ public class NotificacionController {
 
 
 
-
-
     @GetMapping("/usuario/{usuarioId}")
     public ResponseEntity<List<UsuarioNotificacion>> obtenerNotificacionesPorUsuario(@PathVariable Long usuarioId) {
         List<UsuarioNotificacion> usuarioNotificaciones = usuarioNotificacionService.obtenerNotificacionesPorUsuario(usuarioId);

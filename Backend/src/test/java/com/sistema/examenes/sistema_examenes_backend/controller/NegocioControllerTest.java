@@ -23,6 +23,7 @@ import com.sistema.examenes.sistema_examenes_backend.servicios.NegocioService;
 import com.sistema.examenes.sistema_examenes_backend.servicios.PermisoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -34,6 +35,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,26 +57,6 @@ public class NegocioControllerTest {
 
 
 
-    /*@Test
-    public void testCrearNegocioConFotoPerfilOpcional() throws Exception {
-        //given
-        Negocio negocio = new Negocio();
-        negocio.setNegocioId(1L);
-        negocio.setNombre("Negocio prueba");
-
-        //
-        given(negocioService.guardarNegocio(any(Negocio.class))).willReturn(negocio);
-
-        //when
-        ResultActions response = mockMvc.perform(post("/negocios/")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(negocio)));
-
-        //then
-        response.andDo(print())
-                .andExpect((status().isCreated()))
-                .andExpect(jsonPath("$.nombre", is(negocio.getNombre())));
-    }*/
 
 
 

@@ -26,6 +26,11 @@ public class Permiso {
         this.rolPermisos = rolPermisos;
     }
 
+    public Permiso(Long id, String nombre) {
+        this.id = id;
+        this.nombre = nombre;
+    }
+
     public Permiso() {
     }
 

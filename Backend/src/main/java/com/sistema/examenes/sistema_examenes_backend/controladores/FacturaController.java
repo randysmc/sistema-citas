@@ -30,16 +30,10 @@ public class FacturaController {
 
     @PostMapping("/crear")
     public ResponseEntity<?> crearFactura(@RequestBody Factura factura) {
-        try {
             // Intentar crear el comprobante
             Factura nuevaFactura = facturaService.crearFactura(factura);
             return new ResponseEntity<>(nuevaFactura, HttpStatus.CREATED);
-        } catch (RuntimeException e) {
-            // Si ocurre algún error, retornamos un JSON con el mensaje de error
-            return new ResponseEntity<>(Map.of("error", e.getMessage()), HttpStatus.BAD_REQUEST);
-        } catch (Exception e) {
-            return new ResponseEntity<>(Map.of("error", "Error inesperado: " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
     }
 
     @GetMapping("/{id}")
@@ -66,12 +60,6 @@ public class FacturaController {
     public ResponseEntity<Factura> actualizarFactura(@RequestBody Factura factura) {
         Factura facturaActualizada = facturaService.actualizarFactura(factura);
         return ResponseEntity.ok(facturaActualizada);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminarFactura(@PathVariable Long id) {
-        facturaService.eliminarFactura(id);
-        return ResponseEntity.noContent().build();
     }
 
 
