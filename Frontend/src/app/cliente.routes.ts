@@ -30,7 +30,7 @@ export const ClienteRoutes: Routes = [
                 component: AddClienteCitaComponent,
               },
               {
-                path: 'servicios',
+                path: '',
                 component: UserViewServicesComponent,
               },
               {

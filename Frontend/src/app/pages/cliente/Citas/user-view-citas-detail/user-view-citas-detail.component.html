@@ -5,7 +5,6 @@
     </mat-toolbar>
   
     <div class="cita-info">
-      <p><strong>ID de Cita:</strong> {{ cita.idCita }}</p>
       <p><strong>Fecha:</strong> {{ cita.fecha[0] }}-{{ cita.fecha[1] }}-{{ cita.fecha[2] }}</p>
       <p><strong>Hora Inicio:</strong> {{ cita.horaInicio[0] }}:{{ cita.horaInicio[1] | number: '2.0-0' }}</p>
       <p><strong>Hora Fin:</strong> {{ cita.horaFin[0] }}:{{ cita.horaFin[1] | number: '2.0-0' }}</p>
@@ -22,7 +21,7 @@
   
     <div class="botones-accion">
       <button mat-raised-button color="warn">
-        Imprimir Factura
+        Regresar
       </button>
 
     </div>

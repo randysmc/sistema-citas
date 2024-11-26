@@ -1,2 +1,31 @@
+<div class="charts-wrapper">
+    <!-- Gráfica de Servicios -->
+    <div class="chart-container">
+      <canvas id="chartServices"></canvas>
+    </div>
+  
+    <!-- Gráfica de Ingresos -->
+    <div class="chart-container">
+      <canvas id="chartRevenue"></canvas>
+      <div>
+        <label for="month">Mes:</label>
+        <input type="number" id="month" [(ngModel)]="selectedMonth" min="1" max="12">
+  
+        <label for="year">Año:</label>
+        <input type="number" id="year" [(ngModel)]="selectedYear" min="2000" max="2100">
+  
+        <button (click)="loadRevenueByMonthChart(selectedMonth, selectedYear)">Actualizar gráfica</button>
+      </div>
+    </div>
+  
+    <!-- Gráfica de Clientes con más Citas -->
+    <div class="chart-container">
+      <canvas id="chartTopClients"></canvas>
+    </div>
 
-<canvas id="myChart"></canvas>
+    <!--Grafico de empleados con mas citas-->
+    <div class="chart-container">
+      <canvas id="chartTopEmployes"></canvas>
+    </div>
+  </div>
+  

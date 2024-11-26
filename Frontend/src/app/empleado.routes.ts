@@ -20,7 +20,7 @@ export const EmpleadoRoutes: Routes = [
                 component: EmpleadoUpdateProfileComponent
             },
             {
-                path: 'citas',
+                path: '',
                 component: ViewCitasEmpleadoComponent,
             },
             {

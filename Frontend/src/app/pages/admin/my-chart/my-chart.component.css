@@ -1,0 +1,61 @@
+/* Contenedor principal para las gráficas */
+.charts-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  /* Contenedor individual de cada gráfica */
+  .chart-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  /* Estilo para los inputs y botones */
+  .chart-container input[type="number"],
+  .chart-container button {
+    margin: 10px 5px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+  }
+  
+  .chart-container input[type="number"]:focus {
+    border-color: #007bff;
+  }
+  
+  .chart-container button {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .chart-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Estilo para los labels */
+  .chart-container label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  /* Ajuste de los lienzos para las gráficas */
+  .chart-container canvas {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Alineación y espaciado */
+  .chart-container div {
+    margin-top: 15px;
+  }
+  

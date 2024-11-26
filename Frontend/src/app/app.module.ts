@@ -50,7 +50,7 @@ import { ViewServicesDetailComponent } from './pages/admin/Servicio/view-service
 import { AddDiaFestivoComponent } from './pages/admin/Dia_Festivo/add-dia-festivo/add-dia-festivo.component';
 import { UpdateNegocioComponent } from './pages/admin/Negocio/update-negocio/update-negocio.component';
 import { ViewCitasComponent } from './pages/admin/Citas/view-citas/view-citas.component';
-import { ViewCitasDetailComponent } from './pages/admin/Citas/view-citas/view-citas-detail/view-citas-detail.component';
+import { ViewCitasDetailComponent } from './pages/admin/Citas/view-citas-detail/view-citas-detail.component';
 import { AddClienteCitaComponent } from './pages/cliente/Citas/add-cliente-cita/add-cliente-cita.component';
 import { MyChartComponent } from './pages/admin/my-chart/my-chart.component';
 import { UserViewServicesComponent } from './pages/cliente/Servicio/user-view-services/user-view-services.component';
@@ -77,6 +77,7 @@ import { ViewHorariosComponent } from './pages/admin/Horario_Laboral/view-horari
 import { ViewHorarioDetailComponent } from './pages/admin/Horario_Laboral/view-horario-detail/view-horario-detail.component';
 import { ViewEmpleadoDetailComponent } from './pages/admin/crudEmpleado/view-empleado-detail/view-empleado-detail.component';
 import { ViewEmpleadosComponent } from './pages/admin/crudEmpleado/view-empleados/view-empleados.component';
+import { NegocioReportesComponent } from './pages/reporte/negocio-reportes/negocio-reportes.component';
 
 
 
@@ -137,6 +138,7 @@ import { ViewEmpleadosComponent } from './pages/admin/crudEmpleado/view-empleado
     ViewHorarioDetailComponent,
     ViewEmpleadoDetailComponent,
     ViewEmpleadosComponent,
+    NegocioReportesComponent,
 
   ],
   imports: [

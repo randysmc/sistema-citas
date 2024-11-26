@@ -37,7 +37,8 @@
               <span *ngIf="cita.estado === 'REALIZADA'" class="estado realizada">Realizada</span>
               <span *ngIf="cita.estado === 'CANCELADA'" class="estado cancelada">Cancelada</span>
             </div>
-            <p><strong>Cliente:</strong> {{ cita.cliente.nombre }} {{ cita.cliente.apellido }}</p>
+            <p><strong>Empleado:</strong> {{ cita.empleado?.nombre }} {{ cita.empleado?.apellido }}</p>
+
             <p><strong>Servicio:</strong> {{ cita.servicio.nombre }}</p>
             <p><strong>Recurso:</strong> {{ cita.recurso.nombre }}</p>
           </div>

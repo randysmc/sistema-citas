@@ -1,14 +1,24 @@
-<div class="d-flex flex-row">
+<div class="formulario-citas-container">
+  <!-- Contenedor para el Calendario -->
+  <div class="calendar-container">
+    <app-calendar 
+      [mostrarDiasFestivos]="false" 
+      [mostrarHorarioLaboral]="false" 
+      [modoAgregarCita]="false"
+      [modoVerMisCitas]="true">
+    </app-calendar>
+  </div>
 
-    <!-- Contenedor para la Lista de Citas -->
-    <mat-card class="citas-card" style="flex: 1;">
-      <!-- Encabezado del card -->
+  <!-- Contenedor para la Lista de Citas -->
+  <div class="citas-container">
+    <!-- Encabezado del card -->
+    <mat-card class="citas-card">
       <mat-toolbar color="primary">
-        <p><span>Citas del empleado </span></p>
+        <span>Gestión de Citas</span>
       </mat-toolbar>
-  
+
       <!-- Contenedor con altura fija y scroll -->
-      <div class="citas-list-container" style="max-height: 400px; overflow-y: auto;">
+      <div class="citas-list-container">
         <ng-container *ngIf="citas && citas.length > 0; else noCitas">
           <div *ngFor="let cita of citas" (click)="verDetalle(cita.idCita)" class="cita-item">
             <h3>Número de Cita: {{ cita.idCita }}</h3>
@@ -27,17 +37,22 @@
               <span *ngIf="cita.estado === 'REALIZADA'" class="estado realizada">Realizada</span>
               <span *ngIf="cita.estado === 'CANCELADA'" class="estado cancelada">Cancelada</span>
             </div>
-            <p><strong>Cliente:</strong> {{ cita.cliente.nombre }} {{ cita.cliente.apellido }}</p>
+            <p><strong>Cliente:</strong> {{ cita.cliente?.nombre }} {{ cita.cliente?.apellido }}</p>
+
             <p><strong>Servicio:</strong> {{ cita.servicio.nombre }}</p>
             <p><strong>Recurso:</strong> {{ cita.recurso.nombre }}</p>
           </div>
         </ng-container>
-  
+
         <ng-template #noCitas>
           <p>No hay citas disponibles.</p>
         </ng-template>
       </div>
-  
+
+      <!-- Botón para agregar cita -->
+      <div class="text-center mt-3">
+        <button routerLink="/cliente/add-cita" mat-raised-button color="primary">Agregar cita</button>
+      </div>
     </mat-card>
   </div>
-  
+</div>

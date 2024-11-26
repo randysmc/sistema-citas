@@ -16,7 +16,7 @@ import { ServiciosFormComponentComponent } from './pages/admin/Servicio/servicio
 import { ViewServicesDetailComponent } from './pages/admin/Servicio/view-services-detail/view-services-detail.component';
 import { AddDiaFestivoComponent } from './pages/admin/Dia_Festivo/add-dia-festivo/add-dia-festivo.component';
 import { ViewCitasComponent } from './pages/admin/Citas/view-citas/view-citas.component';
-import { ViewCitasDetailComponent } from './pages/admin/Citas/view-citas/view-citas-detail/view-citas-detail.component';
+import { ViewCitasDetailComponent } from './pages/admin/Citas/view-citas-detail/view-citas-detail.component';
 import { AddEmpleadoComponent } from './pages/admin/crudEmpleado/add-empleado/add-empleado.component';
 import { ReportesComponent } from './pages/admin/reportes/reportes.component';
 import { UpdateNegocioComponent } from './pages/admin/Negocio/update-negocio/update-negocio.component';
@@ -26,6 +26,7 @@ import { ViewHorariosComponent } from './pages/admin/Horario_Laboral/view-horari
 import { ViewHorarioDetailComponent } from './pages/admin/Horario_Laboral/view-horario-detail/view-horario-detail.component';
 import { ViewEmpleadosComponent } from './pages/admin/crudEmpleado/view-empleados/view-empleados.component';
 import { ViewEmpleadoDetailComponent } from './pages/admin/crudEmpleado/view-empleado-detail/view-empleado-detail.component';
+import { NegocioReportesComponent } from './pages/reporte/negocio-reportes/negocio-reportes.component';
 
 
 export const AdminRoutes: Routes = [
@@ -168,7 +169,7 @@ export const AdminRoutes: Routes = [
 
           {
             path: 'reportes',
-            component: ReportesComponent
+            component: NegocioReportesComponent
           },
           {
             path: 'update-negocio/:id',
