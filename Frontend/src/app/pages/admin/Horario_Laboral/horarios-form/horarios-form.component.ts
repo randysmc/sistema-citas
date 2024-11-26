@@ -3,6 +3,7 @@ import { HorariosLaboralesService } from 'src/app/services/horarios-laborales.se
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-horarios-form',
@@ -23,7 +24,8 @@ export class HorariosFormComponent implements OnInit {
     private horarioLaboralService: HorariosLaboralesService,
     private snack: MatSnackBar,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) { }
 
   ngOnInit() {
@@ -39,71 +41,72 @@ export class HorariosFormComponent implements OnInit {
   cargarHorario() {
     this.horarioLaboralService.obtenerHorarioPorId(this.horarioLaboralId!).subscribe(
       (data: any) => {
-        this.horarioLaboral = data; // Cargar los datos del horario en el formulario
+        this.horarioLaboral = {
+          ...data,
+          // Convierte las horas en formato "HH:mm" para mostrarlas en el formulario
+          horaInicio: this.convertirHoraArrayAString(data.horaInicio),
+          horaFin: this.convertirHoraArrayAString(data.horaFin),
+        };
       },
       (error) => {
         Swal.fire('Error', 'Error al cargar el horario a editar', 'error');
+        this.router.navigate(['/admin/horarios-laborales']);
       }
     );
   }
 
-  // Lógica para el envío del formulario
-  onSubmit() {
-    const horarioData = {
-      dia: this.horarioLaboral.dia,
-      horaInicio: this.horarioLaboral.horaInicio,
-      horaFin: this.horarioLaboral.horaFin,
-      tipoHorario: this.horarioLaboral.tipoHorario
-    };
 
+
+  convertirHoraArrayAString(horaArray: number[]): string {
+    const [hora, minuto] = horaArray;
+    return `${hora.toString().padStart(2, '0')}:${minuto.toString().padStart(2, '0')}`;
+  }
+  
+  // Convierte una cadena "HH:mm" a un array [hora, minuto]
+  convertirHoraStringAArray(horaString: string): number[] {
+    const [hora, minuto] = horaString.split(':').map(Number);
+    return [hora, minuto];
+  }
+
+
+
+  onSubmit() {
+    if (!this.horarioLaboral.horaInicio || !this.horarioLaboral.horaFin) {
+      this.snack.open('Por favor, complete todos los campos.', 'Cerrar', { duration: 3000 });
+      return;
+    }
+  
+    const horarioData = {
+      ...this.horarioLaboral,
+      // Convierte las cadenas "HH:mm" de vuelta a arrays [hora, minuto]
+      horaInicio: this.convertirHoraStringAArray(this.horarioLaboral.horaInicio),
+      horaFin: this.convertirHoraStringAArray(this.horarioLaboral.horaFin),
+    };
+  
     if (this.horarioLaboralId) {
-      // Si hay un ID, actualizar el horario
       this.horarioLaboralService.actualizarHorarioLaboral(this.horarioLaboralId, horarioData).subscribe(
-        (response) => {
-          Swal.fire({
-            title: 'Horario actualizado',
-            text: 'El horario laboral se ha actualizado exitosamente.',
-            icon: 'success',
-            confirmButtonText: 'Aceptar',
-            customClass: { confirmButton: 'custom-confirm-button' }
-          }).then(() => {
-            this.router.navigate(['/admin/calendario']);
-          });
+        () => {
+          Swal.fire('Horario actualizado', 'El horario laboral se ha actualizado exitosamente.', 'success')
+            .then(() => this.router.navigate(['/admin/horarios-laborales']));
         },
-        (error) => {
-          Swal.fire({
-            title: 'Error al actualizar',
-            text: 'No se pudo actualizar el horario laboral.',
-            icon: 'error',
-            confirmButtonText: 'Intentar de nuevo',
-            customClass: { confirmButton: 'custom-confirm-button' }
-          });
+        () => {
+          Swal.fire('Error', 'No se pudo actualizar el horario laboral.', 'error');
         }
       );
     } else {
-      // Si no hay ID, agregar un nuevo horario
       this.horarioLaboralService.agregarHorarioLaboral(horarioData).subscribe(
-        (response) => {
-          Swal.fire({
-            title: 'Horario agregado',
-            text: 'El horario laboral se ha agregado exitosamente.',
-            icon: 'success',
-            confirmButtonText: 'Aceptar',
-            customClass: { confirmButton: 'custom-confirm-button' }
-          }).then(() => {
-            this.router.navigate(['/admin/calendario']);
-          });
+        () => {
+          Swal.fire('Horario agregado', 'El horario laboral se ha agregado exitosamente.', 'success')
+            .then(() => this.router.navigate(['/admin/horarios-laborales']));
         },
-        (error) => {
-          Swal.fire({
-            title: 'Error al agregar horario',
-            text: 'Ya existe un horario configurado para este día y periodo.',
-            icon: 'error',
-            confirmButtonText: 'Intentar de nuevo',
-            customClass: { confirmButton: 'custom-confirm-button' }
-          });
+        () => {
+          Swal.fire('Error', 'Ya existe un horario configurado para este día y periodo.', 'error');
         }
       );
     }
+  }
+
+  regresar(){
+    this.location.back();
   }
 }

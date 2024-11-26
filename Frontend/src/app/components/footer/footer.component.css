@@ -1,99 +1,90 @@
 /* Estilos base del footer */
 .footer {
-    background-color: #343a40;
-    color: #ffffff;
-    padding: 20px 0;
-  }
-  
-  .footer .container {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  }
-  
-  /* Contenido principal del footer */
+  background-color: #343a40;
+  color: #ffffff;
+  padding: 20px 0;
+  width: 100%; /* Asegura que ocupe todo el ancho */
+  position: relative; /* Cambia a fixed si necesitas que siempre esté visible */
+  bottom: 0; /* Si usas position: fixed */
+  box-sizing: border-box; /* Para manejar bien el padding y el tamaño */
+}
+
+/* Asegurar que el contenedor ocupe todo el ancho */
+.footer .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box;
+  padding: 0 15px; /* Espaciado interno para no pegarlo a los bordes */
+}
+
+/* Contenido principal del footer */
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 100%; /* Se asegura de que respete el espacio horizontal */
+}
+
+/* Ajustes para los textos y listas */
+.footer-info p,
+.footer-contact p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 5px 0;
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links ul li a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.footer-links ul li a:hover {
+  color: #007bff;
+  transform: translateY(-3px);
+}
+
+/* Barra inferior */
+.footer-bottom {
+  text-align: center;
+  font-size: 13px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin-top: 20px;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
   .footer-content {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-  
-  .footer-info h3 {
-    margin-bottom: 10px;
-  }
-  
-  .footer-info p {
-    font-size: 14px;
-    line-height: 1.5;
-  }
-  
-  .footer-links h4 {
-    margin-bottom: 10px;
-  }
-  
-  .footer-links ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .footer-links ul li {
-    margin-bottom: 5px;
-  }
-  
-  .footer-links ul li a {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.3s ease;
-  }
-  
-  .footer-links ul li a:hover {
-    color: #007bff;
-  }
-  
-  .footer-contact h4 {
-    margin-bottom: 10px;
-  }
-  
-  .footer-contact p {
-    font-size: 14px;
-    line-height: 1.5;
-  }
-  
-  /* Barra inferior */
-  .footer-bottom {
+    flex-direction: column;
     text-align: center;
-    font-size: 13px;
-    padding-top: 10px;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    margin-top: 20px;
+    gap: 10px;
   }
-  
-  /* Responsividad */
-  @media (max-width: 768px) {
-    .footer-content {
-      flex-direction: column;
-      text-align: center;
-      gap: 10px;
-    }
-  
-    .footer-links ul {
-      display: inline-block;
-      text-align: center;
-    }
-  }
+}
 
-  
+/* Ocupa todo el ancho y se ajusta correctamente */
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%; /* Se asegura de que el contenido no colapse */
+  display: flex;
+  flex-direction: column; /* Alinea el contenido verticalmente */
+}
 
-  .footer-links ul li a {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.3s ease, transform 0.3s ease;
-  }
-  
-  .footer-links ul li a:hover {
-    color: #007bff;
-    transform: translateY(-3px);
-  }
-  
+body {
+  flex: 1; /* Permite que el footer se ajuste al final */
+}
+
+.footer {
+  margin-top: auto; /* Empuja el footer al final */
+}

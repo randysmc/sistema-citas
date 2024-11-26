@@ -10,6 +10,7 @@ import { CitasService } from 'src/app/services/citas.service';
 import { Cita } from 'src/app/models/cita.model';
 import { LoginService } from 'src/app/services/login.service';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -25,7 +26,7 @@ export class CalendarComponent implements OnInit {
   @Input() modoAgregarCita: boolean = false; 
   @Input() modoVerMisCitas: boolean = false; 
 
-
+  
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',  // Vista inicial
     headerToolbar: {
@@ -36,7 +37,8 @@ export class CalendarComponent implements OnInit {
      
     plugins: [dayGridPlugin, interactionPlugin, timeGridPlugin],
 
-    events: [], 
+    events: [],
+    eventClick: this.onEventClick.bind(this)
   };
 
   diasFestivos: DiaFestivo[] = [];
@@ -45,25 +47,58 @@ export class CalendarComponent implements OnInit {
     private diasFestivosService: DiasFestivosService,
     private horarioLaboralService: HorariosLaboralesService,
     private citasService: CitasService,
-    private loginService: LoginService 
+    private loginService: LoginService,
+    private router: Router,
   ) {}
 
+
   ngOnInit(): void {
-    this.cargarDiasFestivos();
-    this.cargarHorariosLaborales();
-
-    if (this.modoAgregarCita) {
-      this.cargarCitas();
-    } else if (this.modoVerMisCitas) {
-      const userId = this.loginService.getUser().id; // Obtener ID del usuario autenticado
-      this.cargarCitasPorUsuario(userId);
-    } else {
-      this.cargarCitasAgendadas();
-
-    }
+    
+    if (this.mostrarDiasFestivos) {
+        this.cargarDiasFestivos();
+      }
+    
+      if (this.mostrarHorarioLaboral) {
+        this.cargarHorariosLaborales();
+      }
+    
+      if (this.modoAgregarCita) {
+        this.cargarCitas();
+        this.cargarHorariosLaborales();
+        this.cargarDiasFestivos();
+      } else if (this.modoVerMisCitas) {
+        const userId = this.loginService.getUser().id; // Obtener ID del usuario autenticado
+        this.cargarCitasPorUsuario(userId);
+        this.cargarCitasAgendadas();
+      } else{
+      }
   }
 
-  cargarCitasPorUsuario(usuarioId: number) {
+  onEventClick(arg: any): void {
+    const event = arg.event;
+    const horarioLaboralId = event.extendedProps.horarioLaboralId;
+    const festivoId = event.extendedProps.festivoId;
+    const citaId = event.extendedProps.citaId;
+
+    if (horarioLaboralId) {
+        // Redirige a la vista de detalle del horario laboral
+        this.router.navigate([`/admin/view-horario-laboral/${horarioLaboralId}`]);
+    } else if (festivoId) {
+        // Redirige a la vista de detalle del día festivo
+        this.router.navigate([`/admin`]);
+    } 
+    else if (citaId) {
+        // Redirigir al detalle de la cita
+        this.router.navigate([`/admin/citas/${citaId}`]);
+    } else {
+        console.error('El evento no tiene un ID asociado válido');
+    }
+}
+
+
+
+
+cargarCitasPorUsuario(usuarioId: number) {
     this.citasService.obtenerCitasPorUsuario(usuarioId).subscribe(
         (citas: Cita[]) => {
             const eventosCitas: EventInput[] = citas.map(cita => {
@@ -74,8 +109,11 @@ export class CalendarComponent implements OnInit {
                     title: `Cita con: ${cita.cliente.nombre} ${cita.cliente.apellido} - ${cita.servicio.nombre}`,
                     start: start,
                     end: end,
-                    color: 'green', // Puedes cambiar el color según lo que desees
-                    allDay: false
+                    color: 'green',
+                    allDay: false,
+                    extendedProps: {
+                        citaId: cita.idCita // Agregamos el ID de la cita
+                    }
                 };
             });
 
@@ -90,9 +128,9 @@ export class CalendarComponent implements OnInit {
     );
 }
 
-  cargarDiasFestivos() {
+cargarDiasFestivos() {
     this.diasFestivosService.obtenerDiasFestivos().subscribe(
-        (diasFestivos: any[]) => { // Cambia `DiaFestivo[]` por `any[]` si no tienes el tipo definido
+        (diasFestivos: any[]) => {
             this.diasFestivos = diasFestivos.map(dia => ({
                 ...dia,
                 fecha: new Date(dia.fecha[0], dia.fecha[1] - 1, dia.fecha[2]) // Convierte el arreglo a un objeto Date
@@ -100,20 +138,25 @@ export class CalendarComponent implements OnInit {
 
             const eventosFestivos: EventInput[] = this.diasFestivos.map(dia => ({
                 title: dia.descripcion,
-                date: dia.fecha.toISOString().split('T')[0], // Convierte a formato YYYY-MM-DD
+                start: dia.fecha.toISOString(), // Asegura el formato ISO para `start`
                 color: 'red', // Color rojo para días festivos
+                allDay: true, // Los días festivos suelen ser eventos de todo el día
+                extendedProps: {
+                    festivoId: dia.idDiaFestivo // Agregamos el ID del día festivo
+                }
             }));
 
-            // Asegúrate de que calendarOptions.events sea un array
+            // Combina los eventos festivos con los existentes en el calendario
             this.calendarOptions.events = Array.isArray(this.calendarOptions.events) 
                 ? this.calendarOptions.events.concat(eventosFestivos) 
                 : eventosFestivos;
         },
         error => {
-            console.log('Error al cargar los días festivos', error);
+            console.error('Error al cargar los días festivos', error);
         }
     );
 }
+
 
 cargarCitas() {
     this.citasService.obtenerCitas().subscribe(
@@ -126,8 +169,11 @@ cargarCitas() {
                     title: `Cita con: ${cita.cliente.nombre} ${cita.cliente.apellido} - ${cita.servicio.nombre}`,
                     start: start,
                     end: end,
-                    color: 'green', // Puedes cambiar el color según lo que desees
-                    allDay: false
+                    color: 'green',
+                    allDay: false,
+                    extendedProps: {
+                        citaId: cita.idCita // Agregamos el ID de la cita
+                    }
                 };
             });
 
@@ -141,6 +187,7 @@ cargarCitas() {
         }
     );
 }
+
 
 cargarCitasAgendadas() {
   this.citasService.obtenerCitasAgendadas().subscribe(
@@ -170,7 +217,7 @@ cargarCitasAgendadas() {
 }
 
 
-  cargarHorariosLaborales() {
+cargarHorariosLaborales() {
     this.horarioLaboralService.obtenerHorariosLaborales().subscribe(
         (horarios: HorarioLaboral[]) => {
             const eventosLaborales: EventInput[] = [];
@@ -187,8 +234,8 @@ cargarCitasAgendadas() {
             horarios.forEach(horario => {
                 const diaLaboral = diasDeLaSemana[horario.dia as keyof typeof diasDeLaSemana]; // Conversión de día
 
-                // Verificamos los próximos 10 lunes
-                for (let i = 0; i < 10; i++) {
+                // Generar horarios para los próximos 10 días específicos (según el día laboral)
+                for (let i = 0; i < 12; i++) {
                     const fecha = new Date();
                     fecha.setDate(fecha.getDate() + (7 * i) + (diaLaboral - fecha.getDay())); // Calcular la fecha correcta
 
@@ -200,33 +247,31 @@ cargarCitasAgendadas() {
                     end.setHours(horario.horaFin[0]);
                     end.setMinutes(horario.horaFin[1]);
 
-                    // Verificamos si hay un día festivo en esta fecha
-                    const esDiaFestivo = this.diasFestivos.some(dia => {
-                        return dia.fecha.toDateString() === start.toDateString(); // Comparación de fechas
+                    eventosLaborales.push({
+                        title: `Horario: ${horario.tipoHorario}`,
+                        start: start,
+                        end: end,
+                        color: 'blue',
+                        allDay: false,
+                        extendedProps: {
+                            horarioLaboralId: horario.horarioLaboralId
+                        }
                     });
-
-                    if (!esDiaFestivo) {
-                        eventosLaborales.push({
-                            title: `Horario: ${horario.tipoHorario}`,
-                            start: start,
-                            end: end,
-                            color: 'blue',
-                            allDay: false
-                        });
-                    }
                 }
             });
 
             // Asegúrate de que calendarOptions.events sea un array
-            this.calendarOptions.events = Array.isArray(this.calendarOptions.events) 
-                ? this.calendarOptions.events.concat(eventosLaborales) 
+            this.calendarOptions.events = Array.isArray(this.calendarOptions.events)
+                ? this.calendarOptions.events.concat(eventosLaborales)
                 : eventosLaborales;
         },
         error => {
             console.log('Error al cargar los horarios laborales', error);
         }
     );
-  }
+}
+
+
 
 
 }

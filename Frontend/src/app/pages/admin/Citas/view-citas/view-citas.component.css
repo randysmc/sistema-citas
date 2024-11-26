@@ -1,0 +1,73 @@
+.calendario-citas-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px; /* Espacio entre el calendario y la lista de citas */
+  justify-content: space-between;
+  margin: 20px;
+}
+
+.calendario-container,
+.citas-container {
+  flex: 1 1 calc(50% - 20px); /* Toma el 50% del ancho menos el gap */
+  min-width: 300px; /* Ancho mínimo para evitar que se encojan demasiado */
+  box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+}
+
+.calendario-wrapper {
+  background-color: #f9f9f9; /* Fondo suave para el calendario */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.citas-card {
+  height: 100%;
+}
+
+.citas-list-container {
+  max-height: 400px; /* Altura máxima con scroll */
+  overflow-y: auto;
+}
+
+.cita-item {
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px 0;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.cita-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estados de citas */
+.estado.agendada {
+  color: #007bff;
+}
+.estado.confirmada {
+  color: #28a745;
+}
+.estado.realizada {
+  color: #ffc107;
+}
+.estado.cancelada {
+  color: #dc3545;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .calendario-citas-container {
+    flex-direction: column; /* Apila los elementos en pantallas pequeñas */
+  }
+
+  .calendario-container,
+  .citas-container {
+    flex: 1 1 100%;
+  }
+}

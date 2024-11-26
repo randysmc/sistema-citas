@@ -1,11 +1,25 @@
-<!-- Calendario que muestra solo horarios laborales -->
-<div class="calendar-container" style="flex: 1; margin-right: 10px;">
-    <div class="calendar-container" style="flex: 1; margin-right: 10px;">
-        <app-calendar 
-          [mostrarDiasFestivos]="false" 
-          [mostrarHorarioLaboral]="true" 
-          [modoAgregarCita]="false"
-          [modoVerMisCitas]="false">
-        </app-calendar>
-      </div>
+
+
+<div class="calendario-container">
+  <!-- Contenedor del calendario -->
+  <div class="calendario-wrapper">
+    <h2 class="calendario-titulo">Gestión de Horarios</h2>
+    <div id="calendario">
+      <!-- Aquí va tu calendario funcional -->
+      <app-calendar 
+      [mostrarDiasFestivos]="true" 
+      [mostrarHorarioLaboral]="true" 
+      [modoAgregarCita]="true"
+      [modoVerMisCitas]="false">
+    </app-calendar>
+    </div>
+  </div>
+
+  <!-- Botón para agregar horario -->
+  <div class="boton-agregar-wrapper">
+    <button (click)="agregarHorario()" class="boton-agregar">
+      Agregar Horario
+    </button>
+  </div>
 </div>
+

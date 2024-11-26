@@ -24,5 +24,13 @@ export class HorariosLaboralesService {
     return this.http.put(`${baserUrl}/horarios-laborales/${id}`, servicio);
   }
 
+  public obtenerHorarioPorId(id:number){
+    return this.http.get(`${baserUrl}/horarios-laborales/${id}`)
+  }
+
+  public eliminarHorario(id:number){
+    return this.http.delete(`${baserUrl}/horarios-laborales/${id}`)
+  }
+
 
 }

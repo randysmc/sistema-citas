@@ -1,15 +1,79 @@
+/* Contenedor principal */
 .calendar-container {
-    max-width: 800px; /* Ancho máximo */
-    margin: 0 auto;   /* Centrar el contenedor */
-    padding: 20px;    /* Espaciado alrededor del calendario */
-    border: 1px solid #ccc; /* Opcional: borde alrededor del calendario */
-    border-radius: 8px; /* Opcional: bordes redondeados */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Opcional: sombra */
-    margin: auto; /* Centra el calendario */
+  max-width: 800px; /* Limita el ancho en pantallas grandes */
+  margin: 20px auto; /* Centra el contenedor y agrega margen vertical */
+  padding: 20px;
+  background-color: #ffffff; /* Fondo blanco para contraste */
+  border: 1px solid #ddd; /* Borde suave */
+  border-radius: 10px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra elegante */
+}
+
+/* Encabezado del calendario */
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333; /* Color del texto */
+}
+
+.calendar-header select {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.calendar-header select:hover {
+  border-color: #888; /* Cambio de color al pasar el mouse */
+}
+
+/* Ajustes del calendario interno */
+full-calendar {
+  width: 100%; /* Asegura que ocupe todo el ancho disponible */
+  min-height: 400px; /* Altura mínima */
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .calendar-container {
+    padding: 15px;
+    max-width: 90%; /* Ajusta el ancho en pantallas medianas */
   }
-  
-  select {
-    margin-bottom: 20px; /* Espacio entre el selector y el calendario */
+
+  .calendar-header {
+    flex-direction: column; /* Apila los elementos verticalmente */
+    gap: 10px;
+  }
+
+  .calendar-header h2 {
+    font-size: 1.2rem; /* Reduce el tamaño del texto */
+  }
+
+  .calendar-header select {
+    width: 100%; /* Asegura que el selector ocupe todo el ancho */
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar-container {
     padding: 10px;
-    font-size: 16px;
+    border-radius: 5px; /* Reduce los bordes redondeados */
+  }
+
+  .calendar-header h2 {
+    font-size: 1rem; /* Texto aún más pequeño */
+  }
+
+  full-calendar {
+    min-height: 300px; /* Reduce la altura mínima */
+  }
 }

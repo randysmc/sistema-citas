@@ -46,4 +46,11 @@ export class HomeComponent implements OnInit {
     const filename = negocio.fotoPerfil.split('/').pop();
     return `http://localhost:8080/uploads/${folder}/${filename}`;
   }
+
+  promociones = [
+    { nombre: 'Promo 1', descripcion: 'Descripción de Promo 1', imagen: 'promo1.jpg' },
+    { nombre: 'Promo 2', descripcion: 'Descripción de Promo 2', imagen: 'promo2.jpg' },
+    { nombre: 'Promo 3', descripcion: 'Descripción de Promo 3', imagen: 'promo3.jpg' }
+  ];
+  
 }

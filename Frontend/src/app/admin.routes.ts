@@ -15,14 +15,16 @@ import { ViewRecursoDetailComponent } from './pages/admin/Recurso/view-recurso-d
 import { ViewServicesComponent } from './pages/admin/Servicio/view-services/view-services.component';
 import { ServiciosFormComponentComponent } from './pages/admin/Servicio/servicios-form-component/servicios-form-component.component';
 import { ViewServicesDetailComponent } from './pages/admin/Servicio/view-services-detail/view-services-detail.component';
-import { AddDiaFestivoComponent } from './pages/admin/add-dia-festivo/add-dia-festivo.component';
-import { AddHorarioLaboralComponent } from './pages/admin/add-horario-laboral/add-horario-laboral.component';
-import { ViewCitasComponent } from './pages/admin/view-citas/view-citas.component';
-import { ViewCitasDetailComponent } from './pages/admin/view-citas-detail/view-citas-detail.component';
+import { AddDiaFestivoComponent } from './pages/admin/Dia_Festivo/add-dia-festivo/add-dia-festivo.component';
+import { ViewCitasComponent } from './pages/admin/Citas/view-citas/view-citas.component';
+import { ViewCitasDetailComponent } from './pages/admin/Citas/view-citas/view-citas-detail/view-citas-detail.component';
 import { AddEmpleadoComponent } from './pages/admin/Usuario/add-empleado/add-empleado.component';
 import { ReportesComponent } from './pages/admin/reportes/reportes.component';
 import { UpdateNegocioComponent } from './pages/admin/Negocio/update-negocio/update-negocio.component';
 import { ViewNegocioDetailComponent } from './pages/admin/Negocio/view-negocio-detail/view-negocio-detail.component';
+import { HorariosFormComponent } from './pages/admin/Horario_Laboral/horarios-form/horarios-form.component';
+import { ViewHorariosComponent } from './pages/admin/Horario_Laboral/view-horarios/view-horarios.component';
+import { ViewHorarioDetailComponent } from './pages/admin/Horario_Laboral/view-horario-detail/view-horario-detail.component';
 
 
 export const AdminRoutes: Routes = [
@@ -104,9 +106,22 @@ export const AdminRoutes: Routes = [
             path: 'add-dia-festivo',
             component: AddDiaFestivoComponent,
           },
+          
+          {
+            path: 'horarios-laborales',
+            component: ViewHorariosComponent,
+          },
+          {
+            path: 'view-horario-laboral/:id',
+            component: ViewHorarioDetailComponent
+          },
           {
             path: 'add-horario-laboral',
-            component: AddHorarioLaboralComponent,
+            component: HorariosFormComponent,
+          },
+          {
+            path: 'update-horario-laboral/:id',
+            component:HorariosFormComponent
           },
           {
             path: 'citas',

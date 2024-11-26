@@ -1,0 +1,64 @@
+/* Asegura que el body y html ocupen el 100% de la altura */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* El contenedor principal debe ocupar toda la altura disponible */
+  .main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  /* El contenedor de contenido debe expandirse para llenar el espacio disponible */
+  .content {
+    flex: 1; /* Esto hace que el contenido ocupe todo el espacio disponible */
+    overflow-y: auto; /* Permite que el contenido se desplace si es necesario */
+  }
+  
+/* Estilos del footer */
+app-footer {
+    background-color: #343a40;
+    color: #ffffff;
+    padding: 10px 0;  /* Reducir el padding para hacerlo más pequeño */
+    font-size: 12px;  /* Reducir el tamaño de la fuente */
+  }
+  
+  /* Contenido dentro del footer */
+  app-footer .footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center; /* Alinear los elementos de manera más compacta */
+    gap: 10px;  /* Reducir el espacio entre los elementos */
+  }
+  
+  /* Estilo de los enlaces */
+  app-footer .footer-links ul li a {
+    color: #ffffff;
+    font-size: 12px;  /* Reducir el tamaño de la fuente */
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+  
+  app-footer .footer-links ul li a:hover {
+    color: #007bff;
+    transform: translateY(-1px); /* Reducir la animación de desplazamiento */
+  }
+  
+  /* Estilo de la sección de contacto */
+  app-footer .footer-contact p {
+    font-size: 12px;  /* Reducir el tamaño de la fuente */
+    line-height: 1.3; /* Ajustar el interlineado */
+  }
+  
+  /* Reducir el tamaño de la barra inferior */
+  app-footer .footer-bottom p {
+    font-size: 10px; /* Reducir aún más el tamaño de la fuente en el texto de derechos */
+    margin-top: 10px;
+  }
+  
+  

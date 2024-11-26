@@ -1,0 +1,100 @@
+/* Contenedor principal */
+.calendario-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Título del calendario */
+  .calendario-titulo {
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Contenedor del calendario */
+  .calendario-wrapper {
+    width: 100%;
+    max-width: 800px; /* Limita el ancho máximo */
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Ajustes para el calendario interno */
+  #calendario {
+    width: 100%;
+    overflow-x: auto; /* Permite desplazamiento horizontal si es necesario */
+    display: flex;
+    justify-content: center;
+  }
+  
+  /* Botón para agregar horario */
+  .boton-agregar-wrapper {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .boton-agregar {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .boton-agregar:hover {
+    background-color: #45a049;
+  }
+  
+  /* Responsivo */
+  @media (max-width: 768px) {
+    .calendario-titulo {
+      font-size: 1.5rem;
+    }
+  
+    .calendario-wrapper {
+      padding: 15px;
+      max-width: 90%; /* Reduce el ancho máximo para pantallas pequeñas */
+    }
+  
+    #calendario {
+      flex-direction: column; /* Cambia el diseño interno si es necesario */
+    }
+  
+    .boton-agregar {
+      width: 100%;
+      padding: 15px;
+    }
+  }
+  
+  /* Ajuste adicional para celulares pequeños */
+  @media (max-width: 480px) {
+    .calendario-wrapper {
+      padding: 10px;
+      border-radius: 5px;
+    }
+  
+    .calendario-titulo {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+  
+    #calendario {
+      font-size: 0.9rem; /* Ajusta el tamaño de fuente si es necesario */
+    }
+  }
+  

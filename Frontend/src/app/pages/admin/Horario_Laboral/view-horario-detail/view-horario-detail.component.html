@@ -1,1 +1,20 @@
-<p>view-horario-detail works!</p>
+<mat-card *ngIf=" horario" class="detalle-horario-card"> 
+    <mat-toolbar>
+        <h2 class="mat-headline">Detalles del horario del dia {{horario.dia}}</h2>
+    </mat-toolbar>
+
+    <div class="horario-info">
+        <p><strong>Día:</strong>{{ horario.dia}}</p>
+        <p><strong>Hora Inicio:</strong>{{ horario.horaInicio}} Hrs</p>
+        <p><strong>Hora Inicio:</strong>{{ horario.horaFin}} Hrs</p>
+    </div>
+
+
+    <div class="botones-accion">
+        <button (click)="actualizarHorario()">Actualizar</button>
+        <button (click)="regresar()">Regresar</button>
+        <button (click)="eliminarHorario()" class="eliminar-btn">Eliminar</button>
+      </div>
+      
+
+</mat-card>

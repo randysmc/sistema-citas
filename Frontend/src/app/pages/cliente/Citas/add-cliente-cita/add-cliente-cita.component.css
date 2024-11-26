@@ -1,0 +1,284 @@
+/* Estilos generales */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+}
+
+.calendario-citas-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px;
+  gap: 20px;
+}
+
+.calendario-container {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendario-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.calendario-titulo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+#calendario {
+  /* Ajustar el tamaño del calendario según el contenedor */
+  width: 100%;
+  height: 300px; /* Ajustar a tus necesidades */
+  background-color: #ececec;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+h2 {
+  color: #333;
+  font-size: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+/* Mensajes de error */
+.text-danger {
+  color: red;
+  font-size: 12px;
+}
+
+/* Mensajes de advertencia */
+.text-warning {
+  color: orange;
+  font-size: 14px;
+}
+
+/* Formulario de cita */
+.calendario-citas-container form {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+  color: #28a745;
+  font-size: 18px;
+}
+
+/* Estilos para pantallas pequeñas (responsive) */
+@media (max-width: 768px) {
+  .calendario-citas-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .calendario-container {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .calendario-citas-container form {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendario-titulo, h2, h3 {
+    font-size: 18px;
+  }
+
+  .form-control {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  button[type="submit"] {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+
+
+/* Estilos generales */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+}
+
+.calendario-citas-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 20px;
+  gap: 20px;
+}
+
+.calendario-container {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.calendario-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.calendario-titulo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+#calendario {
+  width: 100%;
+  height: auto;
+  background-color: #ececec;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Estilos para el calendario dentro del contenedor */
+#calendario .calendario-header {
+  background-color: #007bff;
+  color: white;
+  padding: 15px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+#calendario .calendario-body {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  padding: 10px;
+}
+
+#calendario .calendario-day {
+  padding: 10px;
+  text-align: center;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#calendario .calendario-day:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+#calendario .calendario-day.selected {
+  background-color: #28a745;
+  color: white;
+}
+
+#calendario .calendario-day.disabled {
+  background-color: #e0e0e0;
+  color: #b0b0b0;
+  cursor: not-allowed;
+}
+
+/* Formulario de cita */
+.calendario-citas-container form {
+  flex: 1;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h3 {
+  color: #28a745;
+  font-size: 18px;
+}
+
+/* Estilos para pantallas pequeñas (responsive) */
+@media (max-width: 768px) {
+  .calendario-citas-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .calendario-container {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .calendario-citas-container form {
+    width: 100%;
+  }
+
+  #calendario .calendario-body {
+    grid-template-columns: repeat(7, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .calendario-titulo, h2, h3 {
+    font-size: 18px;
+  }
+
+  .form-control {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  button[type="submit"] {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
